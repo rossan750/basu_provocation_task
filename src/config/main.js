@@ -19,6 +19,21 @@ const keys = {
 // is this mechanical turk?
 const MTURK = (!jsPsych.turk.turkInfo().outsideTurk)
 
+const imageSettings = {
+	width: 600,
+	height: 600
+}
+
+// import images
+const importAll = (r) => {
+  return r.keys().map(r);
+}
+
+// UPDATE THIS PATH TO CHANGE IMAGE FOLDER
+const images = importAll(require.context('../assets/images/test-images', false, /\.(png|jpe?g|svg)$/));
+
+console.log(images)
+
 // get language file
 const lang = require('../language/en_us.json')
 if (process.env.MTURK) { // if this is mturk, merge in the mturk specific language
@@ -27,7 +42,7 @@ if (process.env.MTURK) { // if this is mturk, merge in the mturk specific langua
 }
 
 const defaultBlockSettings = {
-	conditions: ["a", "b", "c"],
+	images: images,
 	repeats_per_condition: 1, // number of times every condition is repeated
 	is_practice: false,
 	is_tutorial: false,
@@ -36,6 +51,7 @@ const defaultBlockSettings = {
 
 export {
 	keys,
+	imageSettings,
 	defaultBlockSettings,
 	lang,
 	eventCodes,

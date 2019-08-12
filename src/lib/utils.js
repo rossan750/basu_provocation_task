@@ -1,5 +1,3 @@
-import _ from 'lodash'
-import { lang } from '../config/main'
 import { jsPsych } from 'jspsych-react'
 
 // add a random number between 0 and offset to the base number
@@ -64,18 +62,6 @@ const startKeypressListener = () => {
   return keyboardListener
 }
 
-// import images
-const importAll = (r) => {
-  return r.keys().map(r);
-}
-
-const images = importAll(require.context('../assets/images', false, /\.(png|jpe?g|svg)$/));
-
-const oppositeColor = (colour) => {
-  const colours = _.values(lang.color)
-  return _.pull(colours, colour)[0]
-}
-
 const getTurkUniqueId = () => {
   const turkInfo = jsPsych.turk.turkInfo()
   const uniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`
@@ -96,9 +82,7 @@ export {
   formatDollars,
   shuffleArray,
   generateWaitSet,
-  images,
   startKeypressListener,
-  oppositeColor,
   getUserId,
   getTurkUniqueId
 }

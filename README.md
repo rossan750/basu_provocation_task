@@ -1,6 +1,6 @@
-# Neuro Task Starter
+# Provocation Task
 
-This repo contains a simple neuro task to use as a starter for building [jspsych](https://www.jspsych.org/) tasks with React and Electron.
+This repo contains a the provocation task. It is a [jspsych](https://www.jspsych.org/) task built with React and Electron.
 
 ## Getting Started
 

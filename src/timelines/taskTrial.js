@@ -1,6 +1,6 @@
 // import trials
 import fixation from '../trials/fixation'
-import showCondition from '../trials/showCondition'
+import showImage from '../trials/showImage'
 import taskEnd from '../trials/taskEnd'
 
 
@@ -15,7 +15,8 @@ const taskTrial = (blockSettings, blockDetails, condition) => {
   // timeline
   let timeline = [
     // show condition
-    showCondition(condition, 1000, 500),
+    fixation(650),
+    showImage(condition, 3000),
     fixation(650),
     // end the trial
     taskEnd(trialDetails, 500)

@@ -1,4 +1,5 @@
 import * as _ from 'lodash'
+import { baseStimulus } from '../lib/markup/stimuli'
 
 // build a countdown transition with the given text and number of seconds
 const buildCountdown = (text, time) => {
@@ -7,7 +8,7 @@ const buildCountdown = (text, time) => {
 
   return ({
     type: 'html_keyboard_response',
-    stimulus: `<h3>${text}</h3`,
+    stimulus: baseStimulus(`<h3>${text}</h3>`, true),
     trial_duration: 1000,
     response_ends_trial: false,
     timeline:  timeline
