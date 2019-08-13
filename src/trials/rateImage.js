@@ -95,22 +95,22 @@ const rateImage = () => {
           }
 
           // keep circle in canvas
-          if (x > canvas.width + CURSOR_RADIUS) {
+          if (x > canvas.width - CURSOR_RADIUS) {
             x = canvas.width - CURSOR_RADIUS;
           }
-          if (y > canvas.height + CURSOR_RADIUS) {
+          if (y > canvas.height - CURSOR_RADIUS) {
             y = canvas.height - CURSOR_RADIUS;
           }
-          if (x < -CURSOR_RADIUS) {
+          if (x < CURSOR_RADIUS) {
             x = CURSOR_RADIUS;
           }
-          if (y < -CURSOR_RADIUS) {
+          if (y < CURSOR_RADIUS) {
             y = CURSOR_RADIUS;
           }
 
           // re-draw with updates
           if (!animation) {
-            animation = requestAnimationFrame(function() {
+            animation = requestAnimationFrame( () => {
               animation = null;
               canvasDraw();
             });
