@@ -32,7 +32,13 @@ const importAll = (r) => {
 // UPDATE THIS PATH TO CHANGE IMAGE FOLDER
 const images = importAll(require.context('../assets/images/test-images', false, /\.(png|jpe?g|svg)$/));
 
-console.log(images)
+
+const ratingSettings = {
+	max: 10,
+	canvasSize: 640, // canvas is a square
+	circleRadius: 30,
+	cursorRadius: 15
+}
 
 // get language file
 const lang = require('../language/en_us.json')
@@ -52,6 +58,7 @@ const defaultBlockSettings = {
 export {
 	keys,
 	imageSettings,
+	ratingSettings,
 	defaultBlockSettings,
 	lang,
 	eventCodes,

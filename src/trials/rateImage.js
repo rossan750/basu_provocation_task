@@ -1,15 +1,12 @@
-import { triggerPort, eventCodes, keys } from '../config/main'
-import { fixationHTML } from '../lib/markup/fixation'
+import { eventCodes, ratingSettings } from '../config/main'
 import { photodiodeGhostBox, pdSpotEncode } from '../lib/markup/photodiode'
-import { jsPsych } from 'jspsych-react'
 import { getCircles, getCircle, drawNumbers } from '../lib/taskUtils'
 import $ from 'jquery'
-import * as _ from 'lodash'
 
 // make sure cursor radius is such that it can only touch one circle at a time
-const CANVAS_SIZE = 640
-const CIRCLE_RADIUS = 30
-const CURSOR_RADIUS = 15
+const CANVAS_SIZE = ratingSettings.canvasSize
+const CIRCLE_RADIUS = ratingSettings.circleRadius
+const CURSOR_RADIUS = ratingSettings.cursorRadius
 
 const canvasHTML = `<canvas width="${CANVAS_SIZE}" height="${CANVAS_SIZE}" id="jspsych-canvas">
     Your browser does not support HTML5 canvas
@@ -52,7 +49,7 @@ const rateImage = () => {
             const addToPath = () => path.push({x: x, y: y, elapsed: Date.now() - start})
             addToPath()
 
-            let circles = getCircles(w, h, 10, CANVAS_SIZE)
+            let circles = getCircles(w, h, ratingSettings.max, CANVAS_SIZE)
 
             const canvasDraw = () => {
               // transparent background

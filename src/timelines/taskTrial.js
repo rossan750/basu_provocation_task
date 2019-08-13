@@ -4,12 +4,6 @@ import showImage from '../trials/showImage'
 import rateImage from '../trials/rateImage'
 
 const taskTrial = (blockSettings, blockDetails, condition) => {
-  // initialize trial details
-  let trialDetails = {
-    condition: condition,
-    trial_earnings: 0,
-    start_time: Date.now()
-  }
 
   // timeline
   let timeline = [

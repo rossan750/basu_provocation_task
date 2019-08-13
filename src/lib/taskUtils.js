@@ -53,8 +53,6 @@ const getCircle = (x, y, r, circles, circle_r) => {
 }
 
 const drawNumbers = (ctx, circles, radius, x, y, cursor_radius) => {
-  var ang;
-  var num;
   ctx.font = radius * 0.8 + "px arial";
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
