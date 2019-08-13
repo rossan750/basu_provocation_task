@@ -6,7 +6,8 @@ const productId = '0487'
 const eventCodes = {
 	fixation: 1,
 	evidence: 5,
-	show_earnings: 7
+	show_ratings: 7,
+	rate: 8
 }
 
 // this is module.exports isntead of just exports as it is also imported into the electron app
