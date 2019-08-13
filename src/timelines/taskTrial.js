@@ -1,7 +1,6 @@
 // import trials
 import fixation from '../trials/fixation'
 import showImage from '../trials/showImage'
-import taskEnd from '../trials/taskEnd'
 import rateImage from '../trials/rateImage'
 
 const taskTrial = (blockSettings, blockDetails, condition) => {

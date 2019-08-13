@@ -5,14 +5,10 @@ import taskBlock from './taskBlock'
 import userId from '../trials/userId'
 
 import { MTURK, defaultBlockSettings } from '../config/main'
-import { practiceBlock } from '../config/practice'
-import { tutorialBlock } from '../config/tutorial'
-import { exptBlock1, exptBlock2 } from '../config/experiment'
-
 
 
 const primaryTimeline = [
-        userId(exptBlock1),
+        userId(defaultBlockSettings),
         preamble,
         buildCountdown("Provocation starts in:", 3),
         taskBlock(defaultBlockSettings),
@@ -20,12 +16,10 @@ const primaryTimeline = [
         ]
 
 const mturkTimeline = [
-        userId(exptBlock1),
+        userId(defaultBlockSettings),
         preamble,
         buildCountdown("The tutorial block starts in:", 3),
-        taskBlock(tutorialBlock),
-        buildCountdown("The main block starts in:", 3),
-        taskBlock(exptBlock2),
+        taskBlock(defaultBlockSettings),
         experimentEnd(3000)
         ]
 

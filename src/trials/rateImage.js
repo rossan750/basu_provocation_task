@@ -42,9 +42,15 @@ const rateImage = () => {
 
             let w = $('#jspsych-canvas').width()
             let x = w / 2
+            let dx = 0 // start at rest
 
             let h = $('#jspsych-canvas').height()
             let y = h / 2
+            let dy = 0 // start at rest
+
+            let path = []
+            const addToPath = () => path.push({x: x, y: y, elapsed: Date.now() - start})
+            addToPath()
 
             let circles = getCircles(w, h, 10, CANVAS_SIZE)
 
@@ -52,10 +58,10 @@ const rateImage = () => {
               // transparent background
               ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-              drawNumbers(ctx, circles, CIRCLE_RADIUS)
+              drawNumbers(ctx, circles, CIRCLE_RADIUS, x, y, CURSOR_RADIUS)
 
               // draw the cursor
-              ctx.fillStyle = "#f00";
+              ctx.fillStyle = "#00bfff";
               ctx.beginPath();
               ctx.arc(x, y, CURSOR_RADIUS, 0, 2 * Math.PI, true);
               ctx.fill();
@@ -68,6 +74,22 @@ const rateImage = () => {
             const handleMoveListener = (e) => {
                 x += e.originalEvent.movementX;
                 y += e.originalEvent.movementY;
+
+                // if direction changes, add to path
+                let newdx = Math.sign(e.originalEvent.movementX)
+                let newdy = Math.sign(e.originalEvent.movementY)
+
+                let updated = false
+                if ( newdx !== dx && newdx !== 0 ) {
+                    addToPath()
+                    dx = newdx
+                    updated = true
+                }
+
+                if ( newdy !== dy && newdy !== 0 ) {
+                    if (!updated) addToPath()
+                    dy = newdy
+                }
 
                 // keep circle in canvas
                 if (x > canvas.width + CURSOR_RADIUS) {
@@ -97,6 +119,8 @@ const rateImage = () => {
                 let circle = getCircle(x, y, CURSOR_RADIUS, circles, CIRCLE_RADIUS)
 
                 if (circle) { // rating complete
+                  addToPath()
+
                   // return control of mouse
                   document.exitPointerLock()
 
@@ -106,7 +130,7 @@ const rateImage = () => {
                   $(document).unbind('mousemove', handleMoveListener)
                   $(document).unbind('click', handleClickListener)
 
-                  done({circle: circle, click: {x: x, y: y}, code: rateCode, rt: Date.now() - start})
+                  done({circle: circle, click: {x: x, y: y}, code: rateCode, rt: Date.now() - start, path: path})
                 }
             }
 

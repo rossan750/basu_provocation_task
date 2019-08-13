@@ -52,16 +52,22 @@ const getCircle = (x, y, r, circles, circle_r) => {
   return null
 }
 
-const drawNumbers = (ctx, circles, radius) => {
+const drawNumbers = (ctx, circles, radius, x, y, cursor_radius) => {
   var ang;
   var num;
   ctx.font = radius * 0.8 + "px arial";
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
 
+	let hovered = getCircle(x, y, cursor_radius, circles, radius)
+
   circles.forEach( (circle) => {
     // draw circle
-    ctx.fillStyle = "#D3D3D3"; // light grey
+		if (circle === hovered) {
+			ctx.fillStyle = "#778899" // medium grey
+		} else {
+    	ctx.fillStyle = "#D3D3D3"; // light grey
+		}
     ctx.beginPath();
     ctx.arc(circle.x, circle.y, radius, 0, 2 * Math.PI, true);
     ctx.fill();

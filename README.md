@@ -1,6 +1,6 @@
 # Provocation Task
 
-This repo contains a the provocation task. It is a [jspsych](https://www.jspsych.org/) task built with React and Electron.
+This repo contains the provocation task. It is a [jspsych](https://www.jspsych.org/) task built with React and Electron.
 
 ## Getting Started
 
