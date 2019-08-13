@@ -8,11 +8,6 @@ const CANVAS_SIZE = ratingSettings.canvasSize
 const CIRCLE_RADIUS = ratingSettings.circleRadius
 const CURSOR_RADIUS = ratingSettings.cursorRadius
 
-canvas.requestPointerLock = canvas.requestPointerLock ||
-                            canvas.mozRequestPointerLock;
-document.exitPointerLock = document.exitPointerLock    ||
-                           document.mozExitPointerLock;
-
 const canvasHTML = `<canvas width="${CANVAS_SIZE}" height="${CANVAS_SIZE}" id="jspsych-canvas">
     Your browser does not support HTML5 canvas
   </canvas>`
@@ -41,6 +36,12 @@ const rateImage = () => {
         let canvas = document.querySelector('#jspsych-canvas');
         let ctx = canvas.getContext('2d');
         let animation
+
+        // cross-browser compatibility
+        canvas.requestPointerLock = canvas.requestPointerLock ||
+                                    canvas.mozRequestPointerLock;
+        document.exitPointerLock = document.exitPointerLock    ||
+                                   document.mozExitPointerLock;
 
         let w = $('#jspsych-canvas').width()
         let x = w / 2
