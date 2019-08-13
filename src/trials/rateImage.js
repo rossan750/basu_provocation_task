@@ -8,6 +8,11 @@ const CANVAS_SIZE = ratingSettings.canvasSize
 const CIRCLE_RADIUS = ratingSettings.circleRadius
 const CURSOR_RADIUS = ratingSettings.cursorRadius
 
+canvas.requestPointerLock = canvas.requestPointerLock ||
+                            canvas.mozRequestPointerLock;
+document.exitPointerLock = document.exitPointerLock    ||
+                           document.mozExitPointerLock;
+
 const canvasHTML = `<canvas width="${CANVAS_SIZE}" height="${CANVAS_SIZE}" id="jspsych-canvas">
     Your browser does not support HTML5 canvas
   </canvas>`
@@ -17,124 +22,124 @@ const rateImage = () => {
     let stimulus = canvasHTML + photodiodeGhostBox()
 
     return {
-        type: 'call_function',
-        async: true,
-        func: (done) => {
-            // send trigger events
-            const showCode = eventCodes.show_ratings
-            const rateCode = eventCodes.rate
+      type: 'call_function',
+      async: true,
+      func: (done) => {
+        // send trigger events
+        const showCode = eventCodes.show_ratings
+        const rateCode = eventCodes.rate
 
-            pdSpotEncode(showCode)
+        pdSpotEncode(showCode)
 
-            const start = Date.now()
+        const start = Date.now()
 
-            // add stimulus to the DOM
-            document.getElementById('jspsych-content').innerHTML = stimulus
-            $('#jspsych-content').addClass('task-container')
+        // add stimulus to the DOM
+        document.getElementById('jspsych-content').innerHTML = stimulus
+        $('#jspsych-content').addClass('task-container')
 
-            // set up canvas
-            let canvas = document.querySelector('#jspsych-canvas');
-            let ctx = canvas.getContext('2d');
-            let animation
+        // set up canvas
+        let canvas = document.querySelector('#jspsych-canvas');
+        let ctx = canvas.getContext('2d');
+        let animation
 
-            let w = $('#jspsych-canvas').width()
-            let x = w / 2
-            let dx = 0 // start at rest
+        let w = $('#jspsych-canvas').width()
+        let x = w / 2
+        let dx = 0 // start at rest
 
-            let h = $('#jspsych-canvas').height()
-            let y = h / 2
-            let dy = 0 // start at rest
+        let h = $('#jspsych-canvas').height()
+        let y = h / 2
+        let dy = 0 // start at rest
 
-            let path = []
-            const addToPath = () => path.push({x: x, y: y, elapsed: Date.now() - start})
+        let path = []
+        const addToPath = () => path.push({x: x, y: y, elapsed: Date.now() - start})
+        addToPath()
+
+        let circles = getCircles(w, h, ratingSettings.max, CANVAS_SIZE)
+
+        const canvasDraw = () => {
+          // transparent background
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          drawNumbers(ctx, circles, CIRCLE_RADIUS, x, y, CURSOR_RADIUS)
+
+          // draw the cursor
+          ctx.fillStyle = "#00bfff";
+          ctx.beginPath();
+          ctx.arc(x, y, CURSOR_RADIUS, 0, 2 * Math.PI, true);
+          ctx.fill();
+        }
+        canvasDraw();
+
+        // request control of the cursor from the dom
+        canvas.requestPointerLock()
+
+        const handleMoveListener = (e) => {
+          x += e.originalEvent.movementX;
+          y += e.originalEvent.movementY;
+
+          // if direction changes, add to path
+          let newdx = Math.sign(e.originalEvent.movementX)
+          let newdy = Math.sign(e.originalEvent.movementY)
+
+          let updated = false
+          if ( newdx !== dx && newdx !== 0 ) {
+            addToPath()
+            dx = newdx
+            updated = true
+          }
+
+          if ( newdy !== dy && newdy !== 0 ) {
+            if (!updated) addToPath()
+            dy = newdy
+          }
+
+          // keep circle in canvas
+          if (x > canvas.width + CURSOR_RADIUS) {
+            x = canvas.width - CURSOR_RADIUS;
+          }
+          if (y > canvas.height + CURSOR_RADIUS) {
+            y = canvas.height - CURSOR_RADIUS;
+          }
+          if (x < -CURSOR_RADIUS) {
+            x = CURSOR_RADIUS;
+          }
+          if (y < -CURSOR_RADIUS) {
+            y = CURSOR_RADIUS;
+          }
+
+          // re-draw with updates
+          if (!animation) {
+            animation = requestAnimationFrame(function() {
+              animation = null;
+              canvasDraw();
+            });
+          }
+        }
+
+        const handleClickListener = (e) => {
+            // find circle that was clicked (or null if none)
+          let circle = getCircle(x, y, CURSOR_RADIUS, circles, CIRCLE_RADIUS)
+
+          if (circle) { // rating complete
             addToPath()
 
-            let circles = getCircles(w, h, ratingSettings.max, CANVAS_SIZE)
+            // return control of mouse
+            document.exitPointerLock()
 
-            const canvasDraw = () => {
-              // transparent background
-              ctx.clearRect(0, 0, canvas.width, canvas.height);
+            pdSpotEncode(rateCode)
 
-              drawNumbers(ctx, circles, CIRCLE_RADIUS, x, y, CURSOR_RADIUS)
+            // free event listeners
+            $(document).unbind('mousemove', handleMoveListener)
+            $(document).unbind('click', handleClickListener)
 
-              // draw the cursor
-              ctx.fillStyle = "#00bfff";
-              ctx.beginPath();
-              ctx.arc(x, y, CURSOR_RADIUS, 0, 2 * Math.PI, true);
-              ctx.fill();
-            }
-            canvasDraw();
-
-            // request control of the cursor from the dom
-            canvas.requestPointerLock()
-
-            const handleMoveListener = (e) => {
-                x += e.originalEvent.movementX;
-                y += e.originalEvent.movementY;
-
-                // if direction changes, add to path
-                let newdx = Math.sign(e.originalEvent.movementX)
-                let newdy = Math.sign(e.originalEvent.movementY)
-
-                let updated = false
-                if ( newdx !== dx && newdx !== 0 ) {
-                    addToPath()
-                    dx = newdx
-                    updated = true
-                }
-
-                if ( newdy !== dy && newdy !== 0 ) {
-                    if (!updated) addToPath()
-                    dy = newdy
-                }
-
-                // keep circle in canvas
-                if (x > canvas.width + CURSOR_RADIUS) {
-                  x = canvas.width - CURSOR_RADIUS;
-                }
-                if (y > canvas.height + CURSOR_RADIUS) {
-                  y = canvas.height - CURSOR_RADIUS;
-                }
-                if (x < -CURSOR_RADIUS) {
-                  x = CURSOR_RADIUS;
-                }
-                if (y < -CURSOR_RADIUS) {
-                  y = CURSOR_RADIUS;
-                }
-
-                // re-draw with updates
-                if (!animation) {
-                  animation = requestAnimationFrame(function() {
-                    animation = null;
-                    canvasDraw();
-                  });
-                }
-            }
-
-            const handleClickListener = (e) => {
-                // find circle that was clicked (or null if none)
-                let circle = getCircle(x, y, CURSOR_RADIUS, circles, CIRCLE_RADIUS)
-
-                if (circle) { // rating complete
-                  addToPath()
-
-                  // return control of mouse
-                  document.exitPointerLock()
-
-                  pdSpotEncode(rateCode)
-
-                  // free event listeners
-                  $(document).unbind('mousemove', handleMoveListener)
-                  $(document).unbind('click', handleClickListener)
-
-                  done({circle: circle, click: {x: x, y: y}, code: rateCode, rt: Date.now() - start, path: path})
-                }
-            }
-
-            // Bind event listener to document
-            $(document).bind('mousemove', handleMoveListener)
-            $(document).bind('click', handleClickListener)
+            done({circle: circle, click: {x: x, y: y}, code: rateCode, rt: Date.now() - start, path: path})
+          }
         }
+
+        // Bind event listener to document
+        $(document).bind('mousemove', handleMoveListener)
+        $(document).bind('click', handleClickListener)
+      }
     }
 }
 
