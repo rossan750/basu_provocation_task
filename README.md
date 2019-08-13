@@ -6,26 +6,17 @@ This repo contains a the provocation task. It is a [jspsych](https://www.jspsych
 
 1. Clone this repo onto your computer
 ```
-git clone https://github.com/brown-ccv/neuro-task-starter.git
+git clone https://github.com/brown-ccv/task-provocation.git
 ```
-2. Change the folder name and change directory into the new folder
-```
-mv neuro-task-starter task-<TASK_NAME>
-cd task-<TASK NAME>
-```
-3. Set the remote url to your tasks' repo (create a github repo if not yet created)
-```
-git remote set-url origin <PATH_TO_YOUR_REPO>
-```
-4. Install the dependencies (the -D flag installs the dev dependencies as well as the production ones)
+2. Install the dependencies (the -D flag installs the dev dependencies as well as the production ones)
 ```
 npm install -D
 ```
-5. Run the task in dev mode - this should launch an electron window with the task with the inspector open to the console and will hot-reload when changes are made to the app
+3. Run the task in dev mode - this should launch an electron window with the task with the inspector open to the console and will hot-reload when changes are made to the app
 ```
 npm run dev
 ```
-6. Check out the data - the data is saved throughout the task to the users's app directory.  This is logged at the beginning of the task wherever you ran `npm run dev`
+4. Check out the data - the data is saved throughout the task to the users's app directory.  This is logged at the beginning of the task wherever you ran `npm run dev`
 
 ## Project Organization
 

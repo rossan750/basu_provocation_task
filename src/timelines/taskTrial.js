@@ -2,7 +2,7 @@
 import fixation from '../trials/fixation'
 import showImage from '../trials/showImage'
 import taskEnd from '../trials/taskEnd'
-
+import rateImage from '../trials/rateImage'
 
 const taskTrial = (blockSettings, blockDetails, condition) => {
   // initialize trial details
@@ -16,10 +16,10 @@ const taskTrial = (blockSettings, blockDetails, condition) => {
   let timeline = [
     // show condition
     fixation(650),
-    showImage(condition, 3000),
+    showImage(condition, 1001),
     fixation(650),
     // end the trial
-    taskEnd(trialDetails, 500)
+    rateImage()
   ]
 
     return {
