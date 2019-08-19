@@ -18,6 +18,18 @@ npm run dev
 ```
 4. Check out the data - the data is saved throughout the task to the users's app directory.  This is logged at the beginning of the task wherever you ran `npm run dev`
 
+## Contributing
+
+1. Clone the repo and create a new feature branch off `develop`.
+
+```shell
+git clone https://github.com/brown-ccv/task-provocation.git
+git checkout -b your-feature-branch
+```
+
+2. Make your changes and commit using [commitizen](https://pypi.org/project/commitizen/)
+3. Submit a [pull request](https://help.github.com/en/articles/creating-a-pull-request) to the `develop` branch. Add @mcmcgrath13 or @fernandogelin as a reviewer. 
+
 ## Project Organization
 
 This project directory is organized to be very modular and composable. In general, files and functions should be relatively small and self-contained, global scope should not be used (and definitely not mutated), and only the pieces of code needed for any given file should be imported. This keeps the code maintainable with clear lineage and purpose for each piece of code. Below are descriptions of the main files and folders.
