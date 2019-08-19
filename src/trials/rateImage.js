@@ -55,7 +55,7 @@ const rateImage = () => {
         const addToPath = () => path.push({x: x, y: y, elapsed: Date.now() - start})
         addToPath()
 
-        let circles = getCircles(w, h, ratingSettings.max, CANVAS_SIZE)
+        let circles = getCircles(w, h, ratingSettings.min, ratingSettings.max, CANVAS_SIZE)
 
         const canvasDraw = () => {
           // transparent background

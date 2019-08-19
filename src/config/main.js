@@ -6,16 +6,6 @@ import { jsPsych } from 'jspsych-react'
 import _ from 'lodash'
 import { eventCodes } from './trigger'
 
-// mapping of letters to key codes
-const keys = {
-	"A": 65,
-	"B": 66,
-	"C": 67,
-	"F": 70,
-	"J": 74,
-	"space": 32
-}
-
 // is this mechanical turk?
 const MTURK = (!jsPsych.turk.turkInfo().outsideTurk)
 
@@ -33,11 +23,13 @@ const importAll = (r) => {
 const images = importAll(require.context('../assets/images/test-images', false, /\.(png|jpe?g|svg)$/));
 
 
+// NOTE: cursor radius needs to be small enough to not hit two circles at once
 const ratingSettings = {
+	min: 0,
 	max: 10,
 	canvasSize: 640, // canvas is a square
-	circleRadius: 30,
-	cursorRadius: 15
+	circleRadius: 28,
+	cursorRadius: 12
 }
 
 // get language file
@@ -56,7 +48,6 @@ const defaultBlockSettings = {
 }
 
 export {
-	keys,
 	imageSettings,
 	ratingSettings,
 	defaultBlockSettings,
