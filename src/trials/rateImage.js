@@ -133,7 +133,7 @@ const rateImage = () => {
             $(document).unbind('mousemove', handleMoveListener)
             $(document).unbind('click', handleClickListener)
 
-            done({circle: circle, click: {x: x, y: y}, code: rateCode, rt: Date.now() - start, path: path})
+            done({circles: circles, circle_radius: CIRCLE_RADIUS, cursor_radius: CURSOR_RADIUS, clicked: circle, click: {x: x, y: y}, code: rateCode, rt: Date.now() - start, path: path})
           }
         }
 
