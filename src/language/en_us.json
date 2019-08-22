@@ -21,5 +21,15 @@
   "eventMarker" : {
     "found": "Hold the USB event marker in front of the camera.",
     "not_found": "Note: no USB event marker found."
+  },
+  "instructions": {
+    "welcome": "Welcome!",
+    "p1": "During the task, you will see a series of neutral images and anxiety-provoking images.",
+    "p2": "You will be asked to rate your level of distress from 0-10 in response to each images, where 0 is no distress and 10 is the highest level of distress.",
+    "fixation": "Throughout the experiment, you'll see this fixation point at the center of the screen. <br> Fixate your eyes on this black fixation point.",
+    "rate": "When you’re ready, rate your distress by dragging the cursor to the desired rating number and click to submit.",
+    "rate_practice": "Try submitting a rating of “5” by dragging the cursor to “5” and clicking to submit the rating.",
+    "no_talking": "Try not to talk or move around more than necessary, as movements affect the quality of the recordings.",
+    "instruction_end": "In a few moments, the task will begin."
   }
 }

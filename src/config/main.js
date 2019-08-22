@@ -32,6 +32,7 @@ const importAll = (r) => {
 // UPDATE THIS PATH TO CHANGE IMAGE FOLDER
 const images = importAll(require.context('../assets/images/test-images', false, /\.(png|jpe?g|svg)$/));
 
+const practiceImages = importAll(require.context('../assets/images/test-images', false, /\.(png|jpe?g|svg)$/));
 
 const ratingSettings = {
 	max: 10,
@@ -55,6 +56,14 @@ const defaultBlockSettings = {
 	photodiode_active: false
 }
 
+const practiceBlockSettings = {
+	images: practiceImages,
+	repeats_per_condition: 1, // number of times every condition is repeated
+	is_practice: false,
+	is_tutorial: false,
+	photodiode_active: false
+}
+
 export {
 	keys,
 	imageSettings,
@@ -62,5 +71,6 @@ export {
 	defaultBlockSettings,
 	lang,
 	eventCodes,
-	MTURK
+	MTURK,
+	defaultBlockSettings
 }
