@@ -1,3 +1,10 @@
+import { lang } from '../config/main'
+import { images } from '../lib/utils'
+import {baseStimulus } from '../lib/markup/stimuli'
+import {fixationHTML } from '../lib/markup/fixation'
+import _ from 'lodash'
+
+
 const screenOne = () => {
   var stimulus = baseStimulus(`
     <div class='instructions'>
