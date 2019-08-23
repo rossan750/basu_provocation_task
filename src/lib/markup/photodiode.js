@@ -21,7 +21,7 @@ const photodiodeGhostBox = () => {
 
 const pdSpotEncode = (taskCode) => {
 	if (!MTURK) {
-		const blinkTime = taskCode * 10
+		const blinkTime = 20
 		for (var i = 0; i < taskCode; i++) {
 			$('#photodiode-spot').delay(blinkTime).hide(0).delay(blinkTime).show(0)
 		}
