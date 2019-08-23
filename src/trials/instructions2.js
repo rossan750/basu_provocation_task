@@ -9,7 +9,7 @@ const screenFive = () => {
     <div class='instructions'>
     <ul>
     <p>${lang.instructions.no_talking}</p>
-    </ul>
+    <div class="row">
     </div>
     `, prompt=true)
   return {
