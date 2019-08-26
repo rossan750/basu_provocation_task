@@ -49,7 +49,7 @@ const taskBlock = (blockSettings) => {
 				repeats_per_condition: blockSettings.repeats_per_condition
 			}, () => {})
 			//
-			jsPsych.addNodeToEndOfTimeline(experimentEnd(50000), () => {})
+			jsPsych.addNodeToEndOfTimeline(experimentEnd(5000), () => {})
 		}
 	}
 }

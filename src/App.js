@@ -46,9 +46,6 @@ class App extends React.Component {
             else if (psiturk) {
               psiturk.saveData()
             }
-          },
-          on_trial_start: () => {
-            console.log(jsPsych.currentTimelineNodeID())
           }
         }}
         />

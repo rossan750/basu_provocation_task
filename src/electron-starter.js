@@ -24,11 +24,25 @@ let mainWindow
 function createWindow () {
 
   // Create the browser window.
-  mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    webPreferences: { nodeIntegration: true }
-  })
+  if (process.env.ELECTRON_START_URL) { // in dev mode, disable web security to allow local file loading
+    mainWindow = new BrowserWindow({
+      width: 1200,
+      height: 800,
+      webPreferences: {
+        nodeIntegration: true,
+        webSecurity: false
+      }
+    })
+  } else {
+    mainWindow = new BrowserWindow({
+      width: 1200,
+      height: 800,
+      webPreferences: {
+        nodeIntegration: true,
+        webSecurity: true
+      }
+    })
+  }
 
   // and load the index.html of the app.
   const startUrl = process.env.ELECTRON_START_URL || url.format({
