@@ -53,12 +53,7 @@ function createWindow () {
 
 // EVENT TRIGGER
 ipc.on('trigger', (event, args) => {
-  let code
-  try {
-    code = args.value.code
-  } catch {
-    code = args.code
-  }
+  let code = args
   if (code != undefined) {
     console.log(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`)
     sendToPort(triggerPort, code)

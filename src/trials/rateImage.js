@@ -12,7 +12,6 @@ const canvasHTML = `<canvas width="${CANVAS_SIZE}" height="${CANVAS_SIZE}" id="j
     Your browser does not support HTML5 canvas
   </canvas>`
 
-
 const rateImage = () => {
     let stimulus = canvasHTML + photodiodeGhostBox()
 
@@ -23,9 +22,7 @@ const rateImage = () => {
         // send trigger events
         const showCode = eventCodes.show_ratings
         const rateCode = eventCodes.rate
-
-        pdSpotEncode(showCode)
-
+        
         const start = Date.now()
 
         // add stimulus to the DOM
@@ -69,7 +66,9 @@ const rateImage = () => {
           ctx.arc(x, y, CURSOR_RADIUS, 0, 2 * Math.PI, true);
           ctx.fill();
         }
+        // show ratings
         canvasDraw();
+        pdSpotEncode(showCode)
 
         // request control of the cursor from the dom
         canvas.requestPointerLock()
@@ -119,22 +118,26 @@ const rateImage = () => {
 
         const handleClickListener = (e) => {
             // find circle that was clicked (or null if none)
-          let circle = getCircle(x, y, CURSOR_RADIUS, circles, CIRCLE_RADIUS)
+            let circle = getCircle(x, y, CURSOR_RADIUS, circles, CIRCLE_RADIUS)
 
-          if (circle) { // rating complete
-            addToPath()
+            if (circle) { // rating complete
+              const rt = Date.now() - start
+              pdSpotEncode(rateCode)
 
-            // return control of mouse
-            document.exitPointerLock()
+              // add final click spot to path
+              addToPath()
 
-            pdSpotEncode(rateCode)
+              // return control of mouse
+              document.exitPointerLock()
 
-            // free event listeners
-            $(document).unbind('mousemove', handleMoveListener)
-            $(document).unbind('click', handleClickListener)
+              // free event listeners
+              $(document).unbind('mousemove', handleMoveListener)
+              $(document).unbind('click', handleClickListener)
 
-            done({circles: circles, circle_radius: CIRCLE_RADIUS, cursor_radius: CURSOR_RADIUS, clicked: circle, click: {x: x, y: y}, code: rateCode, rt: Date.now() - start, path: path})
-          }
+              setTimeout(
+                  () => done({circle: circle, click: {x: x, y: y}, code: [showCode, rateCode], rt: rt, path: path}),
+                  500)
+            }
         }
 
         // Bind event listener to document
