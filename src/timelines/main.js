@@ -20,7 +20,7 @@ const mturkTimeline = [
         preamble,
         buildCountdown("The tutorial block starts in:", 3),
         taskBlock(defaultBlockSettings),
-        experimentEnd(3000)
+        experimentEnd(5000)
         ]
 
 export const tl = (MTURK) ? mturkTimeline : primaryTimeline

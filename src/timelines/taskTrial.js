@@ -3,7 +3,7 @@ import fixation from '../trials/fixation'
 import showImage from '../trials/showImage'
 import rateImage from '../trials/rateImage'
 
-const taskTrial = (blockSettings, blockDetails, condition) => {
+const taskTrial = (blockSettings, condition) => {
 
   // timeline
   let timeline = [

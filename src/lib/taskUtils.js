@@ -12,17 +12,18 @@ const generateStartingOpts = (blockSettings) => {
 	return shuffleArray(_.flatten(startingOptions))
 }
 
-const getCircles = (width, height, n, size) => {
+const getCircles = (width, height, start, stop, size) => {
   const center = size / 2
   const r = center * 0.85
+	const n = stop - start + 1
 
   const slice = Math.PI / (n-1)
 
-  let circles = _.range(n).map( (val) => {
+  let circles = _.range(start, stop + 1).map( (val) => {
     let theta = slice * val - Math.PI / 2
     let x = r * Math.sin(theta) + center
     let y = r * Math.cos(theta) + center
-    return {n: val+1, x: x, y: y}
+    return {n: val, x: x, y: y}
   })
 
   return circles
