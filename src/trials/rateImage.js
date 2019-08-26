@@ -12,7 +12,6 @@ const canvasHTML = `<canvas width="${CANVAS_SIZE}" height="${CANVAS_SIZE}" id="j
     Your browser does not support HTML5 canvas
   </canvas>`
 
-
 const rateImage = () => {
     let stimulus = canvasHTML + photodiodeGhostBox()
 
@@ -23,8 +22,6 @@ const rateImage = () => {
             // send trigger events
             const showCode = eventCodes.show_ratings
             const rateCode = eventCodes.rate
-
-            pdSpotEncode(showCode)
 
             const start = Date.now()
 
@@ -58,12 +55,15 @@ const rateImage = () => {
               drawNumbers(ctx, circles, CIRCLE_RADIUS, x, y, CURSOR_RADIUS)
 
               // draw the cursor
-              ctx.fillStyle = "#00bfff";
+              ctx.fillStyle = "#ffffff";
               ctx.beginPath();
               ctx.arc(x, y, CURSOR_RADIUS, 0, 2 * Math.PI, true);
               ctx.fill();
             }
+
+            // show ratings
             canvasDraw();
+            pdSpotEncode(showCode)
 
             // request control of the cursor from the dom
             canvas.requestPointerLock()
@@ -116,18 +116,22 @@ const rateImage = () => {
                 let circle = getCircle(x, y, CURSOR_RADIUS, circles, CIRCLE_RADIUS)
 
                 if (circle) { // rating complete
+                  const rt = Date.now() - start
+                  pdSpotEncode(rateCode)
+
+                  // add final click spot to path
                   addToPath()
 
                   // return control of mouse
                   document.exitPointerLock()
 
-                  pdSpotEncode(rateCode)
-
                   // free event listeners
                   $(document).unbind('mousemove', handleMoveListener)
                   $(document).unbind('click', handleClickListener)
 
-                  done({circle: circle, click: {x: x, y: y}, code: rateCode, rt: Date.now() - start, path: path})
+                  setTimeout(
+                      () => done({circle: circle, click: {x: x, y: y}, code: [showCode, rateCode], rt: rt, path: path}),
+                      500)
                 }
             }
 

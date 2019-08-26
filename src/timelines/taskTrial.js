@@ -8,9 +8,10 @@ const taskTrial = (blockSettings, blockDetails, condition) => {
   // timeline
   let timeline = [
     // show condition
-    fixation(650),
+    fixation(2000),
+    fixation(200, false, true), // not jittered, green
     showImage(condition, 1001),
-    fixation(650),
+
     // end the trial
     rateImage()
   ]
