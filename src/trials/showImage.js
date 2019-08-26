@@ -9,8 +9,6 @@ const showImage = (image, duration) => {
   return {
     type: 'image_keyboard_response',
     stimulus: image,
-    stimulus_height: imageSettings.height,
-    stimulus_width: imageSettings.width,
     prompt: photodiodeGhostBox(),
     response_ends_trial: false,
     trial_duration: duration,

@@ -10,7 +10,7 @@ const taskTrial = (blockSettings, condition) => {
     // show condition
     fixation(2000),
     fixation(200, false, true), // not jittered, green
-    showImage(condition, 1001),
+    showImage(condition, 10001),
 
     // end the trial
     rateImage()

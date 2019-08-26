@@ -47,6 +47,9 @@ class App extends React.Component {
               psiturk.saveData()
             }
           },
+          on_trial_start: () => {
+            console.log(jsPsych.currentTimelineNodeID())
+          }
         }}
         />
       </div>

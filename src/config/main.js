@@ -34,7 +34,7 @@ const ratingSettings = {
 
 // get language file
 const lang = require('../language/en_us.json')
-if (process.env.MTURK) { // if this is mturk, merge in the mturk specific language
+if (MTURK) { // if this is mturk, merge in the mturk specific language
   const mlang = require('../language/en_us.mturk.json')
 	_.merge(lang, mlang)
 }
@@ -53,5 +53,6 @@ export {
 	defaultBlockSettings,
 	lang,
 	eventCodes,
-	MTURK
+	MTURK,
+	importAll
 }
