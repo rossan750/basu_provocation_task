@@ -1,5 +1,35 @@
 // utilities specific to this app/task
 import _ from 'lodash'
+import { shuffleArray, deepCopy, randomTrue } from './utils'
+
+// initialize starting conditions for each trial within a block
+// each repetition set is independently randomized then concatenated
+// no more than 3 images from a set can repeat in a row
+const generateStartingOpts = (b) => {
+	let startingOptions = []
+
+	for (let i = 0; i < b.repeats_per_condition; i++) {
+		let neutralImages = shuffleArray(deepCopy(b.images.neutral))
+		let provokingImages = shuffleArray(deepCopy(b.images.provoking))
+
+		while (neutralImages.length > 0 && provokingImages.length > 0) {
+			if (neutralImages.length - provokingImages.length >= 3 ) {
+				startingOptions.push(neutralImages.pop())
+			} else if (provokingImages.length - neutralImages.length >= 3) {
+				startingOptions.push(provokingImages.pop())
+			} else if ( randomTrue() ) {
+				startingOptions.push(neutralImages.pop())
+			} else {
+				startingOptions.push(provokingImages.pop())
+			}
+		}
+
+		startingOptions.push(...neutralImages)
+		startingOptions.push(...provokingImages)
+	}
+
+	return startingOptions
+}
 
 const getCircles = (width, height, start, stop, size) => {
   const center = size / 2
@@ -68,6 +98,7 @@ const drawNumbers = (ctx, circles, radius, x, y, cursor_radius) => {
 
 
 export {
+	generateStartingOpts,
 	getCircles,
 	getCircle,
 	drawNumbers

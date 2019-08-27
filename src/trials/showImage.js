@@ -1,6 +1,7 @@
 import { eventCodes, imageSettings } from '../config/main'
 import { photodiodeGhostBox, pdSpotEncode } from '../lib/markup/photodiode'
 import $ from 'jquery'
+import { jitter50 } from '../lib/utils'
 
 
 const showImage = (image, duration) => {
@@ -11,7 +12,7 @@ const showImage = (image, duration) => {
     stimulus: image,
     prompt: photodiodeGhostBox(),
     response_ends_trial: false,
-    trial_duration: duration,
+    trial_duration: jitter50(duration),
     on_load: () => {
       $('#jspsych-image-keyboard-response-stimulus').addClass('image')
       $('#jspsych-image-keyboard-response-stimulus').height(imageSettings.height)

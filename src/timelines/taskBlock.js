@@ -3,6 +3,7 @@ import path from 'path'
 import { jsPsych } from 'jspsych-react'
 import { MTURK } from '../config/main'
 import experimentEnd from '../trials/experimentEnd'
+import { generateStartingOpts } from '../lib/taskUtils'
 
 const isElectron = !MTURK
 let app = false
@@ -23,24 +24,26 @@ const taskBlock = (blockSettings) => {
 			if ( app ) {
 				try {
 					const patientID = jsPsych.data.get().select('patient_id').values[0]
-					const localImagePath = path.join(app.getPath('desktop'), `${patientID}`, 'images')
+					const localImagePath = path.join(app.getPath('desktop'), 'provocation-images', `${patientID}`)
+					const neutralImagePath = path.join(localImagePath, 'neutral')
+					const provokingImagePath = path.join(localImagePath, 'provoking')
 
-					let items = fs.readdirSync(localImagePath)
-					blockSettings.images = items.map( (image) => `file://` + path.join(localImagePath, image))
+					let neutralItems = fs.readdirSync(neutralImagePath)
+					let provokingItems = fs.readdirSync(provokingImagePath)
+					blockSettings.images.neutral = neutralItems.map( (image) => `file://` + path.join(neutralImagePath, image))
+					blockSettings.images.provoking = provokingItems.map( (image) => `file://` + path.join(provokingImagePath, image))
 
 					console.log(`Loaded images from ${localImagePath}`)
 				} catch {
 					console.log("Error loading local files - using default images")
 				}
-			} else {
-				console.log("remote not required")
 			}
 
 			// initialize block
-			const startingOpts = blockSettings.images
+			const startingOpts = generateStartingOpts(blockSettings)
 
 			// timeline = loop through trials
-			let timeline = startingOpts.map( (image) => taskTrial(blockSettings, image))
+			let timeline = startingOpts.map( (image) => taskTrial(image))
 
 			jsPsych.addNodeToEndOfTimeline({
 				type: 'html_keyboard_response',

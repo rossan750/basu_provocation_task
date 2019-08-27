@@ -20,7 +20,8 @@ const importAll = (r) => {
 }
 
 // UPDATE THIS PATH TO CHANGE IMAGE FOLDER
-const images = importAll(require.context('../assets/images/test-images', false, /\.(png|jpe?g|svg)$/));
+const neutralImages = importAll(require.context('../assets/images/provocation-images/neutral', false, /\.(png|jpe?g|svg)$/));
+const provokingImages = importAll(require.context('../assets/images/provocation-images/provoking', false, /\.(png|jpe?g|svg)$/));
 
 
 // NOTE: cursor radius needs to be small enough to not hit two circles at once
@@ -40,11 +41,11 @@ if (MTURK) { // if this is mturk, merge in the mturk specific language
 }
 
 const defaultBlockSettings = {
-	images: images,
-	repeats_per_condition: 1, // number of times every condition is repeated
-	is_practice: false,
-	is_tutorial: false,
-	photodiode_active: false
+	images: {
+		neutral: neutralImages,
+		provoking: provokingImages
+	},
+	repeats_per_condition: 1 // number of times every condition is repeated
 }
 
 export {
