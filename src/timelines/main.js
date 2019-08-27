@@ -6,14 +6,14 @@ import { MTURK, defaultBlockSettings, lang } from '../config/main'
 
 
 const primaryTimeline = [
-        userId(defaultBlockSettings),
+        userId(),
         preamble,
         buildCountdown(lang.countdown.message, 3),
         taskBlock(defaultBlockSettings) // includes experimentEnd
         ]
 
 const mturkTimeline = [
-        userId(defaultBlockSettings),
+        userId(),
         preamble,
         buildCountdown(lang.countdown.message, 3),
         taskBlock(defaultBlockSettings) // includes experimentEnd
