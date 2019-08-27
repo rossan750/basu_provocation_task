@@ -5,7 +5,7 @@ const url = require('url')
 const ipc = require('electron').ipcMain
 const _ = require('lodash')
 const fs = require('fs')
-
+const tar = require('tar')
 
 // Event Trigger
 const { eventCodes, manufacturer, vendorId, productId } = require('./config/trigger')
@@ -79,6 +79,7 @@ let stream = false
 let fileName = ''
 let filePath = ''
 let patientID = ''
+let images = []
 
 // listener for new data
 ipc.on('data', (event, args) => {
@@ -101,6 +102,9 @@ ipc.on('data', (event, args) => {
 
   //write the data
   stream.write(JSON.stringify(args))
+
+  // Copy provocation images to patient's data folder
+  if (args.trial_type === 'image_keyboard_response') images.push(args.stimulus.slice(7))
 })
 
 // EXPERIMENT END
@@ -119,6 +123,22 @@ ipc.on('end', (event, args) => {
   fs.mkdir(copyPath, { recursive: true }, (err) => {
     console.log(err)
     fs.copyFileSync(filePath, path.join(copyPath, fileName))
+
+    // copy images to config location
+    const sourceImagePath = path.resolve(path.dirname(images[0]), '..')
+    const imagePath = path.join(copyPath, 'provocation-images')
+    const imageFileName = path.basename(fileName, '.json') + `.tar.gz`
+    fs.mkdir(imagePath, {recursive: true}, (err) => {
+      console.log(err)
+      tar.c( // or tar.create
+        {
+          gzip: true,
+          cwd: sourceImagePath
+        },
+        ['.']
+      ).pipe(fs.createWriteStream(path.join(imagePath, imageFileName)))
+    })
+
   })
 
   // quit app
