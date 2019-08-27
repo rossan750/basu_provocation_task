@@ -64,7 +64,7 @@ const rateImage = () => {
           drawNumbers(ctx, circles, CIRCLE_RADIUS, x, y, CURSOR_RADIUS)
 
           // draw the cursor
-          ctx.fillStyle = "#00bfff";
+          ctx.fillStyle = "#ffffff";
           ctx.beginPath();
           ctx.arc(x, y, CURSOR_RADIUS, 0, 2 * Math.PI, true);
           ctx.fill();
