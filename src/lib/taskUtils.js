@@ -31,7 +31,7 @@ const generateStartingOpts = (b) => {
 	return startingOptions
 }
 
-const getCircles = (width, height, start, stop, size) => {
+const getCircles = (start, stop, size) => {
   const center = size / 2
   const r = center * 0.85
 	const n = stop - start + 1
@@ -96,10 +96,23 @@ const drawNumbers = (ctx, circles, radius, x, y, cursor_radius) => {
   })
 }
 
+const drawPrompt = (ctx, rt, size) => {
+	// only draw if it's been 10 seconds
+	if (rt < 10000) return
+
+  ctx.font = 20 + "px arial";
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "center";
+
+  // draw text
+  ctx.fillStyle = "#ffffff" // white
+  ctx.fillText("Please select a rating", size / 2, size * .25);
+}
 
 export {
 	generateStartingOpts,
 	getCircles,
 	getCircle,
-	drawNumbers
+	drawNumbers,
+	drawPrompt
 }
