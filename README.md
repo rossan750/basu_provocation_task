@@ -18,6 +18,8 @@ npm run dev
 ```
 4. Check out the data - the data is saved throughout the task to the users's app directory.  This is logged at the beginning of the task wherever you ran `npm run dev`
 
+**NOTE**: When not running on MTurk, the task will look for a folder on the desktop called `provocation-images/<patient_id>` with subfolders `neutral` and `provoking`.  If these are present, images will be loaded from there instead of the default images that are included in the app.
+
 ## Contributing
 
 1. Clone the repo and create a new feature branch off `develop`.
@@ -28,7 +30,7 @@ git checkout -b your-feature-branch
 ```
 
 2. Make your changes and commit using [commitizen](https://pypi.org/project/commitizen/)
-3. Submit a [pull request](https://help.github.com/en/articles/creating-a-pull-request) to the `develop` branch. Add @mcmcgrath13 or @fernandogelin as a reviewer. 
+3. Submit a [pull request](https://help.github.com/en/articles/creating-a-pull-request) to the `develop` branch. Add @mcmcgrath13 or @fernandogelin as a reviewer.
 
 ## Project Organization
 
