@@ -34,11 +34,8 @@ const rateImage = () => {
         let ctx = canvas.getContext('2d');
         let animation
 
-        // cross-browser compatibility
-        canvas.requestPointerLock = canvas.requestPointerLock ||
-                                    canvas.mozRequestPointerLock;
-        document.exitPointerLock = document.exitPointerLock    ||
-                                   document.mozExitPointerLock;
+        // hide the mouse
+        $('#experiment').css('cursor', 'none')
 
         let w = $('#jspsych-canvas').width()
         let x = w / 2
@@ -133,8 +130,8 @@ const rateImage = () => {
               // add final click spot to path
               addToPath()
 
-              // return control of mouse
-              document.exitPointerLock()
+              // re-show the mouse
+              $('#experiment').css('cursor', 'auto')
 
               // free event listeners
               $(document).unbind('mousemove', handleMoveListener)
