@@ -1,18 +1,37 @@
 // utilities specific to this app/task
 import _ from 'lodash'
-import { shuffleArray } from './utils'
+import { shuffleArray, deepCopy, randomTrue } from './utils'
 
 // initialize starting conditions for each trial within a block
-const generateStartingOpts = (blockSettings) => {
-	let startingOptions = blockSettings.images.map( (c) => {
-		// Repeat each starting condition the same number of times
-		return _.range(blockSettings.repeats_per_condition).map( () => c )
-	})
+// each repetition set is independently randomized then concatenated
+// no more than 3 images from a set can repeat in a row
+const generateStartingOpts = (b) => {
+	let startingOptions = []
 
-	return shuffleArray(_.flatten(startingOptions))
+	for (let i = 0; i < b.repeats_per_condition; i++) {
+		let neutralImages = shuffleArray(deepCopy(b.images.neutral))
+		let provokingImages = shuffleArray(deepCopy(b.images.provoking))
+
+		while (neutralImages.length > 0 && provokingImages.length > 0) {
+			if (neutralImages.length - provokingImages.length >= 3 ) {
+				startingOptions.push(neutralImages.pop())
+			} else if (provokingImages.length - neutralImages.length >= 3) {
+				startingOptions.push(provokingImages.pop())
+			} else if ( randomTrue() ) {
+				startingOptions.push(neutralImages.pop())
+			} else {
+				startingOptions.push(provokingImages.pop())
+			}
+		}
+
+		startingOptions.push(...neutralImages)
+		startingOptions.push(...provokingImages)
+	}
+
+	return startingOptions
 }
 
-const getCircles = (width, height, start, stop, size) => {
+const getCircles = (start, stop, size) => {
   const center = size / 2
   const r = center * 0.85
 	const n = stop - start + 1
@@ -77,10 +96,23 @@ const drawNumbers = (ctx, circles, radius, x, y, cursor_radius) => {
   })
 }
 
+const drawPrompt = (ctx, rt, size) => {
+	// only draw if it's been 10 seconds
+	if (rt < 10000) return
+
+  ctx.font = 20 + "px arial";
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "center";
+
+  // draw text
+  ctx.fillStyle = "#ffffff" // white
+  ctx.fillText("Please select a rating", size / 2, size * .25);
+}
 
 export {
 	generateStartingOpts,
 	getCircles,
 	getCircle,
-	drawNumbers
+	drawNumbers,
+	drawPrompt
 }

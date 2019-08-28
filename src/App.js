@@ -46,7 +46,7 @@ class App extends React.Component {
             else if (psiturk) {
               psiturk.saveData()
             }
-          },
+          }
         }}
         />
       </div>
