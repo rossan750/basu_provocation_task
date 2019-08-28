@@ -117,7 +117,7 @@ After that, just navigate to your newly created PsiTurk project directory.
 shell> psiturk #start psiturk
 psiturk> server on #start server
 psiturk> debug #debug mode
-
+```
 
 ## Best Practices
 
