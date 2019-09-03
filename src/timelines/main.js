@@ -12,9 +12,9 @@ import { MTURK, defaultBlockSettings, practiceBlockSettings, lang } from '../con
 const primaryTimeline = [
         userId(),
         preamble,
-	      instructions1,
-	      taskBlock(practiceBlockSettings),
-	      instructions2,
+	instructions1,
+	taskBlock(practiceBlockSettings),
+	instructions2,
         buildCountdown(lang.countdown.message, 3),
         taskBlock(defaultBlockSettings) // includes experimentEnd
         ]
