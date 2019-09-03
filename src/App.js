@@ -33,7 +33,6 @@ class App extends React.Component {
           timeline: tl,
           on_data_update: (data) => {
             if ( ipcRenderer ) {
-              ipcRenderer.send('trigger', data)
               ipcRenderer.send('data', data)
             }
             else if (psiturk) {
@@ -42,12 +41,12 @@ class App extends React.Component {
           },
           on_finish: (data) => {
             if ( ipcRenderer ) {
-              ipcRenderer.send('data', 'end')
+              ipcRenderer.send('end', 'true')
             }
             else if (psiturk) {
               psiturk.saveData()
             }
-          },
+          }
         }}
         />
       </div>

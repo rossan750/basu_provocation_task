@@ -5,16 +5,17 @@ const url = require('url')
 const ipc = require('electron').ipcMain
 const _ = require('lodash')
 const fs = require('fs')
-
+const tar = require('tar')
 
 // Event Trigger
 const { eventCodes, manufacturer, vendorId, productId } = require('./config/trigger')
 const { isPort, getPort, sendToPort } = require('event-marker')
 
-
 const triggerPort = getPort(vendorId, productId)
 const port_ = isPort(vendorId, productId)
 
+// Data Saving
+const { dataDir } = require('./config/saveData')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -23,11 +24,25 @@ let mainWindow
 function createWindow () {
 
   // Create the browser window.
-  mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    webPreferences: { nodeIntegration: true }
-  })
+  if (process.env.ELECTRON_START_URL) { // in dev mode, disable web security to allow local file loading
+    mainWindow = new BrowserWindow({
+      width: 1200,
+      height: 800,
+      webPreferences: {
+        nodeIntegration: true,
+        webSecurity: false
+      }
+    })
+  } else {
+    mainWindow = new BrowserWindow({
+      width: 1200,
+      height: 800,
+      webPreferences: {
+        nodeIntegration: true,
+        webSecurity: true
+      }
+    })
+  }
 
   // and load the index.html of the app.
   const startUrl = process.env.ELECTRON_START_URL || url.format({
@@ -52,37 +67,31 @@ function createWindow () {
 
 // EVENT TRIGGER
 ipc.on('trigger', (event, args) => {
-  let code
-  try {
-    code = args.value.code
-  }
-  catch {
-    code = args.code
-  }
+  let code = args
   if (code != undefined) {
     console.log(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`)
     sendToPort(triggerPort, code)
   }
 })
+
 // INCREMENTAL FILE SAVING
-var stream = false
+let stream = false
+let fileName = ''
+let filePath = ''
+let patientID = ''
+let images = []
 
 // listener for new data
 ipc.on('data', (event, args) => {
-  // experiment ended, add closing bracket to array
-  if (args === "end") {
-    stream.write(']')
-    stream.end()
-    stream = false
-    return
-  }
 
   // initialize file
   if (args.trial_index === 0) {
     const dir = app.getPath('userData')
-    const fileName = path.resolve(dir, `pid_${args.patient_id}_${Date.now()}.json`)
-    console.log(fileName)
-    stream = fs.createWriteStream(fileName, {flags:'ax+'});
+    patientID = args.patient_id
+    fileName = `pid_${patientID}_${Date.now()}.json`
+    filePath = path.resolve(dir, fileName)
+    console.log(filePath)
+    stream = fs.createWriteStream(filePath, {flags:'ax+'});
     stream.write('[')
   }
 
@@ -93,6 +102,47 @@ ipc.on('data', (event, args) => {
 
   //write the data
   stream.write(JSON.stringify(args))
+
+  // Copy provocation images to patient's data folder
+  if (args.trial_type === 'image_keyboard_response') images.push(args.stimulus.slice(7))
+})
+
+// EXPERIMENT END
+ipc.on('end', (event, args) => {
+  // finish writing file
+  stream.write(']')
+  stream.end()
+  stream = false
+
+  // copy file to config location
+  const desktop = app.getPath('desktop')
+  const name = app.getName()
+  const today = new Date(Date.now())
+  const date = today.toISOString().slice(0,10)
+  const copyPath = path.join(desktop, dataDir, `${patientID}`, date, name)
+  fs.mkdir(copyPath, { recursive: true }, (err) => {
+    console.log(err)
+    fs.copyFileSync(filePath, path.join(copyPath, fileName))
+
+    // copy images to config location
+    const sourceImagePath = path.resolve(path.dirname(images[0]), '..')
+    const imagePath = path.join(copyPath, 'provocation-images')
+    const imageFileName = path.basename(fileName, '.json') + `.tar.gz`
+    fs.mkdir(imagePath, {recursive: true}, (err) => {
+      console.log(err)
+      tar.c( // or tar.create
+        {
+          gzip: true,
+          cwd: sourceImagePath
+        },
+        ['.']
+      ).pipe(fs.createWriteStream(path.join(imagePath, imageFileName)))
+    })
+
+  })
+
+  // quit app
+  app.quit()
 })
 
 // This method will be called when Electron has finished

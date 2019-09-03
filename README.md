@@ -18,6 +18,8 @@ npm run dev
 ```
 4. Check out the data - the data is saved throughout the task to the users's app directory.  This is logged at the beginning of the task wherever you ran `npm run dev`
 
+**NOTE**: When not running on MTurk, the task will look for a folder on the desktop called `provocation-images/<patient_id>` with subfolders `neutral` and `provoking`.  If these are present, images will be loaded from there instead of the default images that are included in the app.
+
 ## Contributing
 
 1. Clone the repo and create a new feature branch off `develop`.
@@ -28,7 +30,7 @@ git checkout -b your-feature-branch
 ```
 
 2. Make your changes and commit using [commitizen](https://pypi.org/project/commitizen/)
-3. Submit a [pull request](https://help.github.com/en/articles/creating-a-pull-request) to the `develop` branch. Add @mcmcgrath13 or @fernandogelin as a reviewer. 
+3. Submit a [pull request](https://help.github.com/en/articles/creating-a-pull-request) to the `develop` branch. Add @mcmcgrath13 or @fernandogelin as a reviewer.
 
 ## Project Organization
 
@@ -92,7 +94,30 @@ The `lib/` directory contains utility functions and markup that is used in the t
 
 ## Usage with PsiTurk
 
-FERNANDO PLEASE FILL THIS IN
+While this set up is optimized for Electron, we added functionality that will make use with PsiTurk easy. The application will detect if it's being used in a Turk environment and will:  
+
+- Save the data to the default PsiTurk SQLite database.  
+- Switch the language to Turk specific, if `src/language/<locale>.mturk.json` exists.  
+- Use the Turk specific timeline if different than the primary timeline.  
+
+To set up your PsiTurk project, we provide a script that does the conversion.
+PsiTurk is a Python package used to manage HITs in Mechanical Turk. Before using the provided script, install [PsiTurk](https://psiturk.org/).
+
+You'll need to follow these steps (the path to the PsiTurk project should be a directory you wish to be created):
+- Build the application: `npm run build`  
+- Move to the `psiturkit` directory: `cd psiturkit`
+- If it's the first time you're running the script:  
+  `./psiturk-it -p <PATH_TO_NEW_PSITURK_PROJECT>`  
+
+- To update an existing PsiTurk project (the path to the PsiTurk project should already exist from the previous steps):  
+  `./psiturk-it -u -p <PATH_TO_NEW_PSITURK_PROJECT>`
+
+After that, just navigate to your newly created PsiTurk project directory.
+```shell
+shell> psiturk #start psiturk
+psiturk> server on #start server
+psiturk> debug #debug mode
+```
 
 ## Best Practices
 

@@ -3,14 +3,15 @@ import fixation from '../trials/fixation'
 import showImage from '../trials/showImage'
 import rateImage from '../trials/rateImage'
 
-const taskTrial = (blockSettings, blockDetails, condition) => {
+const taskTrial = (condition) => {
 
   // timeline
   let timeline = [
     // show condition
-    fixation(650),
-    showImage(condition, 1001),
-    fixation(650),
+    fixation(2000),
+    fixation(200, false, true), // not jittered, green
+    showImage(condition, 3000),
+
     // end the trial
     rateImage()
   ]

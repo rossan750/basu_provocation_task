@@ -48,8 +48,15 @@ html, .App {
   transform: translate(-50%, -50%);
 }
 
-#fixation-dot {
+.color-green {
   background-color: green;
+}
+
+.color-white {
+  background-color: white;
+}
+
+#fixation-dot {
   height: 15px;
   width: 15px;
   border-radius: 50%;

@@ -31,5 +31,8 @@
     "rate_practice": "Try submitting a rating of “5” by dragging the cursor to “5” and clicking to submit the rating.",
     "no_talking": "Try not to talk or move around more than necessary, as movements affect the quality of the recordings.",
     "instruction_end": "In a few moments, the task will begin."
+  },
+  "countdown": {
+    "message": "Provocation will begin in:"
   }
 }
