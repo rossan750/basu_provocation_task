@@ -1,17 +1,15 @@
 import { lang } from '../config/main'
-import { images } from '../lib/utils'
-import {baseStimulus } from '../lib/markup/stimuli'
-import {fixationHTML } from '../lib/markup/fixation'
-import _ from 'lodash'
+import { baseStimulus } from '../lib/markup/stimuli'
 
 const screenFive = () => {
   var stimulus = baseStimulus(`
     <div class='instructions'>
     <ul>
     <p>${lang.instructions.no_talking}</p>
+    </div>
     <div class="row">
     </div>
-    `, prompt=true)
+    `, true)
   return {
     type: 'html_keyboard_response',
     stimulus: stimulus,
@@ -25,9 +23,10 @@ const screenSix = () => {
   var stimulus = baseStimulus(`
     <div class='instructions'>
     <p>${lang.instructions.instruction_end}</p>
+    </div>
     <div class="row">
     </div>
-    `, prompt=true)
+    `, true)
   return {
     type: 'html_keyboard_response',
     stimulus: stimulus,

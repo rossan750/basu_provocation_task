@@ -12,9 +12,9 @@ import { MTURK, defaultBlockSettings, practiceBlockSettings } from '../config/ma
 const primaryTimeline = [
         userId(defaultBlockSettings),
         preamble,
-	instructions1,
-	taskBlock(practiceBlockSettings),
-	instructions2,
+	    instructions1,
+	    taskBlock(practiceBlockSettings),
+	    instructions2,
         buildCountdown("Provocation starts in:", 3),
         taskBlock(defaultBlockSettings),
         experimentEnd(5000)

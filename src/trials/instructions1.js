@@ -1,8 +1,5 @@
 import { lang } from '../config/main'
-import { images } from '../lib/utils'
-import {baseStimulus } from '../lib/markup/stimuli'
-import {fixationHTML } from '../lib/markup/fixation'
-import _ from 'lodash'
+import { baseStimulus } from '../lib/markup/stimuli'
 
 
 const screenOne = () => {
@@ -11,6 +8,7 @@ const screenOne = () => {
     <h1>${lang.instructions.welcome}</h1>
     <p>${lang.instructions.p1}</p>
     <p>${lang.instructions.p2}</p>
+    </div>
     `, prompt=true)
 
   return {
@@ -27,7 +25,7 @@ const screenTwo = () => {
     <p>${lang.instructions.fixation}</p>
     <div id="fixation-dot"></div>
     </div>
-    `, prompt=true)
+    `, true)
 
   return {
     type: 'html_keyboard_response',
@@ -41,9 +39,10 @@ const screenThree = () => {
   var stimulus = baseStimulus(`
     <div class='instructions'>
     <p>${lang.instructions.rate}</p>
+    </div>
     <div class="row">
     </div>
-    `, prompt=true)
+    `, true)
   return {
     type: 'html_keyboard_response',
     stimulus: stimulus,
@@ -56,9 +55,10 @@ const screenFour = () => {
   var stimulus = baseStimulus(`
     <div class='instructions'>
     <p>${lang.instructions.rate_practice}</p>
+    </div>
     <div class="row">
     </div>
-    `, prompt=true)
+    `, true)
   return {
     type: 'html_keyboard_response',
     stimulus: stimulus,
