@@ -125,7 +125,7 @@ ipc.on('end', (event, args) => {
     fs.copyFileSync(filePath, path.join(copyPath, fileName))
 
     // copy images to config location
-    const sourceImagePath = path.resolve(path.dirname(images[0]), '..')
+    const sourceImagePath = path.resolve(path.dirname(images[images.length - 1]), '..')
     const imagePath = path.join(copyPath, 'provocation-images')
     const imageFileName = path.basename(fileName, '.json') + `.tar.gz`
     fs.mkdir(imagePath, {recursive: true}, (err) => {
