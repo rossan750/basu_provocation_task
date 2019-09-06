@@ -7,8 +7,6 @@ const screenFive = () => {
     <ul>
     <p>${lang.instructions.no_talking}</p>
     </div>
-    <div class="row">
-    </div>
     `, true)
   return {
     type: 'html_keyboard_response',
@@ -23,8 +21,6 @@ const screenSix = () => {
   var stimulus = baseStimulus(`
     <div class='instructions'>
     <p>${lang.instructions.instruction_end}</p>
-    </div>
-    <div class="row">
     </div>
     `, true)
   return {

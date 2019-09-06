@@ -40,8 +40,6 @@ const screenThree = () => {
     <div class='instructions'>
     <p>${lang.instructions.rate}</p>
     </div>
-    <div class="row">
-    </div>
     `, true)
   return {
     type: 'html_keyboard_response',
@@ -55,8 +53,6 @@ const screenFour = () => {
   var stimulus = baseStimulus(`
     <div class='instructions'>
     <p>${lang.instructions.rate_practice}</p>
-    </div>
-    <div class="row">
     </div>
     `, true)
   return {
