@@ -9,7 +9,7 @@ const screenOne = () => {
     <p>${lang.instructions.p1}</p>
     <p>${lang.instructions.p2}</p>
     </div>
-    `, prompt=true)
+    `, true)
 
   return {
     type: 'html_keyboard_response',
@@ -23,7 +23,7 @@ const screenTwo = () => {
   var stimulus = baseStimulus(`
     <div class='instructions'>
     <p>${lang.instructions.fixation}</p>
-    <div id="fixation-dot"></div>
+    <div id="fixation-dot" class="color-white"></div>
     </div>
     `, true)
 
@@ -40,8 +40,6 @@ const screenThree = () => {
     <div class='instructions'>
     <p>${lang.instructions.rate}</p>
     </div>
-    <div class="row">
-    </div>
     `, true)
   return {
     type: 'html_keyboard_response',
@@ -56,7 +54,19 @@ const screenFour = () => {
     <div class='instructions'>
     <p>${lang.instructions.rate_practice}</p>
     </div>
-    <div class="row">
+    `, true)
+  return {
+    type: 'html_keyboard_response',
+    stimulus: stimulus,
+    prompt:  lang.prompt.continue.press,
+    response_ends_trial: true
+  }
+}
+
+const screenFive = () => {
+  var stimulus = baseStimulus(`
+    <div class='instructions'>
+    <p>${lang.instructions.no_talking}</p>
     </div>
     `, true)
   return {
@@ -68,6 +78,20 @@ const screenFour = () => {
 }
 
 
+const screenSix = () => {
+  var stimulus = baseStimulus(`
+    <div class='instructions'>
+    <p>${lang.instructions.instruction_end}</p>
+    </div>
+    `, true)
+  return {
+    type: 'html_keyboard_response',
+    stimulus: stimulus,
+    prompt: lang.prompt.continue.press,
+    response_ends_trial: true
+  }
+}
+
 const instructions1 = {
   type: 'html_keyboard_response',
   timeline: [
@@ -78,4 +102,15 @@ const instructions1 = {
   ]
 }
 
-export default instructions1
+const instructions2 = {
+  type: 'html_keyboard_response',
+  timeline: [
+    screenFive(),
+    screenSix(),
+  ]
+}
+
+export {
+  instructions1,
+  instructions2
+}

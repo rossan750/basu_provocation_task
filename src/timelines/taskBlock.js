@@ -15,44 +15,55 @@ if ( isElectron ) {
 
 const taskBlock = (blockSettings) => {
 
-  return {
-		type: 'html_keyboard_response',
-		trial_duration: 1,
-		stimulus: '',
-		prompt: '',
-		on_start: (trial) => {
-			if ( app ) {
-				try {
-					const patientID = jsPsych.data.get().select('patient_id').values[0]
-					const localImagePath = path.join(app.getPath('desktop'), 'provocation-images', `${patientID}`)
-					const neutralImagePath = path.join(localImagePath, 'neutral')
-					const provokingImagePath = path.join(localImagePath, 'provoking')
+	if (blockSettings.is_practice) {
 
-					let neutralItems = fs.readdirSync(neutralImagePath)
-					let provokingItems = fs.readdirSync(provokingImagePath)
-					blockSettings.images.neutral = neutralItems.map( (image) => `file://` + path.join(neutralImagePath, image))
-					blockSettings.images.provoking = provokingItems.map( (image) => `file://` + path.join(provokingImagePath, image))
+		const startingOpts = generateStartingOpts(blockSettings)
+		let timeline = startingOpts.map( (image) => taskTrial(image))
 
-					console.log(`Loaded images from ${localImagePath}`)
-				} catch {
-					console.log("Error loading local files - using default images")
+		return {
+			type: 'html_keyboard_response',
+			timeline: timeline
+		}
+
+	} else {
+	  return {
+			type: 'html_keyboard_response',
+			trial_duration: 1,
+			stimulus: '',
+			prompt: '',
+			on_start: (trial) => {
+				if ( app) {
+					try {
+						const patientID = jsPsych.data.get().select('patient_id').values[0]
+						const localImagePath = path.join(app.getPath('desktop'), 'provocation-images', `${patientID}`)
+						const neutralImagePath = path.join(localImagePath, 'neutral')
+						const provokingImagePath = path.join(localImagePath, 'provoking')
+
+						let neutralItems = fs.readdirSync(neutralImagePath)
+						let provokingItems = fs.readdirSync(provokingImagePath)
+						blockSettings.images.neutral = neutralItems.map( (image) => `file://` + path.join(neutralImagePath, image))
+						blockSettings.images.provoking = provokingItems.map( (image) => `file://` + path.join(provokingImagePath, image))
+
+						console.log(`Loaded images from ${localImagePath}`)
+					} catch {
+						console.log("Error loading local files - using default images")
+					}
 				}
+
+				// initialize block
+				const startingOpts = generateStartingOpts(blockSettings)
+
+				// timeline = loop through trials
+				let timeline = startingOpts.map( (image) => taskTrial(image))
+
+				jsPsych.addNodeToEndOfTimeline({
+					type: 'html_keyboard_response',
+					timeline: timeline,
+					repeats_per_condition: blockSettings.repeats_per_condition
+				}, () => {})
+				//
+				jsPsych.addNodeToEndOfTimeline(experimentEnd(5000), () => {})
 			}
-
-			// initialize block
-			const startingOpts = generateStartingOpts(blockSettings)
-
-			// timeline = loop through trials
-			let timeline = startingOpts.map( (image) => taskTrial(image))
-
-			jsPsych.addNodeToEndOfTimeline({
-				type: 'html_keyboard_response',
-				timeline: timeline,
-				randomize_order: true,
-				repeats_per_condition: blockSettings.repeats_per_condition
-			}, () => {})
-			//
-			jsPsych.addNodeToEndOfTimeline(experimentEnd(5000), () => {})
 		}
 	}
 }

@@ -13,7 +13,7 @@ const canvasHTML = `<canvas width="${CANVAS_SIZE}" height="${CANVAS_SIZE}" id="j
   </canvas>`
 
 const rateImage = () => {
-    let stimulus = canvasHTML + photodiodeGhostBox()
+    let stimulus = `<div class="task-container">` + canvasHTML + photodiodeGhostBox() + `</div>`
 
     return {
       type: 'call_function',
@@ -27,7 +27,7 @@ const rateImage = () => {
 
         // add stimulus to the DOM
         document.getElementById('jspsych-content').innerHTML = stimulus
-        $('#jspsych-content').addClass('task-container')
+        // $('#jspsych-content').addClass('task-container')
 
         // set up canvas
         let canvas = document.querySelector('#jspsych-canvas');

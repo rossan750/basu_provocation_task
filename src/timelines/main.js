@@ -2,8 +2,7 @@ import buildCountdown from '../trials/countdown'
 import preamble from './preamble'
 import taskBlock from './taskBlock'
 import userId from '../trials/userId'
-import instructions1 from '../trials/instructions1'
-import instructions2 from '../trials/instructions2'
+import { instructions1, instructions2 } from '../trials/instructions'
 
 import { MTURK, defaultBlockSettings, practiceBlockSettings, lang } from '../config/main'
 
