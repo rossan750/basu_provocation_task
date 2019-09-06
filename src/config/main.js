@@ -23,6 +23,7 @@ const importAll = (r) => {
 const neutralImages = importAll(require.context('../assets/images/provocation-images/neutral', false, /\.(png|jpe?g|svg)$/));
 const provokingImages = importAll(require.context('../assets/images/provocation-images/provoking', false, /\.(png|jpe?g|svg)$/));
 
+const practiceImages = importAll(require.context('../assets/images/practice-images/neutral', false, /\.(png|jpe?g|svg)$/));
 
 // NOTE: cursor radius needs to be small enough to not hit two circles at once
 const ratingSettings = {
@@ -45,7 +46,17 @@ const defaultBlockSettings = {
 		neutral: neutralImages,
 		provoking: provokingImages
 	},
-	repeats_per_condition: 1 // number of times every condition is repeated
+	repeats_per_condition: 1, // number of times every condition is repeated
+	is_practice: false
+}
+
+const practiceBlockSettings = {
+	images: {
+		neutral: practiceImages,
+		provoking: []
+	},
+	repeats_per_condition: 1, // number of times every condition is repeated
+	is_practice: true
 }
 
 export {
@@ -55,5 +66,6 @@ export {
 	lang,
 	eventCodes,
 	MTURK,
+	practiceBlockSettings,
 	importAll
 }
