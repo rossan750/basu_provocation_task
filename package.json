@@ -34,7 +34,7 @@
     "postpackage:windows": "electron-installer-windows --src dist/provocation-win32-x64/ --dest dist/installers/ --overwrite",
     "postpackage:mac": "electron-installer-dmg dist/neuro-task-darwin-x64/neuro-task.app provocation --out dist/installers/ --overwrite",
     "postpackage:linux": "electron-installer-debian --src dist/provocation-linux-x64/ --dest dist/installers/ --arch x64 --overwrite",
-    "postinstall": "$(npm bin)/electron-rebuild",
+    "postinstall": "electron-rebuild",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron": "electron .",
