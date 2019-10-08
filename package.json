@@ -33,7 +33,7 @@
     "package:mac": "electron-packager . --platform darwin --arch x64 --out dist/ --overwrite",
     "package:linux": "electron-packager . --platform linux --arch x64 --out dist/ --overwrite",
     "postpackage:windows": "electron-installer-windows --src dist/provocation-win32-x64/ --dest dist/installers/ --overwrite",
-    "postpackage:mac": "electron-installer-dmg dist/neuro-task-darwin-x64/neuro-task.app provocation --out dist/installers/ --overwrite",
+    "postpackage:mac": "electron-installer-dmg dist/provocation-darwin-x64/provocation.app provocation --out dist/installers/ --overwrite",
     "postpackage:linux": "electron-installer-debian --src dist/provocation-linux-x64/ --dest dist/installers/ --arch x64 --overwrite",
     "postinstall": "electron-rebuild",
     "test": "react-scripts test",
