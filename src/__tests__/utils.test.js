@@ -9,10 +9,6 @@ describe('generic utility functions', function() {
     assert.closeTo(util.jitter50(100), 100, 50, 'jitter50 is 50 within 100')
   })
 
-  it('should load images', function() {
-    assert.lengthOf(util.images, 2, 'there are two images in the assets folder')
-  })
-
   it('should flip a coin', function() {
     assert.isBoolean(util.randomTrue(), 'randomTrue is true or false')
     const flips = _.range(100).map( (val) => util.randomTrue() )
