@@ -4,6 +4,7 @@ const vendorId = '16c0'
 const productId = '0483'
 
 const eventCodes = {
+	open_provoc_task: 13,
 	fixation: 1,
 	evidence: 5,
 	show_ratings: 7,

@@ -1,5 +1,7 @@
 import { lang } from '../config/main'
 import { baseStimulus } from '../lib/markup/stimuli'
+import { eventCodes, imageSettings } from '../config/main'
+import { photodiodeGhostBox, pdSpotEncode } from '../lib/markup/photodiode'
 
 
 const screenOne = () => {
@@ -9,13 +11,15 @@ const screenOne = () => {
     <p>${lang.instructions.p1}</p>
     <p>${lang.instructions.p2}</p>
     </div>
-    `, true)
-
+    `, true) + photodiodeGhostBox()
   return {
     type: 'html_keyboard_response',
     stimulus: stimulus,
     prompt:  lang.prompt.continue.press,
-    response_ends_trial: true
+    response_ends_trial: true,
+    on_load: () => {
+      pdSpotEncode(eventCodes.open_provoc_task)
+    }
   }
 }
 

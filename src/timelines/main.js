@@ -9,8 +9,8 @@ import { MTURK, defaultBlockSettings, practiceBlockSettings, lang } from '../con
 
 
 const primaryTimeline = [
-        userId(),
         preamble,
+        userId(),
         instructions1,
         taskBlock(practiceBlockSettings),
         instructions2,
