@@ -1,9 +1,11 @@
 import taskTrial from './taskTrial'
 import path from 'path'
 import { jsPsych } from 'jspsych-react'
-import { MTURK } from '../config/main'
+import { MTURK, lang } from '../config/main'
 import experimentEnd from '../trials/experimentEnd'
 import { generateStartingOpts } from '../lib/taskUtils'
+import blockEnd from '../trials/blockEnd'
+import buildCountdown from '../trials/countdown'
 
 const isElectron = !MTURK
 let app = false
@@ -56,6 +58,13 @@ const taskBlock = (blockSettings) => {
 				// timeline = loop through trials
 				let timeline = startingOpts.map( (image) => taskTrial(image))
 
+				jsPsych.addNodeToEndOfTimeline({
+					type: 'html_keyboard_response',
+					timeline: timeline,
+					repeats_per_condition: blockSettings.repeats_per_condition
+				}, () => {})
+				jsPsych.addNodeToEndOfTimeline(blockEnd(), () => {})
+				jsPsych.addNodeToEndOfTimeline(buildCountdown(lang.countdown.message, 3), () => {})
 				jsPsych.addNodeToEndOfTimeline({
 					type: 'html_keyboard_response',
 					timeline: timeline,
