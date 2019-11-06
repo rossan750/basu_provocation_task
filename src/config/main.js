@@ -5,6 +5,8 @@
 import { jsPsych } from 'jspsych-react'
 import _ from 'lodash'
 import { eventCodes } from './trigger'
+import requireContext from 'require-context.macro'
+
 
 // is this mechanical turk?
 const MTURK = (!jsPsych.turk.turkInfo().outsideTurk)
@@ -20,10 +22,10 @@ const importAll = (r) => {
 }
 
 // UPDATE THIS PATH TO CHANGE IMAGE FOLDER
-const neutralImages = importAll(require.context('../assets/images/provocation-images/neutral', false, /\.(png|jpe?g|svg)$/));
-const provokingImages = importAll(require.context('../assets/images/provocation-images/provoking', false, /\.(png|jpe?g|svg)$/));
+const neutralImages = importAll(requireContext('../assets/images/provocation-images/neutral', false, /\.(png|jpe?g|svg)$/));
+const provokingImages = importAll(requireContext('../assets/images/provocation-images/provoking', false, /\.(png|jpe?g|svg)$/));
 
-const practiceImages = importAll(require.context('../assets/images/practice-images/neutral', false, /\.(png|jpe?g|svg)$/));
+const practiceImages = importAll(requireContext('../assets/images/practice-images/neutral', false, /\.(png|jpe?g|svg)$/));
 
 // NOTE: cursor radius needs to be small enough to not hit two circles at once
 const ratingSettings = {
