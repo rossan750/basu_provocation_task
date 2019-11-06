@@ -9,7 +9,7 @@
   },
   "private": true,
   "license": "MIT",
-  "main": "src/electron-starter.js",
+  "main": "public/electron.js",
   "homepage": ".",
   "repository": "https://github.com/brown-ccv/task-provocation",
   "dependencies": {
