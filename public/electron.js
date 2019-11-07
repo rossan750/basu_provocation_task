@@ -98,7 +98,7 @@ const handleEventSend = (code) => {
     } else if (opt == 2) {
       SKIP_SENDING_DEV = true
     }
-  } else {
+  } else if (!SKIP_SENDING_DEV) {
     sendToPort(triggerPort, code)
   }
 }
@@ -189,8 +189,13 @@ ipc.on('end', (event, args) => {
 // Error state sent from front end to back end (e.g. wrong number of images)
 ipc.on('error', (event, args) => {
   log.error(args)
-  dialog.showMessageBoxSync(mainWindow, {type: "error", message: args, title: "Task Error"})
-  app.quit()
+  let buttons = ["OK"]
+  if (process.env.ELECTRON_START_URL) {
+    buttons.push("Continue Anyway")
+  }
+  const opt = dialog.showMessageBoxSync(mainWindow, {type: "error", message: args, title: "Task Error", buttons: buttons})
+
+  if (opt == 0) app.quit()
 })
 
 
@@ -208,7 +213,10 @@ process.on('uncaughtException', (error) => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', () => {
+  createWindow()
+  handleEventSend(eventCodes.test_connect)
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {

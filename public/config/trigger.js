@@ -11,7 +11,8 @@ const eventCodes = {
 	fixation: 1,
 	evidence: 5,
 	show_ratings: 7,
-	rate: 2
+	rate: 2,
+	test_connect: 32
 }
 
 // this is module.exports isntead of just exports as it is also imported into the electron app

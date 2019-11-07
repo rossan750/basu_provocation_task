@@ -17,7 +17,7 @@ const imageSettings = {
 }
 
 // how many of each type of image are required if loading images from disk
-const numRequiredImages = 4
+const numRequiredImages = 10
 
 // import images
 const importAll = (r) => {
@@ -52,7 +52,7 @@ const defaultBlockSettings = {
 		neutral: neutralImages,
 		provoking: provokingImages
 	},
-	repeats_per_condition: 1, // number of times every condition is repeated
+	repeats_per_condition: 3, // number of times every condition is repeated
 	is_practice: false
 }
 

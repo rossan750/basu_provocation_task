@@ -1,20 +1,15 @@
 import { lang } from '../config/main'
 import { photodiodeGhostBox } from '../lib/markup/photodiode'
 import { baseStimulus } from '../lib/markup/stimuli'
-import eventMarkerMessage from '../lib/markup/eventMarkerMessage'
 
 const experimentStart = () => {
-  let stimulus = baseStimulus(`<div><h1>${lang.task.name}</h1><h2 id='usb-alert'></h2></div>`, true) + photodiodeGhostBox()
+  let stimulus = baseStimulus(`<div><h1>${lang.task.name}</h1></div>`, true) + photodiodeGhostBox()
 
    return {
     type: 'html_button_response',
     stimulus: stimulus,
-    prompt: [ `<br><h3>${lang.prompt.focus}</h3>`],
+    prompt: '',
     choices: [lang.prompt.continue.button],
-    on_load: () => (eventMarkerMessage()
-                      .then(s => document.getElementById('usb-alert')
-                      .innerHTML = s )
-                    )
   }
 }
 

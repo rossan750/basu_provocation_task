@@ -63,7 +63,7 @@ const taskSetUp = (blockSettings) => {
 
 				// if last block, add experiment end, otherwise add a break
 				if (i < blockSettings.num_repeats) {
-					jsPsych.addNodeToEndOfTimeline(blockEnd(), () => {})
+					jsPsych.addNodeToEndOfTimeline(blockEnd(i, blockSettings.num_repeats), () => {})
 				} else {
 					jsPsych.addNodeToEndOfTimeline(experimentEnd(5000), () => {})
 				}
