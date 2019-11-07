@@ -1,28 +1,22 @@
-import buildCountdown from '../trials/countdown'
-import preamble from './preamble'
 import userId from '../trials/userId'
+import experimentStart from '../trials/experimentStart'
 import taskBlock from './taskBlock'
+import taskSetUp from './taskSetUp'
 import { instructions1, instructions2 } from '../trials/instructions'
 
-import { MTURK, defaultBlockSettings, practiceBlockSettings, lang } from '../config/main'
+import { MTURK, defaultBlockSettings, practiceBlockSettings} from '../config/main'
 
 
 
 const primaryTimeline = [
-        preamble,
+        experimentStart(),
         userId(),
+        taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
         instructions1,
         taskBlock(practiceBlockSettings),
-        instructions2,
-        buildCountdown(lang.countdown.message, 3),
-        taskBlock(defaultBlockSettings)
+        instructions2
         ]
 
-const mturkTimeline = [
-        userId(),
-        preamble,
-        buildCountdown(lang.countdown.message, 3),
-        taskBlock(defaultBlockSettings)
-        ]
+const mturkTimeline = []
 
 export const tl = (MTURK) ? mturkTimeline : primaryTimeline

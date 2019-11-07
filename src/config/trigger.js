@@ -1,4 +1,7 @@
 // Event trigger settings - used in both the react app (renderer) and the electron app (main)
+
+// NOTE: THIS FILE IS A DUPLICATE OF /public/config/trigger.js - MAKE SURE THEY MATCH
+
 const manufacturer = 'Teensyduino'
 const vendorId = '16c0'
 const productId = '0483'

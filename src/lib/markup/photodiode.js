@@ -40,8 +40,9 @@ const pdSpotEncode = (taskCode) => {
 
 	if (!MTURK) {
 		const blinkTime = 40
-    if (taskCode < eventCodes.open_provoc_task) taskCode = 1;
-		repeat_pulse_for(blinkTime, taskCode)
+		let numBlinks = taskCode
+    if (taskCode < eventCodes.open_provoc_task) numBlinks = 1;
+		repeat_pulse_for(blinkTime, numBlinks)
 		if ( ipcRenderer ) ipcRenderer.send('trigger', taskCode)
 	}
 }

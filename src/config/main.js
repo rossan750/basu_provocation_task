@@ -16,6 +16,9 @@ const imageSettings = {
 	height: 600
 }
 
+// how many of each type of image are required if loading images from disk
+const numRequiredImages = 4
+
 // import images
 const importAll = (r) => {
   return r.keys().map(r);
@@ -44,6 +47,7 @@ if (MTURK) { // if this is mturk, merge in the mturk specific language
 }
 
 const defaultBlockSettings = {
+	num_repeats: 2, // how many blocks to have
 	images: {
 		neutral: neutralImages,
 		provoking: provokingImages
@@ -63,6 +67,7 @@ const practiceBlockSettings = {
 
 export {
 	imageSettings,
+	numRequiredImages,
 	ratingSettings,
 	defaultBlockSettings,
 	lang,
