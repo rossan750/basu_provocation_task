@@ -60,4 +60,4 @@ jobs:
       if: startsWith(matrix.os, 'ubuntu')
       with:
         name: linux-installer
-        path: dist/installers/provocation_0.1.0_amd64.deb
+        path: dist/installers/provocation_0.1.0_x64.deb
