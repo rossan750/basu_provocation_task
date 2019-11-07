@@ -6,7 +6,10 @@ const ipc = require('electron').ipcMain
 const _ = require('lodash')
 const fs = require('fs')
 const tar = require('tar')
-const log = require('electron-log');
+const log = require('electron-log')
+
+// set logging levels
+log.transports.file.level = 'info'
 
 // Event Trigger
 const { eventCodes, manufacturer, vendorId, productId } = require('./config/trigger')
@@ -128,7 +131,7 @@ ipc.on('data', (event, args) => {
     patientID = args.patient_id
     fileName = `pid_${patientID}_${Date.now()}.json`
     filePath = path.resolve(dir, fileName)
-    log.warn(filePath)
+    log.info(filePath)
     stream = fs.createWriteStream(filePath, {flags:'ax+'});
     stream.write('[')
   }

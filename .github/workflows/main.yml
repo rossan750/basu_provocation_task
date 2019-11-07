@@ -57,7 +57,7 @@ jobs:
         path: dist/provocation-0.1.0.dmg
     - name: upload linux-installer
       uses: actions/upload-artifact@master
-      if: startsWith(matrix.os, 'linus')
+      if: startsWith(matrix.os, 'linux')
       with:
         name: linux-installer
         path: dist/installers/provocation-0.1.0-setup.exe
