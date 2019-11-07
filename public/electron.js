@@ -15,21 +15,6 @@ log.transports.file.level = 'info'
 const { eventCodes, manufacturer, vendorId, productId } = require('./config/trigger')
 const { isPort, getPort, sendToPort } = require('event-marker')
 
-let triggerPort
-let portAvailable
-
-const setUpPort = () => {
-  getPort(vendorId, productId)
-    .then((p) => {
-      triggerPort = p
-      portAvailable = true
-    })
-    .catch((e) => {
-      triggerPort = None
-      portAvailable = false
-    })
-  }
-
 // Data Saving
 const { dataDir } = require('./config/saveData')
 
@@ -80,7 +65,39 @@ function createWindow () {
   })
 }
 
+// TRIGGER PORT HELPERS
+let triggerPort
+let portAvailable
 let SKIP_SENDING_DEV = false
+
+const setUpPort = async () => {
+  p = await getPort(vendorId, productId)
+  if (p) {
+    triggerPort = p
+    portAvailable = true
+
+    triggerPort.on('error', (err) => {
+      log.error(err)
+      let buttons = ["OK"]
+      if (process.env.ELECTRON_START_URL) {
+        buttons.push("Continue Anyway")
+      }
+      dialog.showMessageBox(mainWindow, {type: "error", message: "Error communicating with event marker.", title: "Task Error", buttons: buttons, defaultId: 0})
+        .then((opt) => {
+          if (opt.response == 0) {
+            app.exit()
+          } else {
+            SKIP_SENDING_DEV = true
+            portAvailable = false
+            triggerPort = false
+          }
+        })
+    })
+  } else {
+    triggerPort = false
+    portAvailable = false
+  }
+}
 
 const handleEventSend = (code) => {
   if (!portAvailable && !SKIP_SENDING_DEV) {
@@ -91,16 +108,19 @@ const handleEventSend = (code) => {
     if (process.env.ELECTRON_START_URL) {
       buttons.push("Continue Anyway")
     }
-    let opt = dialog.showMessageBoxSync(mainWindow, {type: "error", message: message, title: "Task Error", buttons: buttons})
+    dialog.showMessageBox(mainWindow, {type: "error", message: message, title: "Task Error", buttons: buttons, defaultId: 0})
+      .then((resp) => {
+        let opt = resp.response
+        if (opt == 0) { // quit
+          app.exit()
+        } else if (opt == 1) { // retry
+          setUpPort()
+          .then(() => handleEventSend(code))
+        } else if (opt == 2) {
+          SKIP_SENDING_DEV = true
+        }
+      })
 
-    if (opt == 0) { // quit
-      app.quit()
-    } else if (opt == 1) { // retry
-      setUpPort()
-      handleEventSend(code)
-    } else if (opt == 2) {
-      SKIP_SENDING_DEV = true
-    }
   } else if (!SKIP_SENDING_DEV) {
     sendToPort(triggerPort, code)
   }
@@ -196,9 +216,10 @@ ipc.on('error', (event, args) => {
   if (process.env.ELECTRON_START_URL) {
     buttons.push("Continue Anyway")
   }
-  const opt = dialog.showMessageBoxSync(mainWindow, {type: "error", message: args, title: "Task Error", buttons: buttons})
-
-  if (opt == 0) app.quit()
+  dialog.showMessageBox(mainWindow, {type: "error", message: args, title: "Task Error", buttons: buttons, defaultId: 0})
+    .then((opt) => {
+      if (opt.response == 0) app.quit()
+    })
 })
 
 
@@ -209,7 +230,7 @@ process.on('uncaughtException', (error) => {
 
     // this isn't dev, throw up a dialog
     if (!process.env.ELECTRON_START_URL) {
-      dialog.showMessageBoxSync(mainWindow, {type: "error", message: error, title: "Task Error"})
+      dialog.showMessageBoxSync(mainWindow, {type: "error", message: error, title: "Task Error", defaultId: 0})
     }
 })
 
@@ -218,7 +239,8 @@ process.on('uncaughtException', (error) => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
-  handleEventSend(eventCodes.test_connect)
+  setUpPort()
+  .then(() => handleEventSend(eventCodes.test_connect))
 })
 
 // Quit when all windows are closed.
