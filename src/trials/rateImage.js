@@ -1,6 +1,6 @@
 import { eventCodes, ratingSettings } from '../config/main'
 import { photodiodeGhostBox, pdSpotEncode } from '../lib/markup/photodiode'
-import { getCircles, getCircle, drawNumbers, drawPrompt } from '../lib/taskUtils'
+import { getCircles, getCircle, drawNumbers, drawPrompt, drawFixation, drawCursor } from '../lib/taskUtils'
 import $ from 'jquery'
 
 // make sure cursor radius is such that it can only touch one circle at a time
@@ -35,7 +35,7 @@ const rateImage = () => {
         let animation
 
         // hide the mouse
-        $('#experiment').css('cursor', 'none')
+        $('html').css('cursor', 'none')
 
         let w = $('#jspsych-canvas').width()
         let x = w / 2
@@ -60,11 +60,10 @@ const rateImage = () => {
 
           drawNumbers(ctx, circles, CIRCLE_RADIUS, x, y, CURSOR_RADIUS)
 
+          drawFixation(ctx, CANVAS_SIZE)
+
           // draw the cursor
-          ctx.fillStyle = "#ffffff";
-          ctx.beginPath();
-          ctx.arc(x, y, CURSOR_RADIUS, 0, 2 * Math.PI, true);
-          ctx.fill();
+          drawCursor(ctx, x, y, CURSOR_RADIUS)
         }
         // show ratings
         canvasDraw();
@@ -131,7 +130,7 @@ const rateImage = () => {
               addToPath()
 
               // re-show the mouse
-              $('#experiment').css('cursor', 'auto')
+              $('html').css('cursor', 'auto')
 
               // free event listeners
               $(document).unbind('mousemove', handleMoveListener)

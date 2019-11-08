@@ -36,7 +36,7 @@ const ratingSettings = {
 	max: 10,
 	canvasSize: 640, // canvas is a square
 	circleRadius: 28,
-	cursorRadius: 12
+	cursorRadius: 7.5
 }
 
 // get language file

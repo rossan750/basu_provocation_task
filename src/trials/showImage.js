@@ -17,9 +17,13 @@ const showImage = (image, duration) => {
       $('#jspsych-image-keyboard-response-stimulus').addClass('image')
       $('#jspsych-image-keyboard-response-stimulus').height(imageSettings.height)
       $('#jspsych-image-keyboard-response-stimulus').width(imageSettings.width)
+      $('html').css('cursor', 'none')
       pdSpotEncode(code)
     },
-    on_finish: (data) => data.code = code
+    on_finish: (data) => {
+      data.code = code
+      $('html').css('cursor', 'auto')
+    }
   }
 }
 

@@ -37,6 +37,7 @@ function createWindow () {
   } else {
     mainWindow = new BrowserWindow({
       fullscreen: true,
+      frame: false,
       webPreferences: {
         nodeIntegration: true,
         webSecurity: true
