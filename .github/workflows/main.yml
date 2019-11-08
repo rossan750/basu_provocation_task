@@ -45,8 +45,6 @@ jobs:
     - name: package electron - windows
       if: startsWith(matrix.os, 'windows')
       run: npm run package:windows
-    - name: realisify windows installer
-      run: Squirrel --releasify dist/installers/${{ steps.package_info.outputs.package_name }}.${{ steps.package_info.outputs.package_version }}.nupkg
     - name: package electron - linux
       if: startsWith(matrix.os, 'ubuntu')
       run: npm run package:linux
@@ -60,7 +58,7 @@ jobs:
       if: startsWith(matrix.os, 'windows')
       with:
         name: win-installer
-        path: dist/installers/Setup.exe
+        path: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}-setup.exe
     - name: upload mac-installer
       uses: actions/upload-artifact@master
       if: startsWith(matrix.os, 'mac')

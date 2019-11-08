@@ -1,3 +1,6 @@
+// handle windows installer set up
+if(require('electron-squirrel-startup')) return
+
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, dialog } = require('electron')
 const path = require('path')
