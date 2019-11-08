@@ -29,6 +29,8 @@ jobs:
     - name: Set package version and name
       uses: ./.github/actions/get-package-info
       id: pacakge_info
+    - name: test get-package-info
+      run: echo ${{ steps.package_info.outputs.package_name }}
     - name: npm install
       run: npm install
     - name: npm build
