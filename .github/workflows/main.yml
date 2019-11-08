@@ -34,8 +34,12 @@ jobs:
     - name: Set package version and name - windows
       if: startsWith(matrix.os, 'windows')
       run: |
-        set PACKAGE_VERSION=`node -p "require('./package.json').version"`
-        set PACKAGE_NAME=`node -p "require('./package.json').name"`
+        node -p "require('./package.json').version" > tmpfilev
+        set /p PACKAGE_VERSION= < tmpfilev
+        del tmpfilev
+        node -p "require('./package.json').name" > tmpfilen
+        set /p PACKAGE_NAME= < tmpfilen
+        del tmpfilen
     - name: npm install
       run: npm install
     - name: npm build
@@ -58,16 +62,16 @@ jobs:
       if: startsWith(matrix.os, 'windows')
       with:
         name: win-installer
-        path: dist/installers/$PACKAGE_NAME%-%PACKAGE_VERSION%-setup.exe
+        path: dist/installers/${process.env.PACKAGE_NAME}-${process.env.PACKAGE_VERSION}-setup.exe
     - name: upload mac-installer
       uses: actions/upload-artifact@master
       if: startsWith(matrix.os, 'mac')
       with:
         name: mac-installer
-        path: dist/${PACKAGE_NAME}-${PACKAGE_VERSION}.dmg
+        path: dist/${process.env.PACKAGE_NAME}-${process.env.PACKAGE_VERSION}.dmg
     - name: upload linux-installer
       uses: actions/upload-artifact@master
       if: startsWith(matrix.os, 'ubuntu')
       with:
         name: linux-installer
-        path: dist/installers/${PACKAGE_NAME}_${PACKAGE_VERSION}_x64.deb
+        path: dist/installers/${process.env.PACKAGE_NAME}_${process.env.PACKAGE_VERSION}_x64.deb
