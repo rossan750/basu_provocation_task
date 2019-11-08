@@ -26,14 +26,14 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name : Set package version and name (linux, mac)
+    - name: Set package version and name (linux, mac)
       if: !startsWith(matrix.os, 'windows')
-      run : |
+      run: |
         PACKAGE_VERSION=`node -p "require('./package.json').version"`
         PACKAGE_NAME=`node -p "require('./package.json').name"`
-    - name : Set package version and name (windows)
+    - name: Set package version and name (windows)
       if: startsWith(matrix.os, 'windows')
-      run : |
+      run: |
         set PACKAGE_VERSION=`node -p "require('./package.json').version"`
         set PACKAGE_NAME=`node -p "require('./package.json').name"`
     - name: npm install

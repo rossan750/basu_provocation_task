@@ -15,8 +15,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name : Set package version and name
-      run : |
+    - name: Set package version and name
+      run: |
         PACKAGE_VERSION=`node -p "require('./package.json').version"`
         PACKAGE_NAME=`node -p "require('./package.json').name"`
     - name: npm install, build, test
@@ -44,8 +44,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name : Set package version and name
-      run : |
+    - name: Set package version and name
+      run: |
         PACKAGE_VERSION=`node -p "require('./package.json').version"`
         PACKAGE_NAME=`node -p "require('./package.json').name"`
     - name: npm install, build, test
@@ -72,8 +72,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name : Set package version and name
-      run : |
+    - name: Set package version and name
+      run: |
         set PACKAGE_VERSION=`node -p "require('./package.json').version"`
         set PACKAGE_NAME=`node -p "require('./package.json').name"`
     - name: npm install
