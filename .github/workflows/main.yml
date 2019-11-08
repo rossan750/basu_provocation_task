@@ -28,7 +28,7 @@ jobs:
         node-version: 12.x
     - name: Set package version and name
       uses: ./.github/actions/get-package-info
-      id: pacakge_info
+      id: package_info
     - name: test get-package-info
       run: echo ${{ steps.package_info.outputs.package_name }}
     - name: npm install
