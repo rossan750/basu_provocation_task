@@ -27,13 +27,8 @@ jobs:
       with:
         node-version: 12.x
     - name: Set package version and name
+      uses: actions/get-package-info
       id: packge_info
-      shell: bash
-      run: |
-        PACKAGE_VERSION=`node -p "require('./package.json').version"`
-        PACKAGE_NAME=`node -p "require('./package.json').name"`
-        set-output package_version=$PACKAGE_VERSION
-        set-output package_name=$PACKAGE_NAME
     - name: npm install
       run: npm install
     - name: npm build
