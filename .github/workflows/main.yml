@@ -26,7 +26,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - name: Set package version and name - linux, mac
+    - name: Set package version and name - linux mac
       if: !startsWith(matrix.os, 'windows')
       run: |
         PACKAGE_VERSION=`node -p "require('./package.json').version"`
