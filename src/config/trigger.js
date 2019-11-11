@@ -1,6 +1,6 @@
 // Event trigger settings - used in both the react app (renderer) and the electron app (main)
 
-// NOTE: THIS FILE IS A DUPLICATE OF /public/config/trigger.js - MAKE SURE THE CODES MATCH
+// NOTE: THESE CODES MUST MATCH public/config/trigger.js - MAKE SURE THE CODES MATCH
 
 const eventCodes = {
 	open_provoc_task: 13,
