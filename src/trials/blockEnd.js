@@ -1,8 +1,8 @@
-import { lang } from '../config/main'
+import { lang, breathingAudio } from '../config/main'
 import { baseStimulus } from '../lib/markup/stimuli'
 
 const blockEnd = (curBlock, totalBlocks) => {
-  let stimulus = baseStimulus(`
+  let prompt = baseStimulus(`
     <div class='instructions'>
   <h1>${lang.block.end_p1}
     ${curBlock}
@@ -17,8 +17,9 @@ const blockEnd = (curBlock, totalBlocks) => {
   </div>`, true)
 
    return {
-    type: 'html_button_response',
-    stimulus: stimulus,
+    type: 'audio_button_response',
+    stimulus: breathingAudio,
+    prompt: prompt,
     choices: [lang.prompt.continue.button]
   }
 }

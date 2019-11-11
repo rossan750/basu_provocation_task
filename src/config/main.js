@@ -30,7 +30,12 @@ const provokingImages = importAll(requireContext('../assets/images/provocation-i
 
 const practiceImages = importAll(requireContext('../assets/images/practice-images/neutral', false, /\.(png|jpe?g|svg)$/));
 
-// NOTE: cursor radius needs to be small enough to not hit two circles at once
+const audio = importAll(requireContext('../assets/audio', false, /\.(m4a|mp3)$/))
+
+const breathingAudio = _.filter(audio, (o) => o.includes(`breathing_exercise`))[0]
+
+console.log(breathingAudio)
+
 const ratingSettings = {
 	min: 0,
 	max: 10,
@@ -74,5 +79,6 @@ export {
 	eventCodes,
 	MTURK,
 	practiceBlockSettings,
-	importAll
+	importAll,
+	breathingAudio
 }
