@@ -129,15 +129,17 @@ const rateImage = () => {
               // add final click spot to path
               addToPath()
 
-              // re-show the mouse
-              $('html').css('cursor', 'auto')
-
               // free event listeners
               $(document).unbind('mousemove', handleMoveListener)
               $(document).unbind('click', handleClickListener)
 
               setTimeout(
-                  () => done({circle: circle, click: {x: x, y: y}, code: [showCode, rateCode], rt: end_rt, path: path}),
+                  () => {
+                    // re-show the mouse
+                    $('html').css('cursor', 'auto')
+
+                    done({circle: circle, click: {x: x, y: y}, code: [showCode, rateCode], rt: end_rt, path: path})
+                  },
                   500)
             }
         }

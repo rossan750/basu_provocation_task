@@ -12,6 +12,7 @@ const eventCodes = {
 	evidence: 5,
 	show_ratings: 7,
 	rate: 2,
+	start_break: 8,
 	test_connect: 32
 }
 

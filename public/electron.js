@@ -145,6 +145,7 @@ let fileName = ''
 let filePath = ''
 let patientID = ''
 let images = []
+let startTrial = -1
 
 // listener for new data
 ipc.on('data', (event, args) => {
@@ -155,6 +156,7 @@ ipc.on('data', (event, args) => {
     patientID = args.patient_id
     fileName = `pid_${patientID}_${Date.now()}.json`
     filePath = path.resolve(dir, fileName)
+    startTrial = args.trial_index
     log.info(filePath)
     stream = fs.createWriteStream(filePath, {flags:'ax+'});
     stream.write('[')
@@ -163,7 +165,7 @@ ipc.on('data', (event, args) => {
   // we have a set up stream to write to, write to it!
   if (stream) {
     // write intermediate commas
-    if (args.trial_index > 0) {
+    if (args.trial_index > startTrial) {
       stream.write(',')
     }
 
@@ -222,7 +224,7 @@ ipc.on('error', (event, args) => {
   }
   dialog.showMessageBox(mainWindow, {type: "error", message: args, title: "Task Error", buttons: buttons, defaultId: 0})
     .then((opt) => {
-      if (opt.response == 0) app.quit()
+      if (opt.response == 0) app.exit()
     })
 })
 
