@@ -117,8 +117,7 @@ const drawFixation = (ctx, size) => {
 }
 
 const drawCursor = (ctx, x, y, cursorSize) => {
-	ctx.strokeWidth = 2;
-
+	ctx.beginPath();
 	ctx.moveTo(x, y - cursorSize);
 	ctx.lineTo(x, y + cursorSize);
 
@@ -126,6 +125,7 @@ const drawCursor = (ctx, x, y, cursorSize) => {
 	ctx.lineTo(x + cursorSize,  y);
 
 	// Line color
+	ctx.lineWidth = 3;
 	ctx.strokeStyle = '#a6a6a6';
 
 	ctx.stroke();
