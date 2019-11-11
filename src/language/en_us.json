@@ -8,7 +8,7 @@
       "press": "Press any key to continue.",
       "button": "Continue"
     },
-    "focus": "Make sure the photodiode is aligned before continuing.",
+    "focus": "Make sure the photodiode is aligned and the EEG recording has begun before continuing.",
     "setting_up": "Setting up task, please wait..."
   },
   "userid": {
