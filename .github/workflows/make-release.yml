@@ -46,6 +46,12 @@ jobs:
     - name: package electron - mac
       if: startsWith(matrix.os, 'mac')
       run: npm run package:mac
+    - name: npm rebuild - mac
+      if: startsWith(matrix.os, 'mac')
+      run: npm rebuild
+    - name: Mac installer
+      if: startsWith(matrix.os, 'mac')
+      run: npm run installer:mac
 
     # Upload installers to github release
     - name: Upload app to release - windows
@@ -66,7 +72,7 @@ jobs:
       if: startsWith(matrix.os, 'mac')
       uses: softprops/action-gh-release@v1
       with:
-        files: dist/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}.dmg
+        files: dist/installers/${{ steps.package_info.outputs.package_name }}-${{ steps.package_info.outputs.package_version }}.dmg
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
