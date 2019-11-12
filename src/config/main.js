@@ -16,6 +16,9 @@ const imageSettings = {
 	height: 600
 }
 
+// how many of each type of image are required if loading images from disk
+const numRequiredImages = 10
+
 // import images
 const importAll = (r) => {
   return r.keys().map(r);
@@ -27,13 +30,18 @@ const provokingImages = importAll(requireContext('../assets/images/provocation-i
 
 const practiceImages = importAll(requireContext('../assets/images/practice-images/neutral', false, /\.(png|jpe?g|svg)$/));
 
-// NOTE: cursor radius needs to be small enough to not hit two circles at once
+const audio = importAll(requireContext('../assets/audio', false, /\.(m4a|mp3)$/))
+
+const breathingAudio = _.filter(audio, (o) => o.includes(`breathing_exercise`))[0]
+
+console.log(breathingAudio)
+
 const ratingSettings = {
 	min: 0,
 	max: 10,
 	canvasSize: 640, // canvas is a square
 	circleRadius: 28,
-	cursorRadius: 12
+	cursorRadius: 7.5
 }
 
 // get language file
@@ -44,11 +52,12 @@ if (MTURK) { // if this is mturk, merge in the mturk specific language
 }
 
 const defaultBlockSettings = {
+	num_repeats: 2, // how many blocks to have
 	images: {
 		neutral: neutralImages,
 		provoking: provokingImages
 	},
-	repeats_per_condition: 1, // number of times every condition is repeated
+	repeats_per_condition: 3, // number of times every condition is repeated
 	is_practice: false
 }
 
@@ -63,11 +72,13 @@ const practiceBlockSettings = {
 
 export {
 	imageSettings,
+	numRequiredImages,
 	ratingSettings,
 	defaultBlockSettings,
 	lang,
 	eventCodes,
 	MTURK,
 	practiceBlockSettings,
-	importAll
+	importAll,
+	breathingAudio
 }

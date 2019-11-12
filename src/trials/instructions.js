@@ -10,12 +10,11 @@ const screenOne = () => {
     <p>${lang.instructions.p2}</p>
     </div>
     `, true)
-
   return {
     type: 'html_keyboard_response',
     stimulus: stimulus,
     prompt:  lang.prompt.continue.press,
-    response_ends_trial: true
+    response_ends_trial: true,
   }
 }
 

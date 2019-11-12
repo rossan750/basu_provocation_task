@@ -3,8 +3,9 @@ import { jitter50 } from '../lib/utils'
 import { pdSpotEncode, photodiodeGhostBox } from '../lib/markup/photodiode'
 import { fixationHTML } from '../lib/markup/fixation'
 import { jsPsych } from 'jspsych-react'
+import $ from 'jquery'
 
-const fixation = (duration, jittered=true, green=false) => {
+const fixation = (duration, jittered=true, green=false, hideCursor=false) => {
   let stimulus = fixationHTML(green) + photodiodeGhostBox()
 
   const code = eventCodes.fixation;
@@ -17,8 +18,14 @@ const fixation = (duration, jittered=true, green=false) => {
     stimulus: stimulus,
     response_ends_trial: false,
     trial_duration: trial_duration,
-    on_load: () => pdSpotEncode(code),
-    on_finish: (data) => data.code = code
+    on_load: () => {
+      pdSpotEncode(code)
+      if (hideCursor) $('html').css('cursor', 'none')
+    },
+    on_finish: (data) => {
+      data.code = code
+      if (hideCursor) $('html').css('cursor', 'auto')
+    }
   }
 }
 

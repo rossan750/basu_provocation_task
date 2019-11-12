@@ -1,7 +1,7 @@
 import React from 'react'
 import { Experiment, jsPsych } from 'jspsych-react'
 import { tl } from './timelines/main'
-import { MTURK } from './config/main'
+import { MTURK, breathingAudio } from './config/main'
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import '@fortawesome/fontawesome-free/css/all.css'
@@ -31,6 +31,7 @@ class App extends React.Component {
       <div className="App">
         <Experiment settings={{
           timeline: tl,
+          preload_audio: [breathingAudio],
           on_data_update: (data) => {
             if ( ipcRenderer ) {
               ipcRenderer.send('data', data)

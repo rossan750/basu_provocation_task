@@ -48,12 +48,12 @@ const getCircles = (start, stop, size) => {
   return circles
 }
 
-const isColliding = (x1, y1, r1, x2, y2, r2) => {
+const isColliding = (x1, y1, r1, x2, y2) => {
   let dx = x1 - x2;
   let dy = y1 - y2;
   let distance = Math.sqrt(dx * dx + dy * dy);
 
-  if ( distance < (r1 + r2) ) {
+  if ( distance < r1 ) {
     return true
   } else {
     return false
@@ -109,10 +109,34 @@ const drawPrompt = (ctx, rt, size) => {
   ctx.fillText("Please select a rating", size / 2, size * .25);
 }
 
+const drawFixation = (ctx, size) => {
+	ctx.fillStyle = "#ffffff";
+	ctx.beginPath();
+	ctx.arc(size/2, size/2, 7.5, 0, 2 * Math.PI, true);
+	ctx.fill();
+}
+
+const drawCursor = (ctx, x, y, cursorSize) => {
+	ctx.beginPath();
+	ctx.moveTo(x, y - cursorSize);
+	ctx.lineTo(x, y + cursorSize);
+
+	ctx.moveTo(x - cursorSize,  y);
+	ctx.lineTo(x + cursorSize,  y);
+
+	// Line color
+	ctx.lineWidth = 3;
+	ctx.strokeStyle = '#a6a6a6';
+
+	ctx.stroke();
+}
+
 export {
 	generateStartingOpts,
 	getCircles,
 	getCircle,
 	drawNumbers,
-	drawPrompt
+	drawPrompt,
+	drawFixation,
+	drawCursor
 }
