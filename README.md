@@ -16,7 +16,7 @@ npm install
 ```
 npm run dev
 ```
-4. Check out the data - the data is saved throughout the task to the users's app directory.  This is logged at the beginning of the task wherever you ran `npm run dev`.  If on windows, this command will not work.  Instead, in two different command prompts, run `npm run start` then in the other `npm run delectron-dev`.
+4. Check out the data - the data is saved throughout the task to the users's app directory.  This is logged at the beginning of the task wherever you ran `npm run dev`.  If on windows, this command will not work.  Instead, in two different command prompts, run `npm run start` then in the other `npm run electron-dev`.
 
 **NOTE**: When not running on MTurk, the task will look for a folder on the desktop called `provocation-images/<patient_id>` with subfolders `neutral` and `provoking`.  If these are present, images will be loaded from there instead of the default images that are included in the app.
 
