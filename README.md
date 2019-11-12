@@ -98,6 +98,13 @@ The `lib/` directory contains utility functions and markup that is used in the t
 
 `jspsych` uses `trials` as its base unit of an experiment. These trials do things such as display some stimulus or request a response.
 
+## Environment Variables
+
+The following are environment variables used by the app:
+
+* `ELECTRON_START_URL` [string]: URL (e.g. `http://localhost:3000`) where the front end of the app is being hosted - also used in `electron.js` to indicate the app is running in dev mode
+* `EVENT_MARKER_PRODUCT_ID` [string]: The product ID of the event marker (e.g. `0487`).  If not set, it will use the `productID` set in `public/config/trigger.js`.
+
 ## Usage with PsiTurk
 
 While this set up is optimized for Electron, we added functionality that will make use with PsiTurk easy. The application will detect if it's being used in a Turk environment and will:  
@@ -190,6 +197,10 @@ Creates a production build of the app (renderer).  This must be done before runn
 
 It correctly bundles creates electron packages for the given platform.  It then creates an installer for that platform.  The output can be found in `/dist`
 platforms: windows, mac, linux.
+
+### `npm run installer:mac`
+
+For mac, must be called after `npm run package:mac` to create a `.dmg` installer.  Run `npm rebuild` before running this.
 
 
 #### Prerequisites
