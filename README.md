@@ -3,8 +3,7 @@
   <img src="provocation.svg" width="200" />
 </p>
 
-[![Actions Status](https://github.com/brown-ccv/task-provocation/workflows/Test%2C%20Build%2C%20and%20Package/badge.svg)](https://github.com/brown-ccv/task-provocation/actions)
-[![Actions Status](https://github.com/brown-ccv/task-provocation/workflows/Build%20at%20home%20version%20%28Windows%29/badge.svg)](https://github.com/brown-ccv/task-provocation/actions)  
+[![Actions Status](https://github.com/brown-ccv/task-provocation/workflows/Test%2C%20Build%2C%20and%20Package/badge.svg)](https://github.com/brown-ccv/task-provocation/actions) 
 
 
 This repo contains the Provocation task. It is a [jspsych](https://www.jspsych.org/) task built with React and Electron. This task uses the [Neuro Task Starter](https://www.github.com/brown-ccv/neuro-task-starter).
