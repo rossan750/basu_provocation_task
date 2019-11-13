@@ -1,4 +1,4 @@
-name: CI Tests
+name: Test, Build, and Package
 
 on:
   push:
@@ -8,7 +8,8 @@ on:
   pull_request:
     paths:
       - 'src/**'
-      - '.github/workflows/main.yml'
+      - '.github/workflows/**'
+      - 'public/**'
 
 jobs:
   build:
