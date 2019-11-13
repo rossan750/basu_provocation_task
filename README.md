@@ -3,7 +3,7 @@
   <img src="provocation.svg" width="200" />
 </p>
 
-[![Actions Status](https://github.com/brown-ccv/task-provocation/workflows/Test%2C%20Build%2C%20and%20Package/badge.svg)](https://github.com/brown-ccv/task-provocation/actions) 
+[![Actions Status](https://github.com/brown-ccv/task-provocation/workflows/Test%2C%20Build%2C%20and%20Package/badge.svg)](https://github.com/brown-ccv/task-provocation/actions)
 
 
 This repo contains the Provocation task. It is a [jspsych](https://www.jspsych.org/) task built with React and Electron. This task uses the [Neuro Task Starter](https://www.github.com/brown-ccv/neuro-task-starter).
@@ -103,6 +103,14 @@ The `lib/` directory contains utility functions and markup that is used in the t
 #### `trials`
 
 `jspsych` uses `trials` as its base unit of an experiment. These trials do things such as display some stimulus or request a response.
+
+## Environment Variables
+
+The following are environment variables used by the app:
+
+* `ELECTRON_START_URL` [string]: URL (e.g. `http://localhost:3000`) where the front end of the app is being hosted - also used in `electron.js` to indicate the app is running in dev mode
+* `EVENT_MARKER_PRODUCT_ID` [string]: The product ID of the event marker (e.g. `0487`).  If not set, it will use the `productID` set in `public/config/trigger.js`.
+
 
 ## Usage with PsiTurk
 
