@@ -4,6 +4,7 @@
     "end": "This experiment has ended."
   },
   "prompt": {
+    "skip": "Skip breathing exercise",
     "continue": {
       "press": "Press any key to continue.",
       "button": "Continue"
