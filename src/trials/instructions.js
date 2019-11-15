@@ -2,110 +2,62 @@ import { lang } from '../config/main'
 import { baseStimulus } from '../lib/markup/stimuli'
 
 
-const screenOne = () => {
-  var stimulus = baseStimulus(`
+const screenOne = baseStimulus(`
     <div class='instructions'>
     <h1>${lang.instructions.welcome}</h1>
     <p>${lang.instructions.p1}</p>
     <p>${lang.instructions.p2}</p>
     </div>
     `, true)
-  return {
-    type: 'html_keyboard_response',
-    stimulus: stimulus,
-    prompt:  lang.prompt.continue.press,
-    response_ends_trial: true,
-  }
-}
 
-const screenTwo = () => {
-  var stimulus = baseStimulus(`
+const screenTwo = baseStimulus(`
     <div class='instructions'>
     <p>${lang.instructions.fixation}</p>
     <div id="fixation-dot" class="color-white"></div>
     </div>
     `, true)
 
-  return {
-    type: 'html_keyboard_response',
-    stimulus: stimulus,
-    prompt:  lang.prompt.continue.press,
-    response_ends_trial: true
-  }
-}
-
-const screenThree = () => {
-  var stimulus = baseStimulus(`
+const screenThree = baseStimulus(`
     <div class='instructions'>
     <p>${lang.instructions.rate}</p>
     </div>
     `, true)
-  return {
-    type: 'html_keyboard_response',
-    stimulus: stimulus,
-    prompt:  lang.prompt.continue.press,
-    response_ends_trial: true
-  }
-}
 
-const screenFour = () => {
-  var stimulus = baseStimulus(`
+const screenFour = baseStimulus(`
     <div class='instructions'>
     <p>${lang.instructions.rate_practice}</p>
     </div>
     `, true)
-  return {
-    type: 'html_keyboard_response',
-    stimulus: stimulus,
-    prompt:  lang.prompt.continue.press,
-    response_ends_trial: true
-  }
-}
 
-const screenFive = () => {
-  var stimulus = baseStimulus(`
+const screenFive = baseStimulus(`
     <div class='instructions'>
     <p>${lang.instructions.no_talking}</p>
     </div>
     `, true)
-  return {
-    type: 'html_keyboard_response',
-    stimulus: stimulus,
-    prompt:  lang.prompt.continue.press,
-    response_ends_trial: true
-  }
-}
 
-
-const screenSix = () => {
-  var stimulus = baseStimulus(`
+const screenSix = baseStimulus(`
     <div class='instructions'>
     <p>${lang.instructions.instruction_end}</p>
     </div>
     `, true)
-  return {
-    type: 'html_keyboard_response',
-    stimulus: stimulus,
-    prompt: lang.prompt.continue.press,
-    response_ends_trial: true
-  }
-}
 
 const instructions1 = {
-  type: 'html_keyboard_response',
-  timeline: [
-    screenOne(),
-    screenTwo(),
-    screenThree(),
-    screenFour(),
+  type: 'instructions',
+  show_clickable_nav: true,
+  pages: [
+    screenOne,
+    screenTwo,
+    screenThree,
+    screenFour,
   ]
 }
 
 const instructions2 = {
-  type: 'html_keyboard_response',
-  timeline: [
-    screenFive(),
-    screenSix(),
+  type: 'instructions',
+  show_clickable_nav: true,
+  pages: [
+    screenFive,
+    screenSix,
   ]
 }
 
