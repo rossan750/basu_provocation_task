@@ -41,11 +41,18 @@ const screenSix = baseStimulus(`
     </div>
     `, true)
 
+const breathing = baseStimulus(`
+  <div class='instructions'>
+  <p>${lang.instructions.breathing}</p>
+  </div>
+  `, true)
+
 const instructions1 = {
   type: 'instructions',
   show_clickable_nav: true,
   pages: [
     screenOne,
+    breathing,
     screenTwo,
     screenThree,
     screenFour,

@@ -4,12 +4,15 @@ import { baseStimulus } from '../lib/markup/stimuli'
 import eventMarkerMessage from '../lib/markup/eventMarkerMessage'
 
 const holdUpMarker = () => {
-  let stimulus = baseStimulus(`<div><h2 id='usb-alert'></h2></div>`, true) + photodiodeGhostBox()
+  let stimulus = baseStimulus(`<div>
+    <h2 id='usb-alert'></h2>
+    <br><p>${lang.prompt.focus}</p>
+    <br><p>${lang.instructions.adjust_volume}</p>
+    </div>`, true) + photodiodeGhostBox()
 
    return {
     type: 'html_button_response',
     stimulus: stimulus,
-    prompt: [`<br><h3>${lang.prompt.focus}</h3>`],
     choices: [lang.prompt.continue.button],
     on_load: () => (eventMarkerMessage()
                       .then(s => document.getElementById('usb-alert')
