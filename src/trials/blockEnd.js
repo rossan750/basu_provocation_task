@@ -24,7 +24,8 @@ const blockEnd = (curBlock, totalBlocks) => {
     type: 'audio_button_response',
     stimulus: breathingAudio,
     prompt: prompt,
-    choices: [lang.prompt.continue.button],
+    choices: [lang.prompt.skip],
+    trial_ends_after_audio: true,
     on_load: () => {
       pdSpotEncode(code)
     },
