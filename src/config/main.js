@@ -25,6 +25,12 @@ const importAll = (r) => {
   return r.keys().map(r);
 }
 
+// audio codes
+const audioCodes = {
+	frequency: 500,
+	type: 'sine'
+}
+
 // UPDATE THIS PATH TO CHANGE IMAGE FOLDER
 const neutralImages = importAll(requireContext('../assets/images/provocation-images/neutral', false, /\.(png|jpe?g|svg)$/));
 const provokingImages = importAll(requireContext('../assets/images/provocation-images/provoking', false, /\.(png|jpe?g|svg)$/));
@@ -82,5 +88,6 @@ export {
 	AT_HOME,
 	practiceBlockSettings,
 	importAll,
-	breathingAudio
+	breathingAudio,
+	audioCodes
 }
