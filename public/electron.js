@@ -11,6 +11,8 @@ const fs = require('fs')
 const tar = require('tar')
 const log = require('electron-log')
 
+const AT_HOME = (process.env.REACT_APP_AT_HOME === 'true')
+
 // set logging levels
 log.transports.file.level = 'info'
 
@@ -31,7 +33,12 @@ const { dataDir } = require('./config/saveData')
 let mainWindow
 
 function createWindow () {
-
+  if (AT_HOME) {
+    log.info('Develop "at home" version.')
+  }
+  else {
+    log.info('Develop "clinic" version.')
+  }
   // Create the browser window.
   if (process.env.ELECTRON_START_URL) { // in dev mode, disable web security to allow local file loading
     mainWindow = new BrowserWindow({
@@ -45,7 +52,7 @@ function createWindow () {
   } else {
     mainWindow = new BrowserWindow({
       fullscreen: true,
-      frame: false,
+      frame: AT_HOME,
       webPreferences: {
         nodeIntegration: true,
         webSecurity: true
@@ -140,7 +147,9 @@ ipc.on('trigger', (event, args) => {
   let code = args
   if (code != undefined) {
     log.info(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`)
-    handleEventSend(code)
+    if (!AT_HOME) {
+      handleEventSend(code)
+    }
   }
 })
 
@@ -250,8 +259,10 @@ process.on('uncaughtException', (error) => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
-  setUpPort()
-  .then(() => handleEventSend(eventCodes.test_connect))
+  if (!AT_HOME) {
+    setUpPort()
+    .then(() => handleEventSend(eventCodes.test_connect))
+  }
 })
 
 // Quit when all windows are closed.
