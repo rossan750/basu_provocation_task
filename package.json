@@ -1,7 +1,7 @@
 {
   "name": "provocation",
   "description": "Provocation task app",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "author": {
     "name": "Brown CCV",
     "email": "ccv-bot@brown.edu",
@@ -15,6 +15,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.9.0",
     "bootstrap": "^4.3.1",
+    "cross-env": "^7.0.2",
     "electron-log": "^3.0.9",
     "electron-squirrel-startup": "^1.0.0",
     "event-marker": "git+https://github.com/brown-ccv/event-marker.git#bump-version",
@@ -42,7 +43,10 @@
     "eject": "react-scripts eject",
     "electron": "electron .",
     "electron-dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
-    "dev": "concurrently --kill-others \"npm:start\" \"sleep 5 && npm run electron-dev\""
+    "dev": "concurrently --kill-others \"npm:start\" \"sleep 5 && npm run electron-dev\"",
+    "dev:home": "cross-env REACT_APP_AT_HOME=\"true\" npm run dev",
+    "build:win:home": "cross-env REACT_APP_AT_HOME=\"true\" npm run build",
+    "build:win:clinic": "cross-env REACT_APP_AT_HOME=\"false\" npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"

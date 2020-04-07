@@ -10,6 +10,7 @@ import requireContext from 'require-context.macro'
 
 // is this mechanical turk?
 const MTURK = (!jsPsych.turk.turkInfo().outsideTurk)
+const AT_HOME = (process.env.REACT_APP_AT_HOME === 'true')
 
 const imageSettings = {
 	width: 600,
@@ -22,6 +23,12 @@ const numRequiredImages = 10
 // import images
 const importAll = (r) => {
   return r.keys().map(r);
+}
+
+// audio codes
+const audioCodes = {
+	frequency: 100*(eventCodes.open_provoc_task - 9),
+	type: 'sine'
 }
 
 // UPDATE THIS PATH TO CHANGE IMAGE FOLDER
@@ -78,7 +85,9 @@ export {
 	lang,
 	eventCodes,
 	MTURK,
+	AT_HOME,
 	practiceBlockSettings,
 	importAll,
-	breathingAudio
+	breathingAudio,
+	audioCodes
 }
