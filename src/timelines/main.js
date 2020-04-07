@@ -13,6 +13,7 @@ import { AT_HOME, MTURK, defaultBlockSettings, practiceBlockSettings} from '../c
 const primaryTimeline = (AT_HOME) ? [
         experimentStart(),
         userId(),
+        adjustVolume(),
         taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
         instructions1,
         taskBlock(practiceBlockSettings),
