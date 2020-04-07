@@ -21,8 +21,8 @@ const primaryTimeline = (AT_HOME) ? [
         [
         experimentStart(),
         userId(),
-        holdUpMarker(),
         adjustVolume(),
+        holdUpMarker(),
         taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
         instructions1,
         taskBlock(practiceBlockSettings),
