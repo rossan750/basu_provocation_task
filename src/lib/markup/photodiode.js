@@ -1,4 +1,4 @@
-import { MTURK, eventCodes  } from  '../../config/main'
+import { AT_HOME, MTURK, eventCodes  } from  '../../config/main'
 import $ from 'jquery'
 
 // conditionally load electron and psiturk based on MTURK config variable
@@ -11,7 +11,7 @@ if (isElectron) {
 
 // Relies on styling in App.css, generate PD spot
 const photodiodeGhostBox = () => {
-	const class_ = (MTURK) ? 'invisible' : 'visible'
+	const class_ = (MTURK | AT_HOME) ? 'invisible' : 'visible'
 
   const markup = `<div class="photodiode-box ${class_}" id="photodiode-box">
 									<span id="photodiode-spot" class="photodiode-spot"></span>

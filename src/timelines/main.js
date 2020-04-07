@@ -4,14 +4,25 @@ import holdUpMarker from '../trials/holdUpMarker'
 import taskBlock from './taskBlock'
 import taskSetUp from './taskSetUp'
 import { instructions1, instructions2 } from '../trials/instructions'
+import adjustVolume from '../trials/adjustVolume'
 
-import { MTURK, defaultBlockSettings, practiceBlockSettings} from '../config/main'
+import { AT_HOME, MTURK, defaultBlockSettings, practiceBlockSettings} from '../config/main'
 
 
 
-const primaryTimeline = [
+const primaryTimeline = (AT_HOME) ? [
         experimentStart(),
         userId(),
+        adjustVolume(),
+        taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
+        instructions1,
+        taskBlock(practiceBlockSettings),
+        instructions2
+        ] :
+        [
+        experimentStart(),
+        userId(),
+        adjustVolume(),
         holdUpMarker(),
         taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
         instructions1,

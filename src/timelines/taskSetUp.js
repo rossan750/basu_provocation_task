@@ -1,6 +1,6 @@
 import path from 'path'
 import { jsPsych } from 'jspsych-react'
-import { MTURK, lang, numRequiredImages } from '../config/main'
+import { AT_HOME, MTURK, lang, numRequiredImages } from '../config/main'
 import experimentEnd from '../trials/experimentEnd'
 import blockEnd from '../trials/blockEnd'
 import buildCountdown from '../trials/countdown'
@@ -75,7 +75,7 @@ const taskSetUp = (blockSettings) => {
 
   return {
 		type: 'html_keyboard_response',
-		timeline: [addTasks, startCode()]
+		timeline: (AT_HOME) ? [addTasks] : [addTasks, startCode()]
 	}
 }
 
