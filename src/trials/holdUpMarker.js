@@ -7,7 +7,6 @@ const holdUpMarker = () => {
   let stimulus = baseStimulus(`<div>
     <h2 id='usb-alert'></h2>
     <br><p>${lang.prompt.focus}</p>
-    <br><p>${lang.instructions.adjust_volume}</p>
     </div>`, true) + photodiodeGhostBox()
 
    return {
