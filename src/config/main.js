@@ -27,7 +27,7 @@ const importAll = (r) => {
 
 // audio codes
 const audioCodes = {
-	frequency: 500,
+	frequency: 100*(eventCodes.open_provoc_task - 9),
 	type: 'sine'
 }
 

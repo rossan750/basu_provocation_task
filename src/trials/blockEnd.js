@@ -21,10 +21,11 @@ const blockEnd = (curBlock, totalBlocks) => {
   </div>`, true) + photodiodeGhostBox()
 
    return {
-    type: 'audio_button_response',
+    type: 'audio_keyboard_response',
     stimulus: breathingAudio,
     prompt: prompt,
-    choices: [lang.prompt.skip],
+    choices: [],
+    response_ends_trial: false,
     trial_ends_after_audio: true,
     on_load: () => {
       pdSpotEncode(code)
