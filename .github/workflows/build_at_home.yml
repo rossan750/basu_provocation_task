@@ -7,7 +7,7 @@ on:
         - develop
     paths:
       - 'src/**'
-      - '.github/workflows/main.yml'
+      - '.github/workflows/build_at_home.yml'
 
 jobs:
   build:
