@@ -77,6 +77,8 @@ const practiceBlockSettings = {
 	is_practice: true
 }
 
+const taskName = "Provocation"
+
 export {
 	imageSettings,
 	numRequiredImages,
@@ -89,5 +91,6 @@ export {
 	practiceBlockSettings,
 	importAll,
 	breathingAudio,
-	audioCodes
+	audioCodes,
+	taskName
 }
