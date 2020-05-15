@@ -6,6 +6,7 @@ import taskBlock from './taskBlock'
 import taskSetUp from './taskSetUp'
 import { instructions1, instructions2 } from '../trials/instructions'
 import adjustVolume from '../trials/adjustVolume'
+import camera from '../trials/camera'
 
 import { AT_HOME, MTURK, defaultBlockSettings, practiceBlockSettings} from '../config/main'
 
