@@ -191,6 +191,25 @@ ipc.on('data', (event, args) => {
   }
 })
 
+// Save Video
+
+ipc.on('save_video', (event, fileName, buffer) => {
+  
+  const desktop = app.getPath('desktop')
+  const name = app.getName()
+  const today = new Date(Date.now())
+  const date = today.toISOString().slice(0,10)
+  const fullPath = path.join(desktop, dataDir, `${patientID}`, date, name, fileName)
+  fs.outputFile(fullPath, buffer, err => {
+      if (err) {
+          event.sender.send(ERROR, err.message)
+      } else {
+        event.sender.send('SAVED_FILE', fullPath)
+        console.log(fullPath)
+      }
+  })
+})
+
 // EXPERIMENT END
 ipc.on('end', (event, args) => {
   // finish writing file

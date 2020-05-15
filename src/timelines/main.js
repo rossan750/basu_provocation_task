@@ -1,5 +1,6 @@
 import userId from '../trials/userId'
 import experimentStart from '../trials/experimentStart'
+import experimentEnd from '../trials/experimentEnd'
 import holdUpMarker from '../trials/holdUpMarker'
 import taskBlock from './taskBlock'
 import taskSetUp from './taskSetUp'
@@ -14,10 +15,12 @@ const primaryTimeline = (AT_HOME) ? [
         experimentStart(),
         userId(),
         adjustVolume(),
+        camera(),
         taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
         instructions1,
         taskBlock(practiceBlockSettings),
-        instructions2
+        instructions2,
+        experimentEnd()
         ] :
         [
         experimentStart(),
