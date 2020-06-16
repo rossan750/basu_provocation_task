@@ -27,13 +27,13 @@ const camera = () => {
   <video id="camera" width="640" height="480" autoplay></video>
   </div>
   `
-  let stimulus = baseStimulus(markup, true) +
+  let stimulus = baseStimulus(markup, false) +
                  photodiodeGhostBox()
 
   return {
     type: 'html_button_response',
     stimulus: stimulus,
-    choices: [ lang.prompt.continue.button],
+    choices: [ lang.prompt.continue.button ],
     response_ends_trial: true,
     on_load: () => {
       // Grab elements, create settings, etc.
