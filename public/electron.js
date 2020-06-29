@@ -20,10 +20,10 @@ log.transports.file.level = 'info'
 const { eventCodes, comName } = require('./config/trigger')
 const { getPort, sendToPort } = require('event-marker')
 
-// Override product ID if environment variable set
+// Override comName if environment variable set
 const activeComName = process.env.COMNAME || comName
 
-log.info("Active product ID", activeComName)
+log.info("Active comName", activeComName)
 
 // Data Saving
 const { dataDir } = require('./config/saveData')
