@@ -31,6 +31,7 @@
     "block_end": "Block 1 of 2 is now complete.",
     "block_break": "Take a 10 second break and continue to block 2 of 2.",
     "adjust_volume": "Set tablet volume to 50/100.",
+    "camera": "Make sure the camera is pointing to you and your face is within the camera area.",
     "breathing": "Halfway through the task, you will be guided through a 3 minute guided deep breathing exercise."
   },
   "block": {
