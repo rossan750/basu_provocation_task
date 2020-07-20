@@ -3,7 +3,7 @@ name: Test, Build, and Package
 on:
   pull_request:
     branches:
-      - master
+      - main
       - develop
     paths:
       - 'src/**'

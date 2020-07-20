@@ -3,11 +3,12 @@ name: Build at home version (Windows)
 on:
   pull_request:
     branches:
-        - master
+        - main
         - develop
     paths:
       - 'src/**'
       - '.github/workflows/build_at_home.yml'
+      - 'public/**'
 
 jobs:
   build:
