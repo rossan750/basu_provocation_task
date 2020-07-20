@@ -23,3 +23,5 @@ yarn-error.log*
 
 psiturkit/*_turk/*
 psiturkit/*_turk
+
+public/config/version.json
