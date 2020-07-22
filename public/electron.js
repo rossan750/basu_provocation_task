@@ -7,7 +7,7 @@ const path = require('path')
 const url = require('url')
 const ipc = require('electron').ipcMain
 const _ = require('lodash')
-const fs = require('fs')
+const fs = require('fs-extra')
 const tar = require('tar')
 const log = require('electron-log')
 
@@ -20,10 +20,6 @@ log.transports.file.level = 'info'
 const { eventCodes, comName } = require('./config/trigger')
 const { getPort, sendToPort } = require('event-marker')
 
-// Override comName if environment variable set
-const activeComName = process.env.COMNAME || comName
-
-log.info("Active comName", activeComName)
 
 // Data Saving
 const { dataDir } = require('./config/saveData')
@@ -86,7 +82,15 @@ let triggerPort
 let portAvailable
 let SKIP_SENDING_DEV = false
 
+// Override comName if environment variable set
+const activeComName = process.env.COMNAME || comName
+log.info("Active comName", activeComName)
+
+// Uncomment lines 90, 91 and 93, comment line 94, for testing with Teensyduino
+// const vendorId = '16c0'
+// const productId = '0483'
 const setUpPort = async () => {
+  // p = await getPort(vendorId, productId)
   p = await getPort(activeComName)
   if (p) {
     triggerPort = p
