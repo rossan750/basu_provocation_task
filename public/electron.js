@@ -86,6 +86,9 @@ let triggerPort
 let portAvailable
 let SKIP_SENDING_DEV = false
 
+console.log(activeComName, 'activeComName')
+
+console.log(process.env.COMNAME, 'env COMANME')
 const setUpPort = async () => {
   p = await getPort(activeComName)
   if (p) {
@@ -198,7 +201,7 @@ ipc.on('data', (event, args) => {
 // Save Video
 
 ipc.on('save_video', (event, fileName, buffer) => {
-  
+
   const desktop = app.getPath('desktop')
   const name = app.getName()
   const today = new Date(Date.now())
