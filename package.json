@@ -29,9 +29,10 @@
     "tar": "^4.4.10"
   },
   "scripts": {
+    "postinstall": "node version.js && npm run rebuild",
     "start": "cross-env BROWSER=none NODE_PATH=./src react-scripts start",
-    "firefox": "BROWSER=firefox npm start",
-    "prebuild": "electron-rebuild",
+    "firefox": "cross-env BROWSER=firefox npm start",
+    "prebuild": "npm run rebuild",
     "build": "react-scripts build",
     "package:windows": "electron-packager . --platform win32 --arch x64 --icon ./assets/icons/win/icon.ico --out dist/ --overwrite --asar ",
     "package:mac": "electron-packager . --platform darwin --arch x64 --out dist/ --icon ./assets/icons/mac/icon.icns --overwrite",
