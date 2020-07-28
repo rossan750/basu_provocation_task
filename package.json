@@ -29,9 +29,10 @@
     "tar": "^4.4.10"
   },
   "scripts": {
-    "start": "BROWSER=none NODE_PATH=./src react-scripts start",
-    "firefox": "BROWSER=firefox npm start",
-    "prebuild": "electron-rebuild",
+    "postinstall": "node version.js && npm run rebuild",
+    "start": "cross-env BROWSER=none NODE_PATH=./src react-scripts start",
+    "firefox": "cross-env BROWSER=firefox npm start",
+    "prebuild": "npm run rebuild",
     "build": "react-scripts build",
     "package:windows": "electron-packager . --platform win32 --arch x64 --icon ./assets/icons/win/icon.ico --out dist/ --overwrite --asar ",
     "package:mac": "electron-packager . --platform darwin --arch x64 --out dist/ --icon ./assets/icons/mac/icon.icns --overwrite",
@@ -43,7 +44,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "electron-dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
+    "electron-dev": "cross-env ELECTRON_START_URL=http://localhost:3000 electron .",
     "dev": "concurrently --kill-others \"npm:start\" \"sleep 5 && npm run electron-dev\"",
     "dev:home": "cross-env REACT_APP_AT_HOME=\"true\" npm run dev",
     "build:win:home": "cross-env REACT_APP_AT_HOME=\"true\" npm run build",
