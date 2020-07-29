@@ -11,6 +11,8 @@ import requireContext from 'require-context.macro'
 // is this mechanical turk?
 const MTURK = (!jsPsych.turk.turkInfo().outsideTurk)
 const AT_HOME = (process.env.REACT_APP_AT_HOME === 'true')
+const VIDEO =  (process.env.REACT_APP_VIDEO === 'true')
+console.log(VIDEO)
 
 const imageSettings = {
 	width: 600,
@@ -88,6 +90,7 @@ export {
 	eventCodes,
 	MTURK,
 	AT_HOME,
+	VIDEO,
 	practiceBlockSettings,
 	importAll,
 	breathingAudio,
