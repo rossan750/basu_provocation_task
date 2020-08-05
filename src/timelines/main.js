@@ -8,31 +8,48 @@ import { instructions1, instructions2 } from '../trials/instructions'
 import adjustVolume from '../trials/adjustVolume'
 import camera from '../trials/camera'
 
-import { AT_HOME, MTURK, defaultBlockSettings, practiceBlockSettings} from '../config/main'
+import { AT_HOME, VIDEO, MTURK, defaultBlockSettings, practiceBlockSettings} from '../config/main'
 
+let timeline
+if (AT_HOME && !VIDEO) {
+  timeline = [
+    experimentStart(),
+    userId(),
+    adjustVolume(),
+    taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
+    instructions1,
+    taskBlock(practiceBlockSettings),
+    instructions2,
+    experimentEnd()
+    ]
+}
+else if (AT_HOME && VIDEO) {
+  timeline = [
+    experimentStart(),
+    userId(),
+    adjustVolume(),
+    camera(),
+    taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
+    instructions1,
+    taskBlock(practiceBlockSettings),
+    instructions2,
+    experimentEnd()
+    ]
+}
+else {
+  timeline = [
+    experimentStart(),
+    userId(),
+    adjustVolume(),
+    holdUpMarker(),
+    taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
+    instructions1,
+    taskBlock(practiceBlockSettings),
+    instructions2
+    ]
+}
 
-
-const primaryTimeline = (AT_HOME) ? [
-        experimentStart(),
-        userId(),
-        adjustVolume(),
-        camera(),
-        taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
-        instructions1,
-        taskBlock(practiceBlockSettings),
-        instructions2,
-        experimentEnd()
-        ] :
-        [
-        experimentStart(),
-        userId(),
-        adjustVolume(),
-        holdUpMarker(),
-        taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
-        instructions1,
-        taskBlock(practiceBlockSettings),
-        instructions2
-        ]
+const primaryTimeline = timeline
 
 const mturkTimeline = []
 
