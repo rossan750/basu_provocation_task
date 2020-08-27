@@ -20,6 +20,7 @@ if (AT_HOME && !VIDEO) {
     instructions1,
     taskBlock(practiceBlockSettings),
     instructions2,
+    taskBlock(defaultBlockSettings),
     experimentEnd()
     ]
 }
@@ -33,6 +34,7 @@ else if (AT_HOME && VIDEO) {
     instructions1,
     taskBlock(practiceBlockSettings),
     instructions2,
+    taskBlock(defaultBlockSettings),
     experimentEnd()
     ]
 }
@@ -45,7 +47,8 @@ else {
     taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
     instructions1,
     taskBlock(practiceBlockSettings),
-    instructions2
+    instructions2,
+    taskBlock(defaultBlockSettings)
     ]
 }
 
