@@ -1,6 +1,5 @@
 import userId from '../trials/userId'
 import experimentStart from '../trials/experimentStart'
-import experimentEnd from '../trials/experimentEnd'
 import holdUpMarker from '../trials/holdUpMarker'
 import taskBlock from './taskBlock'
 import taskSetUp from './taskSetUp'
