@@ -9,9 +9,9 @@ const adjustVolume = () => {
     `, true)
     
     return {
-        type: 'html_keyboard_response',
+        type: 'html_button_response',
         stimulus: stimulus,
-        prompt:  lang.prompt.continue.press,
+        choices: [ lang.prompt.continue.button ],
         response_ends_trial: true
     }
 }
