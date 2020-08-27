@@ -16,6 +16,7 @@ if (AT_HOME && !VIDEO) {
     experimentStart(),
     userId(),
     adjustVolume(),
+    // THIS BLOCK MODIFIES THE TIMELINE ITSELF BY APPENDING A TASK BLOCK AND EXPERIMENT END. This is probably not ideal because it makes composition obscure.
     taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
     instructions1,
     taskBlock(practiceBlockSettings),
@@ -28,7 +29,8 @@ else if (AT_HOME && VIDEO) {
     userId(),
     adjustVolume(),
     camera(),
-    taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
+    // THIS BLOCK MODIFIES THE TIMELINE ITSELF BY APPENDING  A TASK BLOCK AND EXPERIMENT END. This is probably not ideal because it makes composition obscure.
+    taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline 
     instructions1,
     taskBlock(practiceBlockSettings),
     instructions2
@@ -40,6 +42,7 @@ else {
     userId(),
     adjustVolume(),
     holdUpMarker(),
+    // THIS BLOCK MODIFIES THE TIMELINE ITSELF BY APPENDING A TASK BLOCK AND EXPERIMENT END. This is probably not ideal because it makes composition obscure.
     taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
     instructions1,
     taskBlock(practiceBlockSettings),
