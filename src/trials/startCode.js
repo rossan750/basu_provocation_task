@@ -1,5 +1,6 @@
-import { eventCodes, lang } from '../config/main'
+import { eventCodes, lang, audioCodes } from '../config/main'
 import { photodiodeGhostBox, pdSpotEncode } from '../lib/markup/photodiode'
+import { beep } from '../lib/utils'
 import { baseStimulus } from '../lib/markup/stimuli'
 
 const startCode = () => {
@@ -11,6 +12,7 @@ const startCode = () => {
     trial_duration: 2000,
     on_load: () => {
       pdSpotEncode(eventCodes.open_provoc_task)
+      beep(audioCodes)
     }
   }
 }

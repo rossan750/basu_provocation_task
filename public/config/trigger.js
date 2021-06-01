@@ -2,9 +2,7 @@
 
 // NOTE: THIS FILE IS A PARITAL DUPLICATE OF /src/config/trigger.js - MAKE SURE THE CODES MATCH
 
-const manufacturer = 'Teensyduino'
-const vendorId = '16c0'
-const productId = '0487'
+const comName = 'COM3'
 
 const eventCodes = {
 	open_provoc_task: 13,
@@ -18,8 +16,6 @@ const eventCodes = {
 
 // this is module.exports isntead of just exports as it is also imported into the electron app
 module.exports = {
-	manufacturer,
-	vendorId,
-	productId,
+	comName,
 	eventCodes
 }

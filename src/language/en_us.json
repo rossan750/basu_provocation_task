@@ -4,6 +4,7 @@
     "end": "This experiment has ended."
   },
   "prompt": {
+    "skip": "Skip breathing exercise",
     "continue": {
       "press": "Press any key to continue.",
       "button": "Continue"
@@ -28,7 +29,10 @@
     "no_talking": "Try not to talk or move around more than necessary, as movements affect the quality of the recordings.",
     "instruction_end": "In a few moments, the task will begin.",
     "block_end": "Block 1 of 2 is now complete.",
-    "block_break": "Take a 10 second break and continue to block 2 of 2."
+    "block_break": "Take a 10 second break and continue to block 2 of 2.",
+    "adjust_volume": "Set tablet volume to 50/100.",
+    "camera": "Make sure the camera is pointing to you and your face is within the camera area.",
+    "breathing": "Halfway through the task, you will be guided through a 3 minute guided deep breathing exercise."
   },
   "block": {
     "end_p1": "Block ",
