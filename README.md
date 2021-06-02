@@ -22,7 +22,7 @@ npm install
 ```
 npm run dev
 ```
-4. Check out the data - the data is saved throughout the task to the users's app directory.  This is logged at the beginning of the task wherever you ran `npm run dev`.  If on windows, this command will not work.  Instead, in two different command prompts, run `npm run start` then in the other `npm run delectron-dev`.
+4. Check out the data - the data is saved throughout the task to the users's app directory.  This is logged at the beginning of the task wherever you ran `npm run dev`.  If on windows, this command will not work.  Instead, in two different command prompts, run `npm run start` then in the other `npm run electron-dev`.
 
 **NOTE**: When not running on MTurk, the task will look for a folder on the desktop called `provocation-images/<patient_id>` with subfolders `neutral` and `provoking`.  If these are present, images will be loaded from there instead of the default images that are included in the app.
 
@@ -110,7 +110,6 @@ The following are environment variables used by the app:
 
 * `ELECTRON_START_URL` [string]: URL (e.g. `http://localhost:3000`) where the front end of the app is being hosted - also used in `electron.js` to indicate the app is running in dev mode
 * `EVENT_MARKER_PRODUCT_ID` [string]: The product ID of the event marker (e.g. `0487`).  If not set, it will use the `productID` set in `public/config/trigger.js`.
-
 
 ## Usage with PsiTurk
 
@@ -204,6 +203,10 @@ Creates a production build of the app (renderer).  This must be done before runn
 
 It correctly bundles creates electron packages for the given platform.  It then creates an installer for that platform.  The output can be found in `/dist`
 platforms: windows, mac, linux.
+
+### `npm run installer:mac`
+
+For mac, must be called after `npm run package:mac` to create a `.dmg` installer.  Run `npm rebuild` before running this.
 
 
 #### Prerequisites

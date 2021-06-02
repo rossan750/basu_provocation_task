@@ -225,38 +225,6 @@ ipc.on('save_video', (event, fileName, buffer) => {
 
 // EXPERIMENT END
 ipc.on('end', (event, args) => {
-  // finish writing file
-  stream.write(']')
-  stream.end()
-  stream = false
-
-  // copy file to config location
-  const desktop = app.getPath('desktop')
-  const name = app.getName()
-  const today = new Date(Date.now())
-  const date = today.toISOString().slice(0,10)
-  const copyPath = path.join(desktop, dataDir, `${patientID}`, date, name)
-  fs.mkdir(copyPath, { recursive: true }, (err) => {
-    log.error(err)
-    fs.copyFileSync(filePath, path.join(copyPath, fileName))
-
-    // copy images to config location
-    const sourceImagePath = path.resolve(path.dirname(images[images.length - 1]), '..')
-    const imagePath = path.join(copyPath, 'provocation-images')
-    const imageFileName = path.basename(fileName, '.json') + `.tar.gz`
-    fs.mkdir(imagePath, {recursive: true}, (err) => {
-      log.error(err)
-      tar.c( // or tar.create
-        {
-          gzip: true,
-          cwd: sourceImagePath
-        },
-        ['.']
-      ).pipe(fs.createWriteStream(path.join(imagePath, imageFileName)))
-    })
-
-  })
-
   // quit app
   app.quit()
 })
@@ -312,3 +280,38 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+// EXPERIMENT END
+app.on('will-quit', () => {
+  // finish writing file
+  stream.write(']')
+  stream.end()
+  stream = false
+
+  // copy file to config location
+  const desktop = app.getPath('desktop')
+  const name = app.getName()
+  const today = new Date(Date.now())
+  const date = today.toISOString().slice(0,10)
+  const copyPath = path.join(desktop, dataDir, `${patientID}`, date, name)
+  fs.mkdir(copyPath, { recursive: true }, (err) => {
+    log.error(err)
+    fs.copyFileSync(filePath, path.join(copyPath, fileName))
+
+    // copy images to config location
+    const sourceImagePath = path.resolve(path.dirname(images[images.length - 1]), '..')
+    const imagePath = path.join(copyPath, 'provocation-images')
+    const imageFileName = path.basename(fileName, '.json') + `.tar.gz`
+    fs.mkdir(imagePath, {recursive: true}, (err) => {
+      log.error(err)
+      tar.c( // or tar.create
+        {
+          gzip: true,
+          cwd: sourceImagePath
+        },
+        ['.']
+      ).pipe(fs.createWriteStream(path.join(imagePath, imageFileName)))
+    })
+
+  })
+})
