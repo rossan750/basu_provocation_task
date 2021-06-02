@@ -1,6 +1,12 @@
 # Provocation Task
+<p float="left">
+  <img src="provocation.svg" width="200" />
+</p>
 
-This repo contains the provocation task. It is a [jspsych](https://www.jspsych.org/) task built with React and Electron.
+[![Actions Status](https://github.com/brown-ccv/task-provocation/workflows/Test%2C%20Build%2C%20and%20Package/badge.svg)](https://github.com/brown-ccv/task-provocation/actions)
+
+
+This repo contains the Provocation task. It is a [jspsych](https://www.jspsych.org/) task built with React and Electron. This task uses the [Neuro Task Starter](https://www.github.com/brown-ccv/neuro-task-starter).
 
 ## Getting Started
 
@@ -54,7 +60,7 @@ This file contains all of the code relating to the electron app. This includes t
 
 The `config` directory contains the config files needed for the electron app.  This includes the event-marker details and event codes.
 
-Note: the productId can be overwritten by the environment variable EVENT_MARKER_PRODUCT_ID
+Note: the `comName` can be overwritten by the environment variable COMNAME
 
 ### `src/`
 

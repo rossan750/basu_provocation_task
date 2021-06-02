@@ -7,21 +7,19 @@ const path = require('path')
 const url = require('url')
 const ipc = require('electron').ipcMain
 const _ = require('lodash')
-const fs = require('fs')
+const fs = require('fs-extra')
 const tar = require('tar')
 const log = require('electron-log')
+
+const AT_HOME = (process.env.REACT_APP_AT_HOME === 'true')
 
 // set logging levels
 log.transports.file.level = 'info'
 
 // Event Trigger
-const { eventCodes, manufacturer, vendorId, productId } = require('./config/trigger')
-const { isPort, getPort, sendToPort } = require('event-marker')
+const { eventCodes, comName } = require('./config/trigger')
+const { getPort, sendToPort } = require('event-marker')
 
-// Override product ID if environment variable set
-const activeProductId = process.env.EVENT_MARKER_PRODUCT_ID || productId
-
-log.info("Active product ID", activeProductId)
 
 // Data Saving
 const { dataDir } = require('./config/saveData')
@@ -31,7 +29,12 @@ const { dataDir } = require('./config/saveData')
 let mainWindow
 
 function createWindow () {
-
+  if (AT_HOME) {
+    log.info('Develop "at home" version.')
+  }
+  else {
+    log.info('Develop "clinic" version.')
+  }
   // Create the browser window.
   if (process.env.ELECTRON_START_URL) { // in dev mode, disable web security to allow local file loading
     mainWindow = new BrowserWindow({
@@ -45,7 +48,7 @@ function createWindow () {
   } else {
     mainWindow = new BrowserWindow({
       fullscreen: true,
-      frame: false,
+      frame: AT_HOME,
       webPreferences: {
         nodeIntegration: true,
         webSecurity: true
@@ -79,8 +82,16 @@ let triggerPort
 let portAvailable
 let SKIP_SENDING_DEV = false
 
+// Override comName if environment variable set
+const activeComName = process.env.COMNAME || comName
+log.info("Active comName", activeComName)
+
+// Uncomment lines 90, 91 and 93, comment line 94, for testing with Teensyduino
+// const vendorId = '16c0'
+// const productId = '0483'
 const setUpPort = async () => {
-  p = await getPort(vendorId, activeProductId)
+  // p = await getPort(vendorId, productId)
+  p = await getPort(activeComName)
   if (p) {
     triggerPort = p
     portAvailable = true
@@ -140,7 +151,9 @@ ipc.on('trigger', (event, args) => {
   let code = args
   if (code != undefined) {
     log.info(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`)
-    handleEventSend(code)
+    if (!AT_HOME) {
+      handleEventSend(code)
+    }
   }
 })
 
@@ -151,6 +164,15 @@ let filePath = ''
 let patientID = ''
 let images = []
 let startTrial = -1
+
+
+// Read version file (git sha and branch)
+var git = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'config/version.json')));
+
+// Get Patient Id from environment
+ipc.on('syncPatientId', (event) => {
+  event.returnValue = process.env.REACT_APP_PATIENT_ID
+})
 
 // listener for new data
 ipc.on('data', (event, args) => {
@@ -175,11 +197,30 @@ ipc.on('data', (event, args) => {
     }
 
     //write the data
-    stream.write(JSON.stringify(args))
+    stream.write(JSON.stringify({...args, git}))
 
     // Copy provocation images to patient's data folder
     if (args.trial_type === 'image_keyboard_response') images.push(args.stimulus.slice(7))
   }
+})
+
+// Save Video
+
+ipc.on('save_video', (event, fileName, buffer) => {
+
+  const desktop = app.getPath('desktop')
+  const name = app.getName()
+  const today = new Date(Date.now())
+  const date = today.toISOString().slice(0,10)
+  const fullPath = path.join(desktop, dataDir, `${patientID}`, date, name, fileName)
+  fs.outputFile(fullPath, buffer, err => {
+      if (err) {
+          event.sender.send(ERROR, err.message)
+      } else {
+        event.sender.send('SAVED_FILE', fullPath)
+        console.log(fullPath)
+      }
+  })
 })
 
 // EXPERIMENT END
@@ -218,8 +259,10 @@ process.on('uncaughtException', (error) => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
-  setUpPort()
-  .then(() => handleEventSend(eventCodes.test_connect))
+  if (!AT_HOME) {
+    setUpPort()
+    .then(() => handleEventSend(eventCodes.test_connect))
+  }
 })
 
 // Quit when all windows are closed.
