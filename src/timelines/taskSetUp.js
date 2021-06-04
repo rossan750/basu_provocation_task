@@ -1,6 +1,6 @@
 import path from 'path'
 import { jsPsych } from 'jspsych-react'
-import { AT_HOME, MTURK, lang, numRequiredImages } from '../config/main'
+import { AT_HOME, MTURK, lang, numRequiredImages, IS_ELECTRON } from '../config/main'
 import experimentEnd from '../trials/experimentEnd'
 import blockEnd from '../trials/blockEnd'
 import buildCountdown from '../trials/countdown'
@@ -11,7 +11,7 @@ const isElectron = !MTURK
 let app = false
 let fs = false
 let ipcRenderer = false;
-if ( isElectron ) {
+if ( IS_ELECTRON ) {
 	app = window.require('electron').remote.app
 	fs = window.require('fs')
 	const electron = window.require('electron');

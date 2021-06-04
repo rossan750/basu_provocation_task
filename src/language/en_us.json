@@ -12,9 +12,6 @@
     "focus": "Make sure the photodiode is aligned and the EEG recording has begun before continuing.",
     "setting_up": "Setting up task, please wait..."
   },
-  "userid": {
-    "set": "Please enter patient ID."
-  },
   "eventMarker" : {
     "found": "Hold the USB event marker in front of the camera.",
     "not_found": "Note: no USB event marker found."

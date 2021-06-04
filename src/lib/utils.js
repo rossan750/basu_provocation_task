@@ -5,6 +5,10 @@ const jitter = (base, offset) => (
   base + Math.floor(Math.random() * Math.floor(offset))
 )
 
+const sleep = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
 // add a random number between 0 and 50 to the base number
 const jitter50 = (base) => jitter(base, 50)
 
@@ -68,12 +72,6 @@ const getTurkUniqueId = () => {
   return uniqueId
 }
 
-const getUserId = (data) => {
-  const patientId = JSON.parse(data.responses)['Q0']
-  jsPsych.data.addProperties({patient_id: patientId, timestamp: Date.now()})
-  console.log("ID", patientId)
-}
-
 const beep = (audioCodes) => {
   const context = new AudioContext()
   const o = context.createOscillator()
@@ -89,6 +87,7 @@ const beep = (audioCodes) => {
 
 export {
   jitter,
+  sleep,
   jitter50,
   randomTrue,
   deepCopy,
@@ -96,7 +95,6 @@ export {
   shuffleArray,
   generateWaitSet,
   startKeypressListener,
-  getUserId,
   getTurkUniqueId,
   beep
 }

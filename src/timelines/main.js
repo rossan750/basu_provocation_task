@@ -1,4 +1,3 @@
-import userId from '../trials/userId'
 import experimentStart from '../trials/experimentStart'
 import holdUpMarker from '../trials/holdUpMarker'
 import taskBlock from './taskBlock'
@@ -13,7 +12,6 @@ let timeline
 if (AT_HOME && !VIDEO) {
   timeline = [
     experimentStart(),
-    userId(),
     adjustVolume(),
     // THIS BLOCK MODIFIES THE TIMELINE ITSELF BY APPENDING A TASK BLOCK AND EXPERIMENT END. This is probably not ideal because it makes composition obscure.
     taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
@@ -25,7 +23,6 @@ if (AT_HOME && !VIDEO) {
 else if (AT_HOME && VIDEO) {
   timeline = [
     experimentStart(),
-    userId(),
     adjustVolume(),
     camera(),
     // THIS BLOCK MODIFIES THE TIMELINE ITSELF BY APPENDING  A TASK BLOCK AND EXPERIMENT END. This is probably not ideal because it makes composition obscure.
@@ -38,7 +35,6 @@ else if (AT_HOME && VIDEO) {
 else {
   timeline = [
     experimentStart(),
-    userId(),
     adjustVolume(),
     holdUpMarker(),
     // THIS BLOCK MODIFIES THE TIMELINE ITSELF BY APPENDING A TASK BLOCK AND EXPERIMENT END. This is probably not ideal because it makes composition obscure.
