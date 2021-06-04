@@ -16,10 +16,17 @@
 # misc
 .DS_Store
 .env*
+/.firebase
+*.cache
+/emulator_data
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+firebase-debug.log*
+firestore-debug.log
+database-debug.log
+ui-debug.log
 
 psiturkit/*_turk/*
 psiturkit/*_turk
