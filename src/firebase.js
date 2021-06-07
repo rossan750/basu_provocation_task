@@ -1,7 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 
-require("dotenv").config();
 const COLLECTION_NAME = "participant_responses";
 const config = {
   apiKey: process.env.REACT_APP_apiKey,
