@@ -10,8 +10,6 @@ import JsPsychExperiment from "./components/JsPsychExperiment"
 import Login from "./components/Login"
 
 function App() {
-  const dataTimestamp = new Date();
-  const curDate = new Date(dataTimestamp);
   const [loggedIn, setLogin] = useState(false);
   const [ipcRenderer, setRenderer] = useState(false);
   const [psiturk, setPsiturk] = useState(false);
@@ -20,7 +18,7 @@ function App() {
   const [currentMethod, setMethod] = useState("default");
   const [reject, setReject] = useState(false);
 
-  const startDate = curDate.toISOString();
+  const startDate = new Date().toISOString();
 
   // Validation functions for desktop case and firebase
   const defaultValidation = async () => {
@@ -58,11 +56,13 @@ function App() {
   // Function to add jspsych data on login
   const setLoggedIn = useCallback(
     (newLoggedIn, studyId, participantId) => {
-      jsPsych.data.addProperties({
-        participant_id: participantId,
-        study_id: studyId,
-        start_date: startDate,
-      });
+      if (newLoggedIn) {
+        jsPsych.data.addProperties({
+          participant_id: participantId,
+          study_id: studyId,
+          start_date: startDate,
+        });
+      }
       setLogin(newLoggedIn);
     },
     [startDate]
@@ -71,7 +71,6 @@ function App() {
   // Login logic
   useEffect(() => {
     // For testing and debugging purposes
-    console.log("Outside Turk:", jsPsych.turk.turkInfo().outsideTurk);
     console.log("Turk:", MTURK);
     console.log("Firebase:", FIREBASE);
     console.log("Electron:", IS_ELECTRON);
@@ -84,10 +83,10 @@ function App() {
       setRenderer(renderer);
       // If at home, fill in fields based on environment variables
       const credentials = renderer.sendSync("syncCredentials");
-      if (credentials.envParticipantId !== null) {
+      if (credentials.envParticipantId) {
         setEnvParticipantId(credentials.envParticipantId);
       }
-      if (credentials.envStudyId !== null) {
+      if (credentials.envStudyId) {
         setEnvStudyId(credentials.envStudyId);
       }
       setMethod("desktop");
@@ -110,7 +109,7 @@ function App() {
         setReject(true);
       }
     }
-  }, [setLoggedIn, startDate]);
+  }, [setLoggedIn]);
 
   if (reject) {
     return (
