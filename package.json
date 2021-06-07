@@ -53,6 +53,7 @@
     "dev:firebase": "dotenv -e env/firebase-build.env npm run dev",
     "dev:home": "cross-env REACT_APP_AT_HOME=\"true\" npm run dev",
     "dev:home:vid": "cross-env REACT_APP_AT_HOME=\"true\" REACT_APP_VIDEO=\"true\" npm run dev",
+    "build:firebase": "dotenv -e env/firebase-build.env npm run build",
     "build:win:home": "cross-env REACT_APP_AT_HOME=\"true\" npm run build",
     "build:win:home:video": "cross-env REACT_APP_AT_HOME=\"true\" REACT_APP_VIDEO=\"true\" npm run build",
     "build:win:clinic": "cross-env REACT_APP_AT_HOME=\"false\" npm run build"
