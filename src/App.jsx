@@ -1,14 +1,11 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { jsPsych } from "jspsych-react";
-import { MTURK } from "./config/main";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "@fortawesome/fontawesome-free/css/all.css";
-import { getTurkUniqueId } from "./lib/utils";
-import { useState, useEffect, useCallback } from "react";
-import { initParticipant, addToFirebase } from "firebase.js"
-import { FIREBASE, IS_ELECTRON, VIDEO } from "config/main.js"
-import { sleep } from "lib/utils.js"
+import { getTurkUniqueId, sleep } from "./lib/utils";
+import { initParticipant, addToFirebase } from "./firebase"
+import { MTURK, FIREBASE, IS_ELECTRON, VIDEO } from "./config/main"
 import JsPsychExperiment from "./components/JsPsychExperiment"
 import Login from "./components/Login"
 
