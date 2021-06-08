@@ -2,9 +2,6 @@ name: Test, Build, and Package
 
 on:
   pull_request:
-    branches:
-      - main
-      - develop
     paths:
       - 'src/**'
       - '.github/workflows/**'
