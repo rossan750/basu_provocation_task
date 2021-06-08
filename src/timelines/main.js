@@ -9,6 +9,7 @@ import camera from "../trials/camera";
 import {
   VIDEO,
   MTURK,
+  VOLUME,
   defaultBlockSettings,
   practiceBlockSettings,
   USE_EVENT_MARKER,
