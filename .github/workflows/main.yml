@@ -36,7 +36,7 @@ jobs:
       run: npm run build
     - name: npm build - windows clinic
       if: startsWith(matrix.os, 'windows')
-      run: npm run build:win:clinic
+      run: npm run build:clinic
     - name: npm test
       run: npm test
       env:
