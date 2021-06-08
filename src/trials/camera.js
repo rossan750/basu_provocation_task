@@ -1,4 +1,4 @@
-import { lang, taskName, AT_HOME, IS_ELECTRON } from "../config/main";
+import { lang, taskName, IS_ELECTRON } from "../config/main";
 import { photodiodeGhostBox } from "../lib/markup/photodiode";
 import { baseStimulus } from "../lib/markup/stimuli";
 import { jsPsych } from "jspsych-react";
@@ -95,7 +95,8 @@ const camera = () => {
         });
     },
     on_finish: () => {
-      if (AT_HOME) {
+      // TODO: is this the right logic?
+      if (IS_ELECTRON) {
         window.cameraCapture.start();
         window.screenCapture.start();
       }

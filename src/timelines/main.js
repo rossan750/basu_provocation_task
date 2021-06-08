@@ -1,52 +1,36 @@
-import experimentStart from '../trials/experimentStart'
-import holdUpMarker from '../trials/holdUpMarker'
-import taskBlock from './taskBlock'
-import taskSetUp from './taskSetUp'
-import { instructions1, instructions2 } from '../trials/instructions'
-import adjustVolume from '../trials/adjustVolume'
-import camera from '../trials/camera'
+import experimentStart from "../trials/experimentStart";
+import holdUpMarker from "../trials/holdUpMarker";
+import taskBlock from "./taskBlock";
+import taskSetUp from "./taskSetUp";
+import { instructions1, instructions2 } from "../trials/instructions";
+import adjustVolume from "../trials/adjustVolume";
+import camera from "../trials/camera";
 
-import { AT_HOME, VIDEO, MTURK, defaultBlockSettings, practiceBlockSettings} from '../config/main'
+import {
+  VIDEO,
+  MTURK,
+  defaultBlockSettings,
+  practiceBlockSettings,
+  USE_EVENT_MARKER,
+} from "../config/main";
 
-let timeline
-if (AT_HOME && !VIDEO) {
-  timeline = [
-    experimentStart(),
-    adjustVolume(),
-    // THIS BLOCK MODIFIES THE TIMELINE ITSELF BY APPENDING A TASK BLOCK AND EXPERIMENT END. This is probably not ideal because it makes composition obscure.
-    taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
-    instructions1,
-    taskBlock(practiceBlockSettings),
-    instructions2
-    ]
-}
-else if (AT_HOME && VIDEO) {
-  timeline = [
-    experimentStart(),
-    adjustVolume(),
-    camera(),
-    // THIS BLOCK MODIFIES THE TIMELINE ITSELF BY APPENDING  A TASK BLOCK AND EXPERIMENT END. This is probably not ideal because it makes composition obscure.
-    taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline 
-    instructions1,
-    taskBlock(practiceBlockSettings),
-    instructions2
-    ]
-}
-else {
-  timeline = [
-    experimentStart(),
-    adjustVolume(),
-    holdUpMarker(),
-    // THIS BLOCK MODIFIES THE TIMELINE ITSELF BY APPENDING A TASK BLOCK AND EXPERIMENT END. This is probably not ideal because it makes composition obscure.
-    taskSetUp(defaultBlockSettings), // start pd code + get local images, add block to end of timeline
-    instructions1,
-    taskBlock(practiceBlockSettings),
-    instructions2
-    ]
-}
+let timeline = [experimentStart()];
 
-const primaryTimeline = timeline
+if (VOLUME) timeline.push(adjustVolume());
 
-const mturkTimeline = []
+if (VIDEO) timeline.push(camera());
 
-export const tl = (MTURK) ? mturkTimeline : primaryTimeline
+if (USE_EVENT_MARKER) timeline.push(holdUpMarker());
+
+timeline.push(
+  taskSetUp(defaultBlockSettings),
+  instructions1,
+  taskBlock(practiceBlockSettings),
+  instructions2
+);
+
+const primaryTimeline = timeline;
+
+const mturkTimeline = [];
+
+export const tl = MTURK ? mturkTimeline : primaryTimeline;

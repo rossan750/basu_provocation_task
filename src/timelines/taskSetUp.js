@@ -1,13 +1,12 @@
 import path from 'path'
 import { jsPsych } from 'jspsych-react'
-import { AT_HOME, MTURK, lang, numRequiredImages, IS_ELECTRON } from '../config/main'
+import { lang, numRequiredImages, IS_ELECTRON, USE_EVENT_MARKER } from '../config/main'
 import experimentEnd from '../trials/experimentEnd'
 import blockEnd from '../trials/blockEnd'
 import buildCountdown from '../trials/countdown'
 import startCode from '../trials/startCode'
 import taskBlock from './taskBlock'
 
-const isElectron = !MTURK
 let app = false
 let fs = false
 let ipcRenderer = false;
@@ -75,7 +74,7 @@ const taskSetUp = (blockSettings) => {
 
   return {
 		type: 'html_keyboard_response',
-		timeline: (AT_HOME) ? [addTasks] : [addTasks, startCode()]
+		timeline: (USE_EVENT_MARKER) ? [addTasks] : [addTasks, startCode()]
 	}
 }
 

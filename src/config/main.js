@@ -9,7 +9,6 @@ import requireContext from "require-context.macro";
 
 // is this mechanical turk?
 const MTURK = !jsPsych.turk.turkInfo().outsideTurk;
-const AT_HOME = process.env.REACT_APP_AT_HOME === "true";
 const VIDEO = process.env.REACT_APP_VIDEO === "true";
 const FIREBASE = process.env.REACT_APP_FIREBASE === "true";
 let IS_ELECTRON = true;
@@ -20,6 +19,15 @@ try {
 } catch {
   IS_ELECTRON = false;
 }
+
+// whether or not to ask the participant to adjust the volume
+const VOLUME = process.env.REACT_APP_VOLUME === "true";
+// whether or not to set a frame in the Electron window, see electron.js
+const HIDE_FRAME_ELECTRON = process.env.REACT_APP_HIDE_FRAME_ELECTRON === "true" && IS_ELECTRON;
+// whether or not the EEG/event marker is available
+const USE_EVENT_MARKER = process.env.REACT_APP_USE_EVENT_MARKER === "true" && IS_ELECTRON;
+// whether or not the photodiode is in use
+const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && IS_ELECTRON;
 
 const imageSettings = {
   width: 600,
@@ -119,10 +127,13 @@ export {
   lang,
   eventCodes,
   MTURK,
-  AT_HOME,
   VIDEO,
   IS_ELECTRON,
   FIREBASE,
+  USE_EVENT_MARKER,
+  HIDE_FRAME_ELECTRON,
+  USE_PHOTODIODE,
+  VOLUME,
   practiceBlockSettings,
   importAll,
   breathingAudio,
