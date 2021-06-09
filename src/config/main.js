@@ -2,7 +2,6 @@
 // This is the main configuration file where universal and default settings should be placed.
 // These settins can then be imported anywhere in the app as they are exported at the botom of the file.
 
-import firebase from "firebase";
 import { jsPsych } from "jspsych-react";
 import _ from "lodash";
 import { eventCodes } from "./trigger";
@@ -24,14 +23,11 @@ try {
 // whether or not to ask the participant to adjust the volume
 const VOLUME = process.env.REACT_APP_VOLUME === "true";
 // whether or not to set a frame in the Electron window, see electron.js
-const HIDE_FRAME_ELECTRON =
-  process.env.REACT_APP_HIDE_FRAME_ELECTRON === "true" && IS_ELECTRON;
+const HIDE_FRAME_ELECTRON = process.env.REACT_APP_HIDE_FRAME_ELECTRON === "true" && IS_ELECTRON;
 // whether or not the EEG/event marker is available
-const USE_EVENT_MARKER =
-  process.env.REACT_APP_USE_EVENT_MARKER === "true" && IS_ELECTRON;
+const USE_EVENT_MARKER = process.env.REACT_APP_USE_EVENT_MARKER === "true" && IS_ELECTRON;
 // whether or not the photodiode is in use
-const USE_PHOTODIODE =
-  process.env.REACT_APP_USE_PHOTODIODE === "true" && IS_ELECTRON;
+const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && IS_ELECTRON;
 
 const imageSettings = {
   width: 600,
@@ -53,30 +49,13 @@ const audioCodes = {
 };
 
 // UPDATE THIS PATH TO CHANGE IMAGE FOLDER
-const neutralImages = async () => {
-  return new Promise((resolve, reject) => {
-    if (!FIREBASE) {
-      return resolve(
-        importAll(
-          requireContext(
-            "../assets/images/provocation-images/neutral",
-            false,
-            /\.(png|jpe?g|svg)$/
-          )
-        )
-      );
-    } else {
-      const storage = firebase.storage();
-      const imageRef = storage.refFromURL(
-        "gs://borton-task-provocation.appspot.com/neutral/1_happy.jpg"
-      );
-      return imageRef.getDownloadURL().then((url) => {
-        return resolve([url]);
-      });
-    }
-  });
-};
-
+const neutralImages = importAll(
+  requireContext(
+    "../assets/images/provocation-images/neutral",
+    false,
+    /\.(png|jpe?g|svg)$/
+  )
+);
 const provokingImages = importAll(
   requireContext(
     "../assets/images/provocation-images/provoking",
@@ -119,21 +98,15 @@ if (MTURK) {
   _.merge(lang, mlang);
 }
 
-const defaultBlockSettings = async () => {
-  const images = await neutralImages();
-
-  return {
-    num_repeats: 2, // how many blocks to have
-    images: {
-      neutral: images,
-      provoking: provokingImages,
-    },
-    repeats_per_condition: 3, // number of times every condition is repeated
-    is_practice: false,
-  };
+const defaultBlockSettings = {
+  num_repeats: 2, // how many blocks to have
+  images: {
+    neutral: neutralImages,
+    provoking: provokingImages,
+  },
+  repeats_per_condition: 3, // number of times every condition is repeated
+  is_practice: false,
 };
-
-console.log("Neutral images:", defaultBlockSettings());
 
 const practiceBlockSettings = {
   images: {

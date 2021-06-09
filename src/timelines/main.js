@@ -14,30 +14,22 @@ import {
   USE_EVENT_MARKER,
 } from "../config/main";
 
-const setupTimeline = async () => {
-  let timeline = [experimentStart()];
+let timeline = [experimentStart()];
 
-  if (VOLUME) timeline.push(adjustVolume());
-  
-  if (VIDEO) timeline.push(camera());
-  
-  if (USE_EVENT_MARKER) timeline.push(holdUpMarker());
+if (VOLUME) timeline.push(adjustVolume());
 
-  const settings = await defaultBlockSettings();
-  
-  timeline.push(
-    settings,
-    instructions1,
-    taskBlock(practiceBlockSettings),
-    instructions2
-  );
+if (VIDEO) timeline.push(camera());
 
-  return timeline;
-}
+if (USE_EVENT_MARKER) timeline.push(holdUpMarker());
 
-const primaryTimeline = setupTimeline();
+timeline.push(
+  taskSetUp(defaultBlockSettings),
+  instructions1,
+  taskBlock(practiceBlockSettings),
+  instructions2
+);
 
-console.log("Primary timeline:", primaryTimeline)
+const primaryTimeline = timeline;
 
 const mturkTimeline = [];
 
