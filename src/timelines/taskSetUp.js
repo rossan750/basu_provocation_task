@@ -18,75 +18,83 @@ let app = false;
 let fs = false;
 let ipcRenderer = false;
 
+const getFirebaseImages = async (blockSettings) => {
+  const storage = firebase.storage();
+  const participantID = jsPsych.data.get().select("participant_id")
+        .values[0];
+  const studyID = jsPsych.data.get().select("study_id").values[0];
+  const neutralRef = storage.refFromURL(
+    `gs://borton-task-provocation.appspot.com/${studyID}/participants/${participantID}/neutral`
+  );
+  const provokingRef = storage.refFromURL(
+    `gs://borton-task-provocation.appspot.com/${studyID}/participants/${participantID}/provoking`
+  );
+  const neutralObjects = await neutralRef.listAll();
+  let neutralURLs = [];
+  neutralObjects.items.forEach((item) => {
+    neutralURLs.push(item.getDownloadURL())
+  });
+  blockSettings.images.neutral = await Promise.all(neutralURLs);
+  const provokingObjects = await provokingRef.listAll();
+  let provokingURLs = [];
+  provokingObjects.items.forEach((item) => {
+    provokingURLs.push(item.getDownloadURL());
+  });
+  blockSettings.images.provoking = await Promise.all(provokingURLs)
+};
+
 const setImages = async (blockSettings) => {
-  return new Promise((resolve, reject) => {
-    if (IS_ELECTRON) {
-      app = window.require("electron").remote.app;
-      fs = window.require("fs");
-      const electron = window.require("electron");
-      ipcRenderer = electron.ipcRenderer;
-      try {
-        const patientID = jsPsych.data.get().select("patient_id").values[0];
-        const localImagePath = path.join(
-          app.getPath("desktop"),
-          "provocation-images",
-          `${patientID}`
-        );
-        const neutralImagePath = path.join(localImagePath, "neutral");
-        const provokingImagePath = path.join(localImagePath, "provoking");
+  if (IS_ELECTRON) {
+    app = window.require("electron").remote.app;
+    fs = window.require("fs");
+    const electron = window.require("electron");
+    ipcRenderer = electron.ipcRenderer;
+    try {
+      const participantID = jsPsych.data.get().select("participant_id")
+        .values[0];
+      const localImagePath = path.join(
+        app.getPath("desktop"),
+        "provocation-images",
+        `${participantID}`
+      );
+      const neutralImagePath = path.join(localImagePath, "neutral");
+      const provokingImagePath = path.join(localImagePath, "provoking");
 
-        let neutralItems = fs.readdirSync(neutralImagePath);
-        let provokingItems = fs.readdirSync(provokingImagePath);
-        blockSettings.images.neutral = neutralItems.map(
-          (image) => `file://` + path.join(neutralImagePath, image)
-        );
-        blockSettings.images.provoking = provokingItems.map(
-          (image) => `file://` + path.join(provokingImagePath, image)
-        );
+      let neutralItems = fs.readdirSync(neutralImagePath);
+      let provokingItems = fs.readdirSync(provokingImagePath);
+      blockSettings.images.neutral = neutralItems.map(
+        (image) => `file://` + path.join(neutralImagePath, image)
+      );
+      blockSettings.images.provoking = provokingItems.map(
+        (image) => `file://` + path.join(provokingImagePath, image)
+      );
 
-        // check the number of loaded imaegs matches what is expected
-        let numNeutral = blockSettings.images.neutral.length;
-        let numProvoking = blockSettings.images.provoking.length;
-        if (
-          numNeutral !== numRequiredImages ||
-          numProvoking !== numRequiredImages
-        ) {
-          ipcRenderer.send(
-            "error",
-            `Number of images provided does not meet requirement.  Found ${numNeutral} neutral images and ${numProvoking} provoking images, the settings for this task requires ${numRequiredImages} of each type.`
-          );
-        }
-
-        console.log(`Loaded images from ${localImagePath}`);
-        resolve();
-      } catch (error) {
-        console.log("Error loading local files - using default images");
+      // check the number of loaded imaegs matches what is expected
+      let numNeutral = blockSettings.images.neutral.length;
+      let numProvoking = blockSettings.images.provoking.length;
+      if (
+        numNeutral !== numRequiredImages ||
+        numProvoking !== numRequiredImages
+      ) {
         ipcRenderer.send(
           "error",
-          `Could not load images from local device. - ${error}`
+          `Number of images provided does not meet requirement.  Found ${numNeutral} neutral images and ${numProvoking} provoking images, the settings for this task requires ${numRequiredImages} of each type.`
         );
-        reject();
       }
-    } else if (FIREBASE) {
-      // TODO: hardcoding raccoon image
-      const storage = firebase.storage();
-      const imageRef = storage.refFromURL(
-        "gs://borton-task-provocation.appspot.com/raccoon.jpeg"
+
+      console.log(`Loaded images from ${localImagePath}`);
+    } catch (error) {
+      console.log("Error loading local files - using default images");
+      ipcRenderer.send(
+        "error",
+        `Could not load images from local device. - ${error}`
       );
-      imageRef
-        .getDownloadURL()
-        .then((url) => {
-          // TODO: need to figure out how to load all images in a folder into an array
-          blockSettings.images.provoking = [url];
-          blockSettings.images.neutral = [url];
-          resolve();
-        })
-        .catch((error) => {
-          console.error(error);
-          reject();
-        });
     }
-  });
+  } else if (FIREBASE) {
+    blockSettings.images.neutral = [];
+    blockSettings.images.provoking = [];
+    await getFirebaseImages(blockSettings);
+  }
 };
 
 const taskSetUp = (blockSettings) => {
@@ -95,7 +103,7 @@ const taskSetUp = (blockSettings) => {
     trial_duration: 1,
     stimulus: "",
     prompt: "",
-    on_start: async (trial) => {
+    on_start: async () => {
       await setImages(blockSettings);
 
       let i = 1;
