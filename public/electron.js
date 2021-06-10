@@ -172,7 +172,7 @@ ipc.on("trigger", (event, args) => {
 let stream = false;
 let fileName = "";
 let filePath = "";
-let patientID = "";
+let participantID = "";
 let images = [];
 let startTrial = -1;
 
@@ -192,10 +192,10 @@ ipc.on("syncCredentials", (event) => {
 // listener for new data
 ipc.on("data", (event, args) => {
   // initialize file - we got a patinet_id to save the data to
-  if (args.patient_id && fileName === "") {
+  if (args.participant_id && fileName === "") {
     const dir = app.getPath("userData");
-    patientID = args.patient_id;
-    fileName = `pid_${patientID}_${Date.now()}.json`;
+    participantID = args.participant_id;
+    fileName = `pid_${participantID}_${Date.now()}.json`;
     filePath = path.resolve(dir, fileName);
     startTrial = args.trial_index;
     log.info(filePath);
@@ -229,7 +229,7 @@ ipc.on("save_video", (event, fileName, buffer) => {
   const fullPath = path.join(
     desktop,
     dataDir,
-    `${patientID}`,
+    `${participantID}`,
     date,
     name,
     fileName
@@ -324,7 +324,7 @@ app.on("will-quit", () => {
   const name = app.getName();
   const today = new Date(Date.now());
   const date = today.toISOString().slice(0, 10);
-  const copyPath = path.join(desktop, dataDir, `${patientID}`, date, name);
+  const copyPath = path.join(desktop, dataDir, `${participantID}`, date, name);
   fs.mkdir(copyPath, { recursive: true }, (err) => {
     log.error(err);
     fs.copyFileSync(filePath, path.join(copyPath, fileName));
