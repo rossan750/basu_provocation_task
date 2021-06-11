@@ -28,6 +28,8 @@ firestore-debug.log
 database-debug.log
 ui-debug.log
 
+/.idea
+
 psiturkit/*_turk/*
 psiturkit/*_turk
 
