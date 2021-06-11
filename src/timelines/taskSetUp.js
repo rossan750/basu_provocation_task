@@ -1,6 +1,6 @@
 import path from "path";
 import { jsPsych } from "jspsych-react";
-import firebase from "../firebase";
+import { getFirebaseImages } from "../firebase";
 import {
   lang,
   numRequiredImages,
@@ -18,32 +18,7 @@ let app = false;
 let fs = false;
 let ipcRenderer = false;
 
-const getFirebaseImages = async (blockSettings) => {
-  const storage = firebase.storage();
-  const participantID = jsPsych.data.get().select("participant_id")
-        .values[0];
-  const studyID = jsPsych.data.get().select("study_id").values[0];
-  const neutralRef = storage.refFromURL(
-    `gs://borton-task-provocation.appspot.com/${studyID}/participants/${participantID}/neutral`
-  );
-  const provokingRef = storage.refFromURL(
-    `gs://borton-task-provocation.appspot.com/${studyID}/participants/${participantID}/provoking`
-  );
-  const neutralObjects = await neutralRef.listAll();
-  let neutralURLs = [];
-  neutralObjects.items.forEach((item) => {
-    neutralURLs.push(item.getDownloadURL())
-  });
-  blockSettings.images.neutral = await Promise.all(neutralURLs);
-  const provokingObjects = await provokingRef.listAll();
-  let provokingURLs = [];
-  provokingObjects.items.forEach((item) => {
-    provokingURLs.push(item.getDownloadURL());
-  });
-  blockSettings.images.provoking = await Promise.all(provokingURLs)
-};
-
-const setImages = async (blockSettings) => {
+const setImages = async () => {
   if (IS_ELECTRON) {
     app = window.require("electron").remote.app;
     fs = window.require("fs");
@@ -62,16 +37,20 @@ const setImages = async (blockSettings) => {
 
       let neutralItems = fs.readdirSync(neutralImagePath);
       let provokingItems = fs.readdirSync(provokingImagePath);
-      blockSettings.images.neutral = neutralItems.map(
+      const newImages = {
+        neutral: [],
+        provoking: [],
+      };
+      newImages.neutral = neutralItems.map(
         (image) => `file://` + path.join(neutralImagePath, image)
       );
-      blockSettings.images.provoking = provokingItems.map(
+      newImages.provoking = provokingItems.map(
         (image) => `file://` + path.join(provokingImagePath, image)
       );
 
       // check the number of loaded imaegs matches what is expected
-      let numNeutral = blockSettings.images.neutral.length;
-      let numProvoking = blockSettings.images.provoking.length;
+      let numNeutral = newImages.neutral.length;
+      let numProvoking = newImages.provoking.length;
       if (
         numNeutral !== numRequiredImages ||
         numProvoking !== numRequiredImages
@@ -81,8 +60,8 @@ const setImages = async (blockSettings) => {
           `Number of images provided does not meet requirement.  Found ${numNeutral} neutral images and ${numProvoking} provoking images, the settings for this task requires ${numRequiredImages} of each type.`
         );
       }
-
       console.log(`Loaded images from ${localImagePath}`);
+      return newImages;
     } catch (error) {
       console.log("Error loading local files - using default images");
       ipcRenderer.send(
@@ -91,9 +70,11 @@ const setImages = async (blockSettings) => {
       );
     }
   } else if (FIREBASE) {
-    blockSettings.images.neutral = [];
-    blockSettings.images.provoking = [];
-    await getFirebaseImages(blockSettings);
+    const newImages = await getFirebaseImages();
+    return {
+      neutral: newImages.neutral,
+      provoking: newImages.provoking,
+    };
   }
 };
 
@@ -104,7 +85,10 @@ const taskSetUp = (blockSettings) => {
     stimulus: "",
     prompt: "",
     on_start: async () => {
-      await setImages(blockSettings);
+      const newImages = await setImages(blockSettings);
+
+      blockSettings.images.neutral = newImages.neutral;
+      blockSettings.images.provoking = newImages.provoking;
 
       let i = 1;
       while (i <= blockSettings.num_repeats) {

@@ -29,6 +29,9 @@ const USE_EVENT_MARKER = process.env.REACT_APP_USE_EVENT_MARKER === "true" && IS
 // whether or not the photodiode is in use
 const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && IS_ELECTRON;
 
+// root url for Firebase storage bucket
+const STORAGE_BUCKET_URL = "gs://borton-task-provocation.appspot.com";
+
 const imageSettings = {
   width: 600,
   height: 600,
@@ -134,6 +137,7 @@ export {
   HIDE_FRAME_ELECTRON,
   USE_PHOTODIODE,
   VOLUME,
+  STORAGE_BUCKET_URL,
   practiceBlockSettings,
   importAll,
   breathingAudio,

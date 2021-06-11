@@ -31,6 +31,7 @@ function App() {
   // Adding data functions for firebase, electron adn Mturk
   const defaultFunction = (data) => {};
   const firebaseUpdateFunction = (data) => {
+    console.log("Adding to firebase in App")
     addToFirebase(data);
   };
   const desktopUpdateFunction = (data) => {
