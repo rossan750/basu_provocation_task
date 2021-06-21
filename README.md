@@ -68,7 +68,7 @@ This folder contains the code for the app, the vast majority of changes and code
 
 #### `App.js`
 
-This is the starting point for the app. The `<Experiment>` component initializes a `jspsych` experiment. This is also where communication is set up with the `electron` and `psiturk` processes.
+This is the starting point for the app. The `<Experiment>` component initializes a `jspsych` experiment. This is also where communication is set up with the `electron` and `psiturk` processes. The `<Login>` component handles login authentication for the various app environments (Firebase, Prolific, MTurk, or desktop).
 
 #### `App.css`
 
@@ -77,6 +77,18 @@ This is where styling for the app is housed. If colors, fonts, spacing, etc. nee
 #### `assets/`
 
 This folder contains any static files that are used by the app, such as images.
+
+### `components/`
+
+React components.
+
+### `JsPsychExperiment.jsx`
+
+Sets up the JsPsych timeline and specifies which functions to use to update the JsPsych data and when the experiment finishes.
+
+### `Login.jsx`
+
+Handles login authentication. Contains different functions for the Firebase, Prolific, MTurk, and desktop cases.
 
 #### `config/`
 
@@ -106,10 +118,25 @@ The `lib/` directory contains utility functions and markup that is used in the t
 
 ## Environment Variables
 
-The following are environment variables used by the app:
+NOTE: boolean environment variables should be set as strings, e.g., `"true"` _not_ `true`. Boolean environment variables are false by default. The following are environment variables used by the app:
 
 * `ELECTRON_START_URL` [string]: URL (e.g. `http://localhost:3000`) where the front end of the app is being hosted - also used in `electron.js` to indicate the app is running in dev mode
 * `EVENT_MARKER_PRODUCT_ID` [string]: The product ID of the event marker (e.g. `0487`).  If not set, it will use the `productID` set in `public/config/trigger.js`.
+* `REACT_APP_FIREBASE` [boolean]: True if Firebase is in use.
+* `REACT_APP_VOLUME` [boolean]: Whether or not to ask the participant to adjust the volume before the experiment starts.
+* `REACT_APP_HIDE_FRAME_ELECTRON` [boolean]: Whether or not to hide the buttons for closing and minifying the app window.
+* `REACT_APP_EVENT_MARKER` [boolean]: Whether or not the EEG is in use.
+* `REACT_APP_USE_PHOTODIODE` [boolean]: Whether or not the photodiode is in use.
+* Firebase environment variables: If using a custom Firebase project, make sure to set environment variables accordingly.
+
+### `env/`
+
+Contains `.env` files that set the above environment variables for different build environments. If you want to adjust environment variable settings, create a new `.env` file and a corresponding build/dev script in `package.json`.
+
+* `clinic.env`: Sets environment variables for the in-clinic environment.
+* `firebase-build.env`: Sets environment variables for running with Firebase.
+* `home.env`: This file is blank, since the at-home environment has default environment variable settings.
+* `video.env`: Sets environment variables for running at home with video enabled.
 
 ## Usage with PsiTurk
 
@@ -182,6 +209,18 @@ In the project directory, you can run:
 
 Runs `npm start` and `npm run electron-dev` concurrently.  This may not play nicely with windows.  If it doesn't, run `npm start` and `npm run electron-dev` from different terminal windows.
 
+### `npm run dev:firebase`
+
+Runs a dev version of the app with Firebase enabled.
+
+### `npm run dev:home`
+
+Runs a dev version for the at-home context.
+
+### `npm run dev:home:video`
+
+Runs an at-home version with video enabled.
+
 ### `npm start`
 
 Runs the app in the development mode.<br>
@@ -198,6 +237,22 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 ### `npm build`
 
 Creates a production build of the app (renderer).  This must be done before running `package:platform` or the psiturk build instructions.
+
+### `npm run build:firebase`
+
+Builds the project for Firebase.
+
+### `npm run build:home`
+
+Builds the project for an at-home context.
+
+### `npm run build:video`
+
+Builds the project for an at-home context with video enabled.
+
+### `npm run build:clinic`
+
+Builds the project for an in-clinic context.
 
 ### `npm run package:platform`
 
