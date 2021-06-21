@@ -18,6 +18,24 @@ let app = false;
 let fs = false;
 let ipcRenderer = false;
 
+const checkNumImages = (newImages) => {
+  // check the number of loaded imaegs matches what is expected
+  let numNeutral = newImages.neutral.length;
+  let numProvoking = newImages.provoking.length;
+  if (numNeutral !== numRequiredImages || numProvoking !== numRequiredImages) {
+    if (IS_ELECTRON) {
+      ipcRenderer.send(
+        "error",
+        `Number of images provided does not meet requirement.  Found ${numNeutral} neutral images and ${numProvoking} provoking images, the settings for this task requires ${numRequiredImages} of each type.`
+      );
+    } else {
+      alert(
+        `Number of images provided does not meet requirement.  Found ${numNeutral} neutral images and ${numProvoking} provoking images, the settings for this task requires ${numRequiredImages} of each type. Please reload and try again.`
+      );
+    }
+  }
+};
+
 const setImages = async () => {
   if (IS_ELECTRON) {
     app = window.require("electron").remote.app;
@@ -48,19 +66,8 @@ const setImages = async () => {
         (image) => `file://` + path.join(provokingImagePath, image)
       );
 
-      // check the number of loaded imaegs matches what is expected
-      let numNeutral = newImages.neutral.length;
-      let numProvoking = newImages.provoking.length;
-      if (
-        numNeutral !== numRequiredImages ||
-        numProvoking !== numRequiredImages
-      ) {
-        ipcRenderer.send(
-          "error",
-          `Number of images provided does not meet requirement.  Found ${numNeutral} neutral images and ${numProvoking} provoking images, the settings for this task requires ${numRequiredImages} of each type.`
-        );
-      }
       console.log(`Loaded images from ${localImagePath}`);
+      checkNumImages(newImages);
       return newImages;
     } catch (error) {
       console.log("Error loading local files - using default images");
@@ -71,6 +78,7 @@ const setImages = async () => {
     }
   } else if (FIREBASE) {
     const newImages = await getFirebaseImages();
+    checkNumImages(newImages);
     return {
       neutral: newImages.neutral,
       provoking: newImages.provoking,
