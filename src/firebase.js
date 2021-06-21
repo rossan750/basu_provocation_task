@@ -2,7 +2,6 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/storage";
 import { jsPsych } from "jspsych-react";
-import { STORAGE_BUCKET_URL } from "./config/main";
 
 const COLLECTION_NAME = "participant_responses";
 const config = {
@@ -31,9 +30,9 @@ if (window.location.hostname === "localhost") {
  * @returns An array of promises, each containing a download URL for an object.
  */
 async function getObjectURLs(participantID, studyID, folderType) {
-  const folderURL = `${STORAGE_BUCKET_URL}/${studyID}/${participantID}/${folderType}`
+  const folderURL = `${studyID}/${participantID}/${folderType}`
   const storage = firebase.storage();
-  const ref = storage.refFromURL(folderURL);
+  const ref = storage.ref(folderURL);
   const objects = await ref.listAll();
   let URLs = objects.items.map(async (item) => await item.getDownloadURL());
   return (await Promise.all(URLs));
