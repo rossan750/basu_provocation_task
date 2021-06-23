@@ -1,6 +1,6 @@
 import path from "path";
 import { jsPsych } from "jspsych-react";
-import { getFirebaseImages } from "../firebase";
+import { getObjectURLs } from "../firebase";
 import {
   lang,
   numRequiredImages,
@@ -17,6 +17,23 @@ import taskBlock from "./taskBlock";
 let app = false;
 let fs = false;
 let ipcRenderer = false;
+
+/**
+ * Sets the experiment images from the Firebase storage bucket.
+ * @param {Object} blockSettings An object containing the settings for the experiment block.
+ * The function updates this object's "images" field to contain the images from Firebase.
+ */
+ const getFirebaseImages = async () => {
+  const participantID = jsPsych.data.get().select("participant_id").values[0];
+  const studyID = jsPsych.data.get().select("study_id").values[0];
+  const newImages = {
+    neutral: [],
+    provoking: []
+  }
+  newImages.neutral = await getObjectURLs(participantID, studyID, "neutral");
+  newImages.provoking = await getObjectURLs(participantID, studyID, "provoking")
+  return newImages;
+};
 
 const checkNumImages = (newImages) => {
   // check the number of loaded imaegs matches what is expected
@@ -126,7 +143,7 @@ const taskSetUp = (blockSettings) => {
 
   return {
     type: "html_keyboard_response",
-    timeline: USE_EVENT_MARKER ? [addTasks] : [addTasks, startCode()],
+    timeline: USE_EVENT_MARKER ? [addTasks, startCode()] : [addTasks],
   };
 };
 

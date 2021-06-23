@@ -29,7 +29,7 @@ if (window.location.hostname === "localhost") {
  * @param {string} folderType The type of folder, either "neutral" or "provoking".
  * @returns An array of promises, each containing a download URL for an object.
  */
-async function getObjectURLs(participantID, studyID, folderType) {
+const getObjectURLs = async (participantID, studyID, folderType) => {
   const folderURL = `${studyID}/${participantID}/${folderType}`
   const storage = firebase.storage();
   const ref = storage.ref(folderURL);
@@ -37,23 +37,6 @@ async function getObjectURLs(participantID, studyID, folderType) {
   let URLs = objects.items.map(async (item) => await item.getDownloadURL());
   return (await Promise.all(URLs));
 }
-
-/**
- * Sets the experiment images from the Firebase storage bucket.
- * @param {Object} blockSettings An object containing the settings for the experiment block.
- * The function updates this object's "images" field to contain the images from Firebase.
- */
-const getFirebaseImages = async () => {
-  const participantID = jsPsych.data.get().select("participant_id").values[0];
-  const studyID = jsPsych.data.get().select("study_id").values[0];
-  const newImages = {
-    neutral: [],
-    provoking: []
-  }
-  newImages.neutral = await getObjectURLs(participantID, studyID, "neutral");
-  newImages.provoking = await getObjectURLs(participantID, studyID, "provoking")
-  return newImages;
-};
 
 // Add participant data and trial data to db
 const initParticipant = (participantId, studyId, startDate) => {
@@ -115,5 +98,5 @@ export {
   createFirebaseDocumentRandom,
 };
 
-export { getFirebaseImages };
+export { getObjectURLs };
 export default firebase;
