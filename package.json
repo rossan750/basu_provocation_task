@@ -47,13 +47,13 @@
     "electron": "electron .",
     "electron-dev": "cross-env ELECTRON_START_URL=http://localhost:3000 electron .",
     "dev": "concurrently --kill-others \"npm:start\" \"sleep 5 && npm run electron-dev\"",
-    "dev:firebase": "dotenv -e env/firebase-build.env npm run dev",
-    "dev:home": "dotenv -e env/home.env npm run dev",
-    "dev:home:video": "dotenv -e env/video.env npm run dev",
-    "build:firebase": "dotenv -e env/firebase-build.env npm run build",
-    "build:home": "dotenv -e env/home.env npm run build",
-    "build:video": "dotenv -e env/video.env npm run build",
-    "build:clinic": "dotenv -e env/clinic.env npm run build"
+    "dev:firebase": "dotenv -e env/.env.firebase-build npm run dev",
+    "dev:home": "dotenv -e env/.env.home npm run dev",
+    "dev:home:video": "dotenv -e env/.env.video npm run dev",
+    "build:firebase": "dotenv -e env/.env.firebase-build npm run build",
+    "build:home": "dotenv -e env/.env.home npm run build",
+    "build:video": "dotenv -e env/.env.video npm run build",
+    "build:clinic": "dotenv -e env/.env.clinic npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"

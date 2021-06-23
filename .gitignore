@@ -15,7 +15,7 @@
 
 # misc
 .DS_Store
-.env*
+.env
 /.firebase
 *.cache
 /emulator_data

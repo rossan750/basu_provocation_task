@@ -133,10 +133,10 @@ NOTE: boolean environment variables should be set as strings, e.g., `"true"` _no
 
 Contains `.env` files that set the above environment variables for different build environments. If you want to adjust environment variable settings, create a new `.env` file and a corresponding build/dev script in `package.json`.
 
-* `clinic.env`: Sets environment variables for the in-clinic environment.
-* `firebase-build.env`: Sets environment variables for running with Firebase.
-* `home.env`: This file is blank, since the at-home environment has default environment variable settings.
-* `video.env`: Sets environment variables for running at home with video enabled.
+* `.envclinic`: Sets environment variables for the in-clinic environment.
+* `.env.firebase-build`: Sets environment variables for running with Firebase.
+* `.env.home`: This file is blank, since the at-home environment has default environment variable settings.
+* `.env.video`: Sets environment variables for running at home with video enabled.
 
 ## Usage with PsiTurk
 
