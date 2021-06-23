@@ -23,13 +23,11 @@ if (VIDEO) timeline.push(camera());
 
 if (USE_EVENT_MARKER) timeline.push(holdUpMarker());
 
-const setup = taskSetUp(defaultBlockSettings);
-timeline.push(setup)
+const setup = taskSetUp(defaultBlockSettings, setup);
 
 timeline.push(instructions1)
 
-const tBlock = taskBlock(practiceBlockSettings)
-timeline.push(tBlock)
+const tBlock = taskBlock(practiceBlockSettings, tBlock)
 
 timeline.push(instructions2)
 
