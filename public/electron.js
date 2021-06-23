@@ -11,7 +11,8 @@ const fs = require("fs-extra");
 const tar = require("tar");
 const log = require("electron-log");
 
-const HIDE_FRAME_ELECTRON = process.env.REACT_APP_HIDE_FRAME_ELECTRON === "true";
+const HIDE_FRAME_ELECTRON =
+  process.env.REACT_APP_HIDE_FRAME_ELECTRON === "true";
 const USE_EVENT_MARKER = process.env.REACT_APP_USE_EVENT_MARKER === "true";
 
 // set logging levels
@@ -173,6 +174,8 @@ let stream = false;
 let fileName = "";
 let filePath = "";
 let participantID = "";
+let now = Date.now();
+let studyID = "";
 let images = [];
 let startTrial = -1;
 
@@ -195,7 +198,8 @@ ipc.on("data", (event, args) => {
   if (args.participant_id && fileName === "") {
     const dir = app.getPath("userData");
     participantID = args.participant_id;
-    fileName = `pid_${participantID}_${Date.now()}.json`;
+    studyID = args.study_id;
+    fileName = `pid_${participantID}_${now}.json`;
     filePath = path.resolve(dir, fileName);
     startTrial = args.trial_index;
     log.info(filePath);
@@ -224,7 +228,7 @@ ipc.on("data", (event, args) => {
 ipc.on("save_video", (event, fileName, buffer) => {
   const desktop = app.getPath("desktop");
   const name = app.getName();
-  const today = new Date(Date.now());
+  const today = new Date();
   const date = today.toISOString().slice(0, 10);
   const fullPath = path.join(
     desktop,
@@ -324,7 +328,14 @@ app.on("will-quit", () => {
   const name = app.getName();
   const today = new Date(Date.now());
   const date = today.toISOString().slice(0, 10);
-  const copyPath = path.join(desktop, dataDir, `${participantID}`, date, name);
+  const copyPath = path.join(
+    desktop,
+    dataDir,
+    `${studyID}`,
+    `${participantID}`,
+    date,
+    name
+  );
   fs.mkdir(copyPath, { recursive: true }, (err) => {
     log.error(err);
     fs.copyFileSync(filePath, path.join(copyPath, fileName));
