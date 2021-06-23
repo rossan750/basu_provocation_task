@@ -95,7 +95,6 @@ const camera = () => {
         });
     },
     on_finish: () => {
-      // TODO: is this the right logic?
       if (IS_ELECTRON) {
         window.cameraCapture.start();
         window.screenCapture.start();
