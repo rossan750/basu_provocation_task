@@ -1,7 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/storage";
-import { jsPsych } from "jspsych-react";
 
 const COLLECTION_NAME = "participant_responses";
 const config = {
