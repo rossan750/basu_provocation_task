@@ -31,11 +31,7 @@ jobs:
    # install, test, build package
     - name: npm install
       run: npm install
-    - name: npm build - linux mac
-      if: startsWith(matrix.os, 'mac') || startsWith(matrix.os, 'ubuntu')
-      run: npm run build
-    - name: npm build - windows clinic
-      if: startsWith(matrix.os, 'windows')
+    - name: npm build - clinic
       run: npm run build:clinic
     - name: npm test
       run: npm test
