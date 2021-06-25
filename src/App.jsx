@@ -121,7 +121,7 @@ function App() {
         setReject(true);
       }
     }
-  }, [setLoggedIn]);
+  }, [setLoggedIn, query]);
 
   if (reject) {
     return (
