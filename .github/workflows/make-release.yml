@@ -108,6 +108,7 @@ jobs:
 
     # Build At Home Video Windows Release
     - name: npm build - win home
+      if: startsWith(matrix.os, 'windows')
       run: npm run build:video
       env:
         CI: true
