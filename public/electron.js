@@ -326,7 +326,7 @@ app.on("will-quit", () => {
   // copy file to config location
   const desktop = app.getPath("desktop");
   const name = app.getName();
-  const today = new Date(Date.now());
+  const today = new Date();
   const date = today.toISOString().slice(0, 10);
   const copyPath = path.join(
     desktop,
