@@ -20,6 +20,8 @@ function App() {
 
   const startDate = new Date().toISOString();
 
+  const query = new URLSearchParams(window.location.search);
+
   // Validation functions for desktop case and firebase
   const defaultValidation = async () => {
     return true;
@@ -106,11 +108,20 @@ function App() {
       // If firebase
       else if (FIREBASE) {
         setMethod("firebase");
+        // Autologin with query parameters
+        const participantId = query.get("participantID");
+        const studyId = query.get("studyID");
+        if (participantId) {
+          setEnvParticipantId(participantId)
+        }
+        if (studyId) {
+          setEnvStudyId(studyId)
+        }
       } else {
         setReject(true);
       }
     }
-  }, [setLoggedIn]);
+  }, [setLoggedIn, query]);
 
   if (reject) {
     return (
