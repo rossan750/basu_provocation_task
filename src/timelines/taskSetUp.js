@@ -96,10 +96,7 @@ const setImages = async () => {
   } else if (FIREBASE) {
     const newImages = await getFirebaseImages();
     checkNumImages(newImages);
-    return {
-      neutral: newImages.neutral,
-      provoking: newImages.provoking,
-    };
+    return newImages;
   }
 };
 
