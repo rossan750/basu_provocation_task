@@ -28,10 +28,7 @@ jobs:
     - name: npm install
       run: npm install
     - name: npm build
-      run: npm run build:win:home:video
-      env:
-        REACT_APP_AT_HOME: true
-        REACT_APP_VIDEO: true
+      run: npm run build:video
 
     # Build electron app package installers
     - name: package electron - windows
