@@ -21,9 +21,6 @@ log.transports.file.level = "info";
 const { eventCodes, comName } = require("./config/trigger");
 const { getPort, sendToPort } = require("event-marker");
 
-// Data Saving
-const { dataDir } = require("./config/saveData");
-
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -241,7 +238,7 @@ ipc.on("save_video", (event, fileName, buffer) => {
   const date = today.toISOString().slice(0, 10);
   const fullPath = path.join(
     desktop,
-    dataDir,
+    `${studyID}`,
     `${participantID}`,
     date,
     name,
@@ -325,7 +322,7 @@ app.on("activate", function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-// EXPERIMENT END
+// EXPERIMENT END  
 app.on("will-quit", () => {
   // finish writing file
   stream.write("]");
@@ -339,7 +336,6 @@ app.on("will-quit", () => {
   const date = today.toISOString().slice(0, 10);
   const copyPath = path.join(
     desktop,
-    dataDir,
     `${studyID}`,
     `${participantID}`,
     date,
