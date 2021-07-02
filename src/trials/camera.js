@@ -4,7 +4,7 @@ import { baseStimulus } from "../lib/markup/stimuli";
 import { jsPsych } from "jspsych-react";
 
 let ipcRenderer = false;
-if (envConfig.IS_ELECTRON) {
+if (envConfig.USE_ELECTRON) {
   const electron = window.require("electron");
   ipcRenderer = electron.ipcRenderer;
 }
@@ -94,7 +94,7 @@ const camera = () => {
         });
     },
     on_finish: () => {
-      if (envConfig.IS_ELECTRON) {
+      if (envConfig.USE_ELECTRON) {
         window.cameraCapture.start();
         window.screenCapture.start();
       }

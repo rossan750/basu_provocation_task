@@ -14,9 +14,9 @@ import {
 
 let timeline = [experimentStart()];
 
-if (envConfig.VOLUME) timeline.push(adjustVolume());
+if (envConfig.USE_VOLUME) timeline.push(adjustVolume());
 
-if (envConfig.VIDEO) timeline.push(camera());
+if (envConfig.USE_VIDEO) timeline.push(camera());
 
 if (envConfig.USE_EEG) timeline.push(holdUpMarker());
 
@@ -31,4 +31,4 @@ const primaryTimeline = timeline;
 
 const mturkTimeline = [];
 
-export const tl = envConfig.MTURK ? mturkTimeline : primaryTimeline;
+export const tl = envConfig.USE_MTURK ? mturkTimeline : primaryTimeline;

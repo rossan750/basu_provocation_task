@@ -31,7 +31,7 @@ function App() {
   };
 
   // Adding data functions for firebase, electron adn Mturk
-  const defaultFunction = (data) => {};
+  const defaultFunction = () => {};
   const firebaseUpdateFunction = (data) => {
     addToFirebase(data);
   };
@@ -76,7 +76,7 @@ function App() {
     console.log("Environment configuration:", envConfig);
 
     // If on desktop
-    if (envConfig.IS_ELECTRON) {
+    if (envConfig.USE_ELECTRON) {
       const electron = window.require("electron");
       const renderer = electron.ipcRenderer;
       setRenderer(renderer);
@@ -93,7 +93,7 @@ function App() {
       // If online
     } else {
       // If envConfig.MTURK
-      if (envConfig.MTURK) {
+      if (envConfig.USE_MTURK) {
         /* eslint-disable */
         window.lodash = _.noConflict();
         const turkId = getTurkUniqueId();
@@ -103,7 +103,7 @@ function App() {
         /* eslint-enable */
       }
       // If firebase
-      else if (envConfig.FIREBASE) {
+      else if (envConfig.USE_FIREBASE) {
         setMethod("firebase");
         // Autologin with query parameters
         const participantId = query.get("participantID");

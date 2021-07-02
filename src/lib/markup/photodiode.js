@@ -3,7 +3,7 @@ import $ from 'jquery'
 
 // conditionally load electron and psiturk based on envConfig.MTURK config variable
 let ipcRenderer = false;
-if (envConfig.IS_ELECTRON) {
+if (envConfig.USE_ELECTRON) {
   const electron = window.require('electron');
   ipcRenderer  = electron.ipcRenderer;
 }
@@ -12,10 +12,9 @@ if (envConfig.IS_ELECTRON) {
 const photodiodeGhostBox = () => {
 	const class_ = envConfig.USE_PHOTODIODE ? 'visible' : 'invisible'
 
-  const markup = `<div class="photodiode-box ${class_}" id="photodiode-box">
+  return `<div class="photodiode-box ${class_}" id="photodiode-box">
 									<span id="photodiode-spot" class="photodiode-spot"></span>
   								</div>`
-	return markup
 }
 
 const pdSpotEncode = (taskCode) => {

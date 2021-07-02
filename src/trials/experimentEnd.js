@@ -10,7 +10,7 @@ const experimentEnd = (duration) => {
     stimulus: stimulus,
     trial_duration: duration,
     on_load: () => {
-      if (envConfig.VIDEO) {
+      if (envConfig.USE_VIDEO) {
         console.log('finished')
         window.cameraCapture.stop()
         window.screenCapture.stop()

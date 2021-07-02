@@ -18,7 +18,6 @@ let ipcRenderer = false;
 
 /**
  * Sets the experiment images from the Firebase storage bucket.
- * @param {Object} blockSettings An object containing the settings for the experiment block.
  * The function updates this object's "images" field to contain the images from Firebase.
  */
  const getFirebaseImages = async () => {
@@ -38,7 +37,7 @@ const checkNumImages = (newImages) => {
   let numNeutral = newImages.neutral.length;
   let numProvoking = newImages.provoking.length;
   if (numNeutral !== numRequiredImages || numProvoking !== numRequiredImages) {
-    if (envConfig.IS_ELECTRON) {
+    if (envConfig.USE_ELECTRON) {
       ipcRenderer.send(
         "error",
         `Number of images provided does not meet requirement.  Found ${numNeutral} neutral images and ${numProvoking} provoking images, the settings for this task requires ${numRequiredImages} of each type.`
@@ -52,7 +51,7 @@ const checkNumImages = (newImages) => {
 };
 
 const setImages = async () => {
-  if (envConfig.IS_ELECTRON) {
+  if (envConfig.USE_ELECTRON) {
     app = window.require("electron").remote.app;
     fs = window.require("fs");
     const electron = window.require("electron");
@@ -90,7 +89,7 @@ const setImages = async () => {
         `Could not load images from local device. - ${error}`
       );
     }
-  } else if (envConfig.FIREBASE) {
+  } else if (envConfig.USE_FIREBASE) {
     const newImages = await getFirebaseImages();
     checkNumImages(newImages);
     return newImages;
