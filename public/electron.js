@@ -11,9 +11,8 @@ const fs = require("fs-extra");
 const tar = require("tar");
 const log = require("electron-log");
 
-const HIDE_FRAME_ELECTRON =
-  process.env.REACT_APP_HIDE_FRAME_ELECTRON === "true";
-const USE_EVENT_MARKER = process.env.REACT_APP_USE_EVENT_MARKER === "true";
+let HIDE_FRAME_ELECTRON = false;
+let USE_EEG = false;
 
 // set logging levels
 log.transports.file.level = "info";
@@ -158,12 +157,22 @@ const handleEventSend = (code) => {
   }
 };
 
+// Update env variables with buildtime values from frontend
+ipc.on("updateEnvironmentVariables", (event, args) => {
+  log.info("Received config:", args)
+  USE_EEG = args.USE_EEG;
+  HIDE_FRAME_ELECTRON = args.HIDE_FRAME_ELECTRON;
+  if (USE_EEG) {
+    setUpPort().then(() => handleEventSend(eventCodes.test_connect));
+  }
+});
+
 // EVENT TRIGGER
 ipc.on("trigger", (event, args) => {
   let code = args;
   if (code != undefined) {
     log.info(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`);
-    if (USE_EVENT_MARKER) {
+    if (USE_EEG) {
       handleEventSend(code);
     }
   }
@@ -295,7 +304,7 @@ process.on("uncaughtException", (error) => {
 // Some APIs can only be used after this event occurs.
 app.on("ready", () => {
   createWindow();
-  if (USE_EVENT_MARKER) {
+  if (USE_EEG) {
     setUpPort().then(() => handleEventSend(eventCodes.test_connect));
   }
 });

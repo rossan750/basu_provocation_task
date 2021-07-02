@@ -5,7 +5,7 @@ import {
   lang,
   numRequiredImages,
   IS_ELECTRON,
-  USE_EVENT_MARKER,
+  USE_EEG,
   FIREBASE,
 } from "../config/main";
 import experimentEnd from "../trials/experimentEnd";
@@ -140,7 +140,7 @@ const taskSetUp = (blockSettings) => {
 
   return {
     type: "html_keyboard_response",
-    timeline: USE_EVENT_MARKER ? [addTasks, startCode()] : [addTasks],
+    timeline: USE_EEG ? [addTasks, startCode()] : [addTasks],
   };
 };
 

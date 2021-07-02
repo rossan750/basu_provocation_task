@@ -12,7 +12,7 @@ import {
   VOLUME,
   defaultBlockSettings,
   practiceBlockSettings,
-  USE_EVENT_MARKER,
+  USE_EEG,
 } from "../config/main";
 
 let timeline = [experimentStart()];
@@ -21,7 +21,7 @@ if (VOLUME) timeline.push(adjustVolume());
 
 if (VIDEO) timeline.push(camera());
 
-if (USE_EVENT_MARKER) timeline.push(holdUpMarker());
+if (USE_EEG) timeline.push(holdUpMarker());
 
 timeline.push(
   taskSetUp(defaultBlockSettings),

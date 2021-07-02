@@ -25,7 +25,7 @@ const VOLUME = process.env.REACT_APP_VOLUME === "true";
 // whether or not to set a frame in the Electron window, see electron.js
 const HIDE_FRAME_ELECTRON = process.env.REACT_APP_HIDE_FRAME_ELECTRON === "true" && IS_ELECTRON;
 // whether or not the EEG/event marker is available
-const USE_EVENT_MARKER = process.env.REACT_APP_USE_EVENT_MARKER === "true" && IS_ELECTRON;
+const USE_EEG = process.env.REACT_APP_USE_EEG === "true" && IS_ELECTRON;
 // whether or not the photodiode is in use
 const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && IS_ELECTRON;
 
@@ -131,7 +131,7 @@ export {
   VIDEO,
   IS_ELECTRON,
   FIREBASE,
-  USE_EVENT_MARKER,
+  USE_EEG,
   HIDE_FRAME_ELECTRON,
   USE_PHOTODIODE,
   VOLUME,
