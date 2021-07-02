@@ -1,10 +1,10 @@
-import { lang, taskName, IS_ELECTRON } from "../config/main";
+import { lang, taskName, envConfig } from "../config/main";
 import { photodiodeGhostBox } from "../lib/markup/photodiode";
 import { baseStimulus } from "../lib/markup/stimuli";
 import { jsPsych } from "jspsych-react";
 
 let ipcRenderer = false;
-if (IS_ELECTRON) {
+if (envConfig.IS_ELECTRON) {
   const electron = window.require("electron");
   ipcRenderer = electron.ipcRenderer;
 }
@@ -95,7 +95,7 @@ const camera = () => {
         });
     },
     on_finish: () => {
-      if (IS_ELECTRON) {
+      if (envConfig.IS_ELECTRON) {
         window.cameraCapture.start();
         window.screenCapture.start();
       }

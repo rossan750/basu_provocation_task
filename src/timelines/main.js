@@ -7,21 +7,18 @@ import adjustVolume from "../trials/adjustVolume";
 import camera from "../trials/camera";
 
 import {
-  VIDEO,
-  MTURK,
-  VOLUME,
+  envConfig,
   defaultBlockSettings,
   practiceBlockSettings,
-  USE_EEG,
 } from "../config/main";
 
 let timeline = [experimentStart()];
 
-if (VOLUME) timeline.push(adjustVolume());
+if (envConfig.VOLUME) timeline.push(adjustVolume());
 
-if (VIDEO) timeline.push(camera());
+if (envConfig.VIDEO) timeline.push(camera());
 
-if (USE_EEG) timeline.push(holdUpMarker());
+if (envConfig.USE_EEG) timeline.push(holdUpMarker());
 
 timeline.push(
   taskSetUp(defaultBlockSettings),
@@ -34,4 +31,4 @@ const primaryTimeline = timeline;
 
 const mturkTimeline = [];
 
-export const tl = MTURK ? mturkTimeline : primaryTimeline;
+export const tl = envConfig.MTURK ? mturkTimeline : primaryTimeline;

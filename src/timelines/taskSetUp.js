@@ -3,10 +3,8 @@ import { jsPsych } from "jspsych-react";
 import { getObjectURLs } from "../firebase";
 import {
   lang,
-  numRequiredImages,
-  IS_ELECTRON,
-  USE_EEG,
-  FIREBASE,
+  envConfig,
+  numRequiredImages
 } from "../config/main";
 import experimentEnd from "../trials/experimentEnd";
 import blockEnd from "../trials/blockEnd";
@@ -40,7 +38,7 @@ const checkNumImages = (newImages) => {
   let numNeutral = newImages.neutral.length;
   let numProvoking = newImages.provoking.length;
   if (numNeutral !== numRequiredImages || numProvoking !== numRequiredImages) {
-    if (IS_ELECTRON) {
+    if (envConfig.IS_ELECTRON) {
       ipcRenderer.send(
         "error",
         `Number of images provided does not meet requirement.  Found ${numNeutral} neutral images and ${numProvoking} provoking images, the settings for this task requires ${numRequiredImages} of each type.`
@@ -54,7 +52,7 @@ const checkNumImages = (newImages) => {
 };
 
 const setImages = async () => {
-  if (IS_ELECTRON) {
+  if (envConfig.IS_ELECTRON) {
     app = window.require("electron").remote.app;
     fs = window.require("fs");
     const electron = window.require("electron");
@@ -93,7 +91,7 @@ const setImages = async () => {
         `Could not load images from local device. - ${error}`
       );
     }
-  } else if (FIREBASE) {
+  } else if (envConfig.FIREBASE) {
     const newImages = await getFirebaseImages();
     checkNumImages(newImages);
     return newImages;
@@ -140,7 +138,7 @@ const taskSetUp = (blockSettings) => {
 
   return {
     type: "html_keyboard_response",
-    timeline: USE_EEG ? [addTasks, startCode()] : [addTasks],
+    timeline: envConfig.USE_EEG ? [addTasks, startCode()] : [addTasks],
   };
 };
 

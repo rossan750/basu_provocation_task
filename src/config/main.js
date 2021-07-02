@@ -120,13 +120,7 @@ const practiceBlockSettings = {
 
 const taskName = "Provocation";
 
-export {
-  imageSettings,
-  numRequiredImages,
-  ratingSettings,
-  defaultBlockSettings,
-  lang,
-  eventCodes,
+const envConfig = {
   MTURK,
   VIDEO,
   IS_ELECTRON,
@@ -135,6 +129,16 @@ export {
   HIDE_FRAME_ELECTRON,
   USE_PHOTODIODE,
   VOLUME,
+}
+
+export {
+  envConfig,
+  imageSettings,
+  numRequiredImages,
+  ratingSettings,
+  defaultBlockSettings,
+  lang,
+  eventCodes,
   practiceBlockSettings,
   importAll,
   breathingAudio,
