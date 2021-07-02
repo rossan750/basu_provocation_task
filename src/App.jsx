@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import { getTurkUniqueId, sleep } from "./lib/utils";
 import { initParticipant, addToFirebase } from "./firebase"
-import { MTURK, FIREBASE, IS_ELECTRON, VIDEO } from "./config/main"
+import { envConfig } from "./config/main"
 import JsPsychExperiment from "./components/JsPsychExperiment"
 import Login from "./components/Login"
 
@@ -74,16 +74,17 @@ function App() {
   // Login logic
   useEffect(() => {
     // For testing and debugging purposes
-    console.log("Turk:", MTURK);
-    console.log("Firebase:", FIREBASE);
-    console.log("Electron:", IS_ELECTRON);
-    console.log("Video:", VIDEO);
+    console.log("Turk:", envConfig.MTURK);
+    console.log("Firebase:", envConfig.FIREBASE);
+    console.log("Electron:", envConfig.IS_ELECTRON);
+    console.log("Video:", envConfig.VIDEO);
 
     // If on desktop
-    if (IS_ELECTRON) {
+    if (envConfig.IS_ELECTRON) {
       const electron = window.require("electron");
       const renderer = electron.ipcRenderer;
       setRenderer(renderer);
+      renderer.send("updateEnvironmentVariables", envConfig);
       // If at home, fill in fields based on environment variables
       const credentials = renderer.sendSync("syncCredentials");
       if (credentials.envParticipantId) {
@@ -95,8 +96,8 @@ function App() {
       setMethod("desktop");
       // If online
     } else {
-      // If MTURK
-      if (MTURK) {
+      // If envConfig.MTURK
+      if (envConfig.MTURK) {
         /* eslint-disable */
         window.lodash = _.noConflict();
         const turkId = getTurkUniqueId();
@@ -106,7 +107,7 @@ function App() {
         /* eslint-enable */
       }
       // If firebase
-      else if (FIREBASE) {
+      else if (envConfig.FIREBASE) {
         setMethod("firebase");
         // Autologin with query parameters
         const participantId = query.get("participantID");
