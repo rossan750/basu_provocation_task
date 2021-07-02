@@ -33,7 +33,6 @@ function App() {
   // Adding data functions for firebase, electron adn Mturk
   const defaultFunction = (data) => {};
   const firebaseUpdateFunction = (data) => {
-    console.log("Adding to firebase in App")
     addToFirebase(data);
   };
   const desktopUpdateFunction = (data) => {
@@ -74,10 +73,7 @@ function App() {
   // Login logic
   useEffect(() => {
     // For testing and debugging purposes
-    console.log("Turk:", envConfig.MTURK);
-    console.log("Firebase:", envConfig.FIREBASE);
-    console.log("Electron:", envConfig.IS_ELECTRON);
-    console.log("Video:", envConfig.VIDEO);
+    console.log("Environment configuration:", envConfig);
 
     // If on desktop
     if (envConfig.IS_ELECTRON) {

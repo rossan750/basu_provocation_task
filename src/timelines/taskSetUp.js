@@ -81,7 +81,6 @@ const setImages = async () => {
         (image) => `file://` + path.join(provokingImagePath, image)
       );
 
-      console.log(`Loaded images from ${localImagePath}`);
       checkNumImages(newImages);
       return newImages;
     } catch (error) {
@@ -130,11 +129,8 @@ const taskSetUp = (blockSettings) => {
 
         i += 1;
       }
-      console.log("jspsych:", jsPsych);
     },
   };
-
-  console.log("addTasks:", addTasks);
 
   return {
     type: "html_keyboard_response",

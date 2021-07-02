@@ -16,7 +16,6 @@ function saveBlob(blob, media, participantId) {
     if (reader.readyState === 2) {
       var buffer = new Buffer(reader.result);
       ipcRenderer.send("save_video", fileName, buffer);
-      console.log(`Saving ${JSON.stringify({ fileName, size: blob.size })}`);
     }
   };
   reader.readAsArrayBuffer(blob);

@@ -12,7 +12,6 @@ const MTURK = !jsPsych.turk.turkInfo().outsideTurk;
 const VIDEO = process.env.REACT_APP_VIDEO === "true";
 const FIREBASE = process.env.REACT_APP_FIREBASE === "true";
 let IS_ELECTRON = true;
-console.log(VIDEO);
 
 try {
   window.require("electron");
