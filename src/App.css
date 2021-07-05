@@ -50,7 +50,7 @@ html, body, #root, .App {
   background-color: black;
   border-radius: 50%;
   position: absolute;
-  display: visible;
+  display: block;
 }
 
 .main-prompt, .task-container {

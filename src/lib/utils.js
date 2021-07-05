@@ -1,4 +1,4 @@
-import { jsPsych } from 'jspsych-react'
+import {jsPsych} from 'jspsych-react'
 
 // add a random number between 0 and offset to the base number
 const jitter = (base, offset) => (
@@ -57,19 +57,16 @@ const keypressResponse = (info) => {
 }
 
 const startKeypressListener = () => {
-  let keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+  return jsPsych.pluginAPI.getKeyboardResponse({
     callback_function: keypressResponse,
     valid_responses: jsPsych.ALL_KEYS,
     persist: false
   })
-
-  return keyboardListener
 }
 
 const getTurkUniqueId = () => {
   const turkInfo = jsPsych.turk.turkInfo()
-  const uniqueId = `${turkInfo.workerId}:${turkInfo.assignmentId}`
-  return uniqueId
+  return `${turkInfo.workerId}:${turkInfo.assignmentId}`
 }
 
 const beep = (audioCodes) => {

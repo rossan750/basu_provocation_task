@@ -85,7 +85,7 @@ log.info("Active comName", activeComName);
 // const productId = '0483'
 const setUpPort = async () => {
   // p = await getPort(vendorId, productId)
-  p = await getPort(activeComName);
+  const p = await getPort(activeComName);
   if (p) {
     triggerPort = p;
     portAvailable = true;
@@ -105,7 +105,7 @@ const setUpPort = async () => {
           defaultId: 0,
         })
         .then((opt) => {
-          if (opt.response == 0) {
+          if (opt.response === 0) {
             app.exit();
           } else {
             SKIP_SENDING_DEV = true;
@@ -139,13 +139,13 @@ const handleEventSend = (code) => {
       })
       .then((resp) => {
         let opt = resp.response;
-        if (opt == 0) {
+        if (opt === 0) {
           // quit
           app.exit();
-        } else if (opt == 1) {
+        } else if (opt === 1) {
           // retry
           setUpPort().then(() => handleEventSend(code));
-        } else if (opt == 2) {
+        } else if (opt === 2) {
           SKIP_SENDING_DEV = true;
         }
       });
@@ -167,7 +167,7 @@ ipc.on("updateEnvironmentVariables", (event, args) => {
 // EVENT TRIGGER
 ipc.on("trigger", (event, args) => {
   let code = args;
-  if (code != undefined) {
+  if (code !== undefined) {
     log.info(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`);
     if (USE_EEG) {
       handleEventSend(code);
@@ -186,7 +186,7 @@ let images = [];
 let startTrial = -1;
 
 // Read version file (git sha and branch)
-var git = JSON.parse(
+const git = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "config/version.json"))
 );
 
@@ -255,7 +255,7 @@ ipc.on("save_video", (event, fileName, buffer) => {
 });
 
 // EXPERIMENT END
-ipc.on("end", (event, args) => {
+ipc.on("end", () => {
   // quit app
   app.quit();
 });
@@ -276,7 +276,7 @@ ipc.on("error", (event, args) => {
       defaultId: 0,
     })
     .then((opt) => {
-      if (opt.response == 0) app.exit();
+      if (opt.response === 0) app.exit();
     });
 });
 

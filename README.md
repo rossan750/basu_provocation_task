@@ -1,6 +1,6 @@
 # Provocation Task
-<p float="left">
-  <img src="provocation.svg" width="200" />
+<p style="float:left">
+  <img alt="Provocation Icon" src="provocation.svg" width="200" />
 </p>
 
 [![Actions Status](https://github.com/brown-ccv/task-provocation/workflows/Test%2C%20Build%2C%20and%20Package/badge.svg)](https://github.com/brown-ccv/task-provocation/actions)

@@ -11,7 +11,7 @@ describe('generic utility functions', function() {
 
   it('should flip a coin', function() {
     assert.isBoolean(util.randomTrue(), 'randomTrue is true or false')
-    const flips = _.range(100).map( (val) => util.randomTrue() )
+    const flips = _.range(100).map( () => util.randomTrue() )
     const numTrue = _.sum(flips)
     assert.closeTo(numTrue, 50, 45, 'of 100 flips should be some trues and some falses')
   })

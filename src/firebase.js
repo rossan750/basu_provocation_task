@@ -60,11 +60,6 @@ const initParticipant = (participantId, studyId, startDate) => {
     });
 };
 
-// create a document in the collection with a random id
-const createFirebaseDocumentRandom = () => {
-  db.collection(COLLECTION_NAME).add({ dateCreated: new Date() });
-};
-
 // add individual trials to db
 const addToFirebase = (data) => {
   const participantID = data.participant_id;
@@ -96,7 +91,6 @@ export {
   COLLECTION_NAME,
   initParticipant,
   addToFirebase,
-  createFirebaseDocumentRandom,
 };
 
 export { getObjectURLs };

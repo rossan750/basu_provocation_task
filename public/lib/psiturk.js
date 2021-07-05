@@ -19,14 +19,14 @@ _.extend(Backbone.Notifications, Backbone.Events);
 /*******
  * API *
  ******/
-var PsiTurk = function(uniqueId, adServerLoc, mode) {
+const PsiTurk = function(uniqueId, adServerLoc, mode) {
 	mode = mode || "live";  // defaults to live mode in case user doesn't pass this
-	var self = this;
+	const self = this;
 
 	/****************
 	 * TASK DATA    *
 	 ***************/
-	var TaskData = Backbone.Model.extend({
+	const TaskData = Backbone.Model.extend({
 		urlRoot: "/sync", // Fetch will GET from this url, while Save will PUT to this url, with mimetype 'application/JSON'
 		id: uniqueId,
 		adServerLoc: adServerLoc,
@@ -60,14 +60,14 @@ var PsiTurk = function(uniqueId, adServerLoc, mode) {
 
 		addTrialData: function(trialdata) {
 			trialdata = {"uniqueid":this.id, "current_trial":this.get("currenttrial"), "dateTime":(new Date().getTime()), "trialdata":trialdata};
-			var data = this.get('data');
+			const data = this.get('data');
 			data.push(trialdata);
 			this.set('data', data);
 			this.set({"currenttrial": this.get("currenttrial")+1});
 		},
 
 		addUnstructuredData: function(field, response) {
-			var qd = this.get("questiondata");
+			const qd = this.get("questiondata");
 			qd[field] = response;
 			this.set("questiondata", qd);
 		},
@@ -85,11 +85,11 @@ var PsiTurk = function(uniqueId, adServerLoc, mode) {
 		},
 
 		addEvent: function(eventtype, value) {
-			var interval,
+			let interval,
 			    ed = this.get('eventdata'),
 			    timestamp = new Date().getTime();
 
-			if (eventtype == 'initialized') {
+			if (eventtype === 'initialized') {
 				interval = 0;
 			} else {
 				interval = timestamp - ed[ed.length-1]['timestamp'];
@@ -105,21 +105,21 @@ var PsiTurk = function(uniqueId, adServerLoc, mode) {
 	* INSTRUCTIONS
 	*   - a simple, default instruction player
 	******************************************************/
-	var Instructions = function(parent, pages, callback) {
+	const Instructions = function(parent, pages, callback) {
 
-		var self = this;
-		var psiturk = parent;
-		var currentscreen = 0, timestamp;
-		var instruction_pages = pages;
-		var complete_fn = callback;
+		const self = this;
+		const psiturk = parent;
+		let currentscreen = 0, timestamp;
+		const instruction_pages = pages;
+		const complete_fn = callback;
 
-		var loadPage = function() {
+		const loadPage = function() {
 
 			// show the page
 			psiturk.showPage(instruction_pages[currentscreen]);
 
 			// connect event handler to previous button
-			if(currentscreen != 0) {  // can't do this if first page
+			if(currentscreen !== 0) {  // can't do this if first page
 				$('.instructionsnav').on('click.psiturk.instructionsnav.prev', '.previous', function() {
 					prevPageButtonPress();
 				});
@@ -129,18 +129,14 @@ var PsiTurk = function(uniqueId, adServerLoc, mode) {
 			$('.instructionsnav').on('click.psiturk.instructionsnav.next', '.continue', function() {
 				nextPageButtonPress();
 			});
-
-			// Record the time that an instructions page is first presented
-			timestamp = new Date().getTime();
-
 		};
 
-		var prevPageButtonPress = function () {
+		const prevPageButtonPress = function () {
 
 			// Record the response time
-			var rt = (new Date().getTime()) - timestamp;
-			viewedscreen = currentscreen;
-			currentscreen = currentscreen - 1;
+			const rt = (new Date().getTime()) - timestamp;
+			const viewedscreen = currentscreen;
+			let currentscreen = currentscreen - 1;
 			if (currentscreen < 0) {
 				currentscreen = 0; // can't go back that far
 			} else {
@@ -150,14 +146,14 @@ var PsiTurk = function(uniqueId, adServerLoc, mode) {
 
 		}
 
-		var nextPageButtonPress = function() {
+		const nextPageButtonPress = function() {
 
 			// Record the response time
-			var rt = (new Date().getTime()) - timestamp;
-			viewedscreen = currentscreen;
-			currentscreen = currentscreen + 1;
+			const rt = (new Date().getTime()) - timestamp;
+			const viewedscreen = currentscreen;
+			const currentscreen = currentscreen + 1;
 
-			if (currentscreen == instruction_pages.length) {
+			if (currentscreen === instruction_pages.length) {
 				psiturk.recordTrialData({"phase":"INSTRUCTIONS", "template":pages[viewedscreen], "indexOf":viewedscreen, "action":"FinishInstructions", "viewTime":rt});
 				finish();
 			} else {
@@ -167,7 +163,7 @@ var PsiTurk = function(uniqueId, adServerLoc, mode) {
 
 		};
 
-		var finish = function() {
+		const finish = function() {
 
 			// unbind all instruction related events
 			$('.continue').unbind('click.psiturk.instructionsnav.next');
@@ -200,7 +196,7 @@ var PsiTurk = function(uniqueId, adServerLoc, mode) {
 	/*  PUBLIC METHODS: */
 	self.preloadImages = function(imagenames) {
 		$(imagenames).each(function() {
-			image = new Image();
+			const image = new Image();
 			image.src = this;
 		});
 	};
@@ -222,7 +218,7 @@ var PsiTurk = function(uniqueId, adServerLoc, mode) {
 		    throw new Error(
 			["Attemping to load page before preloading: ",
 			pagename].join(""));
-		};
+		}
 		return self.pages[pagename];
 	};
 
@@ -272,7 +268,7 @@ var PsiTurk = function(uniqueId, adServerLoc, mode) {
 				data: {uniqueId: self.taskdata.id}
 		});
 
-		if (self.taskdata.mode != 'debug') {  // don't block people from reloading in debug mode
+		if (self.taskdata.mode !== 'debug') {  // don't block people from reloading in debug mode
 			// Provide opt-out
 			$(window).on("beforeunload", function(){
 				self.saveData();
@@ -281,7 +277,7 @@ var PsiTurk = function(uniqueId, adServerLoc, mode) {
 						type: "POST",
 						data: {uniqueId: self.taskdata.id}
 				});
-				//var optoutmessage = "By leaving this page, you opt out of the experiment.";
+				//const optoutmessage = "By leaving this page, you opt out of the experiment.";
 				//alert(optoutmessage);
 				return "By leaving or reloading this page, you opt out of the experiment.  Are you sure you want to leave the experiment?";
 			});
@@ -305,24 +301,24 @@ var PsiTurk = function(uniqueId, adServerLoc, mode) {
 	}
 
 	self.doInstructions = function(pages, callback) {
-		instructionController = new Instructions(self, pages, callback);
+		const instructionController = new Instructions(self, pages, callback);
 		instructionController.loadFirstPage();
 	};
 
 	self.getInstructionIndicator = function() {
-		if (instructionController!=undefined) {
+		if (instructionController !== undefined) {
 			return instructionController.getIndicator();
 		}
 	}
 
 	// To be fleshed out with backbone views in the future.
-	var replaceBody = function(x) { $('body').html(x); };
+	const replaceBody = function(x) { $('body').html(x); };
 
 	self.showPage = _.compose(replaceBody, self.getPage);
 
 	/* initialized local variables */
 
-	var taskdata = new TaskData();
+	const taskdata = new TaskData();
 	taskdata.fetch({async: false});
 
 	/*  DATA: */
@@ -344,12 +340,12 @@ var PsiTurk = function(uniqueId, adServerLoc, mode) {
 	});
 
 	// track changes in window size
-	var triggerResize = function() {
+	const triggerResize = function() {
 		Backbone.Notifications.trigger('_psiturk_windowresize', [window.innerWidth, window.innerHeight]);
 	};
 
 	// set up the window resize trigger
-	var to = false;
+	let to = false;
 	$(window).resize(function(){
 	 if(to !== false)
 	    clearTimeout(to);

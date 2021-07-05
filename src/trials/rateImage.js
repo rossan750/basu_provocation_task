@@ -118,7 +118,7 @@ const rateImage = () => {
           }
         }
 
-        const handleClickListener = (e) => {
+        const handleClickListener = () => {
             // find circle that was clicked (or null if none)
             let circle = getCircle(x, y, CURSOR_RADIUS, circles, CIRCLE_RADIUS)
 
