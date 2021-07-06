@@ -56,7 +56,7 @@ function createWindow() {
       protocol: "file:",
       slashes: true,
     });
-  log.info(startUrl);
+  log.info("Start URL:", startUrl);
   mainWindow.loadURL(startUrl);
 
   // Open the DevTools.
@@ -156,7 +156,7 @@ const handleEventSend = (code) => {
 
 // Update env variables with buildtime values from frontend
 ipc.on("updateEnvironmentVariables", (event, args) => {
-  log.info("Received config:", args)
+  log.info("Received config:", args);
   USE_EEG = args.USE_EEG;
   HIDE_FRAME_ELECTRON = args.HIDE_FRAME_ELECTRON;
   if (USE_EEG) {
@@ -322,7 +322,7 @@ app.on("activate", function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-// EXPERIMENT END  
+// EXPERIMENT END
 app.on("will-quit", () => {
   // finish writing file
   stream.write("]");
