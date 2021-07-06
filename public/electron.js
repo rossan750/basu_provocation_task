@@ -229,19 +229,29 @@ ipc.on("data", (event, args) => {
   }
 });
 
-// Save Video
-
-ipc.on("save_video", (event, fileName, buffer) => {
+/**
+ * Abstracts constructing the filepath for saving data for this participant and study.
+ * @returns {string} The filepath.
+ */
+ const getSavePath = () => {
   const desktop = app.getPath("desktop");
   const name = app.getName();
   const today = new Date();
   const date = today.toISOString().slice(0, 10);
+  return path.join(
+      desktop,
+      studyID,
+      participantID,
+      date,
+      name
+  );
+}
+
+// Save Video
+
+ipc.on("save_video", (event, fileName, buffer) => {
   const fullPath = path.join(
-    desktop,
-    `${studyID}`,
-    `${participantID}`,
-    date,
-    name,
+    getSavePath(),
     fileName
   );
   fs.outputFile(fullPath, buffer, (err) => {
@@ -330,17 +340,7 @@ app.on("will-quit", () => {
   stream = false;
 
   // copy file to config location
-  const desktop = app.getPath("desktop");
-  const name = app.getName();
-  const today = new Date();
-  const date = today.toISOString().slice(0, 10);
-  const copyPath = path.join(
-    desktop,
-    `${studyID}`,
-    `${participantID}`,
-    date,
-    name
-  );
+  const copyPath = getSavePath();
   fs.mkdir(copyPath, { recursive: true }, (err) => {
     log.error(err);
     fs.copyFileSync(filePath, path.join(copyPath, fileName));
