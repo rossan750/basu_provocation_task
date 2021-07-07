@@ -11,7 +11,7 @@ const fs = require("fs-extra");
 const tar = require("tar");
 const log = require("electron-log");
 
-const HIDE_FRAME_ELECTRON = process.env.REACT_APP_HIDE_FRAME_ELECTRON;
+const HIDE_FRAME_ELECTRON = process.env.REACT_APP_HIDE_FRAME_ELECTRON === "true";
 let USE_EEG = false;
 
 // set logging levels
@@ -27,16 +27,6 @@ let mainWindow;
 
 function createWindow() {
   // Create the browser window.
-  const options = {
-    type: 'question',
-    buttons: ['OK'],
-    defaultId: 2,
-    title: 'Question',
-    message: HIDE_FRAME_ELECTRON,
-    checkboxLabel: 'Remember my answer',
-    checkboxChecked: true,
-  };
-  dialog.showMessageBox(null, options).then(() => {})
   if (process.env.ELECTRON_START_URL) {
     // in dev mode, disable web security to allow local file loading
     mainWindow = new BrowserWindow({
