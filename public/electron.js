@@ -256,7 +256,7 @@ ipc.on("data", (event, args) => {
 
 let fullPath = "";
 
-const getFullPath = () => {
+const getFullPath = (fileName) => {
   return path.join(
     savePath,
     fileName
@@ -265,7 +265,7 @@ const getFullPath = () => {
 
 ipc.on("save_video", (event, fileName, buffer) => {
   if (fullPath === "") {
-    fullPath = getFullPath();
+    fullPath = getFullPath(fileName);
   }
   fs.outputFile(fullPath, buffer, (err) => {
     if (err) {
