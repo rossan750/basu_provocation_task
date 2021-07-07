@@ -8,6 +8,7 @@ import { initParticipant, addToFirebase } from "./firebase"
 import { MTURK, FIREBASE, IS_ELECTRON, VIDEO } from "./config/main"
 import JsPsychExperiment from "./components/JsPsychExperiment"
 import Login from "./components/Login"
+import { version } from "../package.json";
 
 function App() {
   const [loggedIn, setLogin] = useState(false);
@@ -64,6 +65,7 @@ function App() {
           participant_id: participantId,
           study_id: studyId,
           start_date: startDate,
+          task_version: version
         });
       }
       setLogin(newLoggedIn);
