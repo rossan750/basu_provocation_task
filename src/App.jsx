@@ -92,7 +92,6 @@ function App() {
       setMethod("desktop");
       // If online
     } else {
-      // If envConfig.MTURK
       if (envConfig.USE_MTURK) {
         /* eslint-disable */
         window.lodash = _.noConflict();
