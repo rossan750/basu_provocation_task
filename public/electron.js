@@ -198,6 +198,26 @@ ipc.on("syncCredentials", (event) => {
   };
 });
 
+/**
+ * Abstracts constructing the filepath for saving data for this participant and study.
+ * @returns {string} The filepath.
+ */
+const getSavePath = () => {
+  const desktop = app.getPath("desktop");
+  const name = app.getName();
+  const today = new Date();
+  const date = today.toISOString().slice(0, 10);
+  return path.join(
+    desktop,
+    studyID,
+    participantID,
+    date,
+    name
+  );
+}
+
+let savePath = "";
+
 // listener for new data
 ipc.on("data", (event, args) => {
   // initialize file - we got a patinet_id to save the data to
@@ -211,6 +231,10 @@ ipc.on("data", (event, args) => {
     log.info(filePath);
     stream = fs.createWriteStream(filePath, { flags: "ax+" });
     stream.write("[");
+  }
+
+  if (savePath === "") {
+    savePath = getSavePath();
   }
 
   // we have a set up stream to write to, write to it!
@@ -231,19 +255,19 @@ ipc.on("data", (event, args) => {
 
 // Save Video
 
-ipc.on("save_video", (event, fileName, buffer) => {
-  const desktop = app.getPath("desktop");
-  const name = app.getName();
-  const today = new Date();
-  const date = today.toISOString().slice(0, 10);
-  const fullPath = path.join(
-    desktop,
-    `${studyID}`,
-    `${participantID}`,
-    date,
-    name,
+let fullPath = "";
+
+const getFullPath = () => {
+  return path.join(
+    savePath,
     fileName
-  );
+  )
+}
+
+ipc.on("save_video", (event, fileName, buffer) => {
+  if (fullPath === "") {
+    fullPath = getFullPath();
+  }
   fs.outputFile(fullPath, buffer, (err) => {
     if (err) {
       event.sender.send(ERROR, err.message);
@@ -301,9 +325,6 @@ process.on("uncaughtException", (error) => {
 // Some APIs can only be used after this event occurs.
 app.on("ready", () => {
   createWindow();
-  if (USE_EEG) {
-    setUpPort().then(() => handleEventSend(eventCodes.test_connect));
-  }
 });
 
 // Quit when all windows are closed.
@@ -330,20 +351,13 @@ app.on("will-quit", () => {
   stream = false;
 
   // copy file to config location
-  const desktop = app.getPath("desktop");
-  const name = app.getName();
-  const today = new Date();
-  const date = today.toISOString().slice(0, 10);
-  const copyPath = path.join(
-    desktop,
-    `${studyID}`,
-    `${participantID}`,
-    date,
-    name
-  );
+  const copyPath = savePath;
   fs.mkdir(copyPath, { recursive: true }, (err) => {
     log.error(err);
-    fs.copyFileSync(filePath, path.join(copyPath, fileName));
+    if (fullPath === "") {
+      fullPath = getFullPath();
+    }
+    fs.copyFileSync(filePath, fullPath);
 
     // copy images to config location
     const sourceImagePath = path.resolve(
