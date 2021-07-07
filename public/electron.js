@@ -11,7 +11,7 @@ const fs = require("fs-extra");
 const tar = require("tar");
 const log = require("electron-log");
 
-let HIDE_FRAME_ELECTRON = false;
+const HIDE_FRAME_ELECTRON = process.env.REACT_APP_HIDE_FRAME_ELECTRON;
 let USE_EEG = false;
 
 // set logging levels
@@ -27,6 +27,16 @@ let mainWindow;
 
 function createWindow() {
   // Create the browser window.
+  const options = {
+    type: 'question',
+    buttons: ['OK'],
+    defaultId: 2,
+    title: 'Question',
+    message: HIDE_FRAME_ELECTRON,
+    checkboxLabel: 'Remember my answer',
+    checkboxChecked: true,
+  };
+  dialog.showMessageBox(null, options).then(() => {})
   if (process.env.ELECTRON_START_URL) {
     // in dev mode, disable web security to allow local file loading
     mainWindow = new BrowserWindow({
@@ -158,7 +168,6 @@ const handleEventSend = (code) => {
 ipc.on("updateEnvironmentVariables", (event, args) => {
   log.info("Received config:", args);
   USE_EEG = args.USE_EEG;
-  HIDE_FRAME_ELECTRON = args.HIDE_FRAME_ELECTRON;
   if (USE_EEG) {
     setUpPort().then(() => handleEventSend(eventCodes.test_connect));
   }
