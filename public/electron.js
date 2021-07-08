@@ -354,7 +354,7 @@ app.on("will-quit", () => {
   fs.mkdir(copyPath, { recursive: true }, (err) => {
     log.error(err);
     if (fullPath === "") {
-      fullPath = getFullPath();
+      fullPath = getFullPath(`pid_${participantID}_${now}.json`);
     }
     fs.copyFileSync(filePath, fullPath);
 
