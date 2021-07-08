@@ -34,8 +34,7 @@ const imageSettings = {
 };
 
 // how many of each type of image are required if loading images from disk
-// TODO: this was 10 before, making it 3 for testing purposes
-const numRequiredImages = 3;
+const numRequiredImages = 10;
 
 // import images
 const importAll = (r) => {
