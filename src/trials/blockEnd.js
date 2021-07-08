@@ -1,6 +1,5 @@
-import { lang, breathingAudio } from '../config/main'
+import { lang, breathingAudio, eventCodes } from '../config/main'
 import { baseStimulus } from '../lib/markup/stimuli'
-import { eventCodes } from '../config/main'
 import { photodiodeGhostBox, pdSpotEncode } from '../lib/markup/photodiode'
 
 const blockEnd = (curBlock, totalBlocks) => {

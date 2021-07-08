@@ -11,9 +11,8 @@ const fs = require("fs-extra");
 const tar = require("tar");
 const log = require("electron-log");
 
-const HIDE_FRAME_ELECTRON =
-  process.env.REACT_APP_HIDE_FRAME_ELECTRON === "true";
-const USE_EVENT_MARKER = process.env.REACT_APP_USE_EVENT_MARKER === "true";
+const HIDE_FRAME_ELECTRON = process.env.REACT_APP_HIDE_FRAME_ELECTRON === "true";
+let USE_EEG = false;
 
 // set logging levels
 log.transports.file.level = "info";
@@ -21,9 +20,6 @@ log.transports.file.level = "info";
 // Event Trigger
 const { eventCodes, comName } = require("./config/trigger");
 const { getPort, sendToPort } = require("event-marker");
-
-// Data Saving
-const { dataDir } = require("./config/saveData");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -60,7 +56,7 @@ function createWindow() {
       protocol: "file:",
       slashes: true,
     });
-  log.info(startUrl);
+  log.info("Start URL:", startUrl);
   mainWindow.loadURL(startUrl);
 
   // Open the DevTools.
@@ -89,7 +85,7 @@ log.info("Active comName", activeComName);
 // const productId = '0483'
 const setUpPort = async () => {
   // p = await getPort(vendorId, productId)
-  p = await getPort(activeComName);
+  const p = await getPort(activeComName);
   if (p) {
     triggerPort = p;
     portAvailable = true;
@@ -109,7 +105,7 @@ const setUpPort = async () => {
           defaultId: 0,
         })
         .then((opt) => {
-          if (opt.response == 0) {
+          if (opt.response === 0) {
             app.exit();
           } else {
             SKIP_SENDING_DEV = true;
@@ -143,13 +139,13 @@ const handleEventSend = (code) => {
       })
       .then((resp) => {
         let opt = resp.response;
-        if (opt == 0) {
+        if (opt === 0) {
           // quit
           app.exit();
-        } else if (opt == 1) {
+        } else if (opt === 1) {
           // retry
           setUpPort().then(() => handleEventSend(code));
-        } else if (opt == 2) {
+        } else if (opt === 2) {
           SKIP_SENDING_DEV = true;
         }
       });
@@ -158,12 +154,21 @@ const handleEventSend = (code) => {
   }
 };
 
+// Update env variables with buildtime values from frontend
+ipc.on("updateEnvironmentVariables", (event, args) => {
+  log.info("Received config:", args);
+  USE_EEG = args.USE_EEG;
+  if (USE_EEG) {
+    setUpPort().then(() => handleEventSend(eventCodes.test_connect));
+  }
+});
+
 // EVENT TRIGGER
 ipc.on("trigger", (event, args) => {
   let code = args;
-  if (code != undefined) {
+  if (code !== undefined) {
     log.info(`Event: ${_.invert(eventCodes)[code]}, code: ${code}`);
-    if (USE_EVENT_MARKER) {
+    if (USE_EEG) {
       handleEventSend(code);
     }
   }
@@ -180,7 +185,7 @@ let images = [];
 let startTrial = -1;
 
 // Read version file (git sha and branch)
-var git = JSON.parse(
+const git = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "config/version.json"))
 );
 
@@ -191,6 +196,26 @@ ipc.on("syncCredentials", (event) => {
     envStudyId: process.env.REACT_APP_STUDY_ID,
   };
 });
+
+/**
+ * Abstracts constructing the filepath for saving data for this participant and study.
+ * @returns {string} The filepath.
+ */
+const getSavePath = () => {
+  const desktop = app.getPath("desktop");
+  const name = app.getName();
+  const today = new Date();
+  const date = today.toISOString().slice(0, 10);
+  return path.join(
+    desktop,
+    studyID,
+    participantID,
+    date,
+    name
+  );
+}
+
+let savePath = "";
 
 // listener for new data
 ipc.on("data", (event, args) => {
@@ -205,6 +230,10 @@ ipc.on("data", (event, args) => {
     log.info(filePath);
     stream = fs.createWriteStream(filePath, { flags: "ax+" });
     stream.write("[");
+  }
+
+  if (savePath === "") {
+    savePath = getSavePath();
   }
 
   // we have a set up stream to write to, write to it!
@@ -225,19 +254,19 @@ ipc.on("data", (event, args) => {
 
 // Save Video
 
-ipc.on("save_video", (event, fileName, buffer) => {
-  const desktop = app.getPath("desktop");
-  const name = app.getName();
-  const today = new Date();
-  const date = today.toISOString().slice(0, 10);
-  const fullPath = path.join(
-    desktop,
-    dataDir,
-    `${participantID}`,
-    date,
-    name,
+let fullPath = "";
+
+const getFullPath = (fileName) => {
+  return path.join(
+    savePath,
     fileName
-  );
+  )
+}
+
+ipc.on("save_video", (event, fileName, buffer) => {
+  if (fullPath === "") {
+    fullPath = getFullPath(fileName);
+  }
   fs.outputFile(fullPath, buffer, (err) => {
     if (err) {
       event.sender.send(ERROR, err.message);
@@ -249,7 +278,7 @@ ipc.on("save_video", (event, fileName, buffer) => {
 });
 
 // EXPERIMENT END
-ipc.on("end", (event, args) => {
+ipc.on("end", () => {
   // quit app
   app.quit();
 });
@@ -270,7 +299,7 @@ ipc.on("error", (event, args) => {
       defaultId: 0,
     })
     .then((opt) => {
-      if (opt.response == 0) app.exit();
+      if (opt.response === 0) app.exit();
     });
 });
 
@@ -295,9 +324,6 @@ process.on("uncaughtException", (error) => {
 // Some APIs can only be used after this event occurs.
 app.on("ready", () => {
   createWindow();
-  if (USE_EVENT_MARKER) {
-    setUpPort().then(() => handleEventSend(eventCodes.test_connect));
-  }
 });
 
 // Quit when all windows are closed.
@@ -324,21 +350,13 @@ app.on("will-quit", () => {
   stream = false;
 
   // copy file to config location
-  const desktop = app.getPath("desktop");
-  const name = app.getName();
-  const today = new Date();
-  const date = today.toISOString().slice(0, 10);
-  const copyPath = path.join(
-    desktop,
-    dataDir,
-    `${studyID}`,
-    `${participantID}`,
-    date,
-    name
-  );
+  const copyPath = savePath;
   fs.mkdir(copyPath, { recursive: true }, (err) => {
     log.error(err);
-    fs.copyFileSync(filePath, path.join(copyPath, fileName));
+    if (fullPath === "") {
+      fullPath = getFullPath();
+    }
+    fs.copyFileSync(filePath, fullPath);
 
     // copy images to config location
     const sourceImagePath = path.resolve(

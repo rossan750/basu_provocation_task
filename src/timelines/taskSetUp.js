@@ -3,10 +3,8 @@ import { jsPsych } from "jspsych-react";
 import { getObjectURLs } from "../firebase";
 import {
   lang,
-  numRequiredImages,
-  IS_ELECTRON,
-  USE_EVENT_MARKER,
-  FIREBASE,
+  envConfig,
+  numRequiredImages
 } from "../config/main";
 import experimentEnd from "../trials/experimentEnd";
 import blockEnd from "../trials/blockEnd";
@@ -20,7 +18,6 @@ let ipcRenderer = false;
 
 /**
  * Sets the experiment images from the Firebase storage bucket.
- * @param {Object} blockSettings An object containing the settings for the experiment block.
  * The function updates this object's "images" field to contain the images from Firebase.
  */
  const getFirebaseImages = async () => {
@@ -40,7 +37,7 @@ const checkNumImages = (newImages) => {
   let numNeutral = newImages.neutral.length;
   let numProvoking = newImages.provoking.length;
   if (numNeutral !== numRequiredImages || numProvoking !== numRequiredImages) {
-    if (IS_ELECTRON) {
+    if (envConfig.USE_ELECTRON) {
       ipcRenderer.send(
         "error",
         `Number of images provided does not meet requirement.  Found ${numNeutral} neutral images and ${numProvoking} provoking images, the settings for this task requires ${numRequiredImages} of each type.`
@@ -54,7 +51,7 @@ const checkNumImages = (newImages) => {
 };
 
 const setImages = async () => {
-  if (IS_ELECTRON) {
+  if (envConfig.USE_ELECTRON) {
     app = window.require("electron").remote.app;
     fs = window.require("fs");
     const electron = window.require("electron");
@@ -83,7 +80,6 @@ const setImages = async () => {
         (image) => `file://` + path.join(provokingImagePath, image)
       );
 
-      console.log(`Loaded images from ${localImagePath}`);
       checkNumImages(newImages);
       return newImages;
     } catch (error) {
@@ -93,7 +89,7 @@ const setImages = async () => {
         `Could not load images from local device. - ${error}`
       );
     }
-  } else if (FIREBASE) {
+  } else if (envConfig.USE_FIREBASE) {
     const newImages = await getFirebaseImages();
     checkNumImages(newImages);
     return newImages;
@@ -132,15 +128,12 @@ const taskSetUp = (blockSettings) => {
 
         i += 1;
       }
-      console.log("jspsych:", jsPsych);
     },
   };
 
-  console.log("addTasks:", addTasks);
-
   return {
     type: "html_keyboard_response",
-    timeline: USE_EVENT_MARKER ? [addTasks, startCode()] : [addTasks],
+    timeline: envConfig.USE_EEG ? [addTasks, startCode()] : [addTasks],
   };
 };
 

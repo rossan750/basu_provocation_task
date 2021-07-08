@@ -1,5 +1,5 @@
 import { lang } from '../config/main'
-import { baseStimulus } from '../lib/markup/stimuli'
+import { baseStimulus } from '../lib/markup/stimuli';
 
 const adjustVolume = () => {
     const stimulus = baseStimulus(`

@@ -8,26 +8,25 @@ import { eventCodes } from "./trigger";
 import requireContext from "require-context.macro";
 
 // is this mechanical turk?
-const MTURK = !jsPsych.turk.turkInfo().outsideTurk;
-const VIDEO = process.env.REACT_APP_VIDEO === "true";
-const FIREBASE = process.env.REACT_APP_FIREBASE === "true";
-let IS_ELECTRON = true;
-console.log(VIDEO);
+const USE_MTURK = !jsPsych.turk.turkInfo().outsideTurk;
+const USE_VIDEO = process.env.REACT_APP_VIDEO === "true";
+const USE_FIREBASE = process.env.REACT_APP_FIREBASE === "true";
+let USE_ELECTRON = true;
 
 try {
   window.require("electron");
 } catch {
-  IS_ELECTRON = false;
+  USE_ELECTRON = false;
 }
 
 // whether or not to ask the participant to adjust the volume
-const VOLUME = process.env.REACT_APP_VOLUME === "true";
+const USE_VOLUME = process.env.REACT_APP_VOLUME === "true";
 // whether or not to set a frame in the Electron window, see electron.js
-const HIDE_FRAME_ELECTRON = process.env.REACT_APP_HIDE_FRAME_ELECTRON === "true" && IS_ELECTRON;
+const HIDE_FRAME_ELECTRON = process.env.REACT_APP_HIDE_FRAME_ELECTRON === "true" && USE_ELECTRON;
 // whether or not the EEG/event marker is available
-const USE_EVENT_MARKER = process.env.REACT_APP_USE_EVENT_MARKER === "true" && IS_ELECTRON;
+const USE_EEG = process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON;
 // whether or not the photodiode is in use
-const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && IS_ELECTRON;
+const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON;
 
 const imageSettings = {
   width: 600,
@@ -35,8 +34,7 @@ const imageSettings = {
 };
 
 // how many of each type of image are required if loading images from disk
-// TODO: this was 10 before, making it 3 for testing purposes
-const numRequiredImages = 3;
+const numRequiredImages = 10;
 
 // import images
 const importAll = (r) => {
@@ -93,7 +91,7 @@ const ratingSettings = {
 
 // get language file
 const lang = require("../language/en_us.json");
-if (MTURK) {
+if (USE_MTURK) {
   // if this is mturk, merge in the mturk specific language
   const mlang = require("../language/en_us.mturk.json");
   _.merge(lang, mlang);
@@ -120,21 +118,25 @@ const practiceBlockSettings = {
 
 const taskName = "Provocation";
 
+const envConfig = {
+  USE_MTURK,
+  USE_VIDEO,
+  USE_ELECTRON,
+  USE_FIREBASE,
+  USE_EEG,
+  HIDE_FRAME_ELECTRON,
+  USE_PHOTODIODE,
+  USE_VOLUME,
+}
+
 export {
+  envConfig,
   imageSettings,
   numRequiredImages,
   ratingSettings,
   defaultBlockSettings,
   lang,
   eventCodes,
-  MTURK,
-  VIDEO,
-  IS_ELECTRON,
-  FIREBASE,
-  USE_EVENT_MARKER,
-  HIDE_FRAME_ELECTRON,
-  USE_PHOTODIODE,
-  VOLUME,
   practiceBlockSettings,
   importAll,
   breathingAudio,

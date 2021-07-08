@@ -1,6 +1,6 @@
 # Provocation Task
-<p float="left">
-  <img src="provocation.svg" width="200" />
+<p style="float:left">
+  <img alt="Provocation Icon" src="provocation.svg" width="200" />
 </p>
 
 [![Actions Status](https://github.com/brown-ccv/task-provocation/workflows/Test%2C%20Build%2C%20and%20Package/badge.svg)](https://github.com/brown-ccv/task-provocation/actions)
@@ -120,14 +120,23 @@ The `lib/` directory contains utility functions and markup that is used in the t
 
 NOTE: boolean environment variables should be set as strings, e.g., `"true"` _not_ `true`. Boolean environment variables are false by default. The following are environment variables used by the app:
 
+### Buildtime variables
+These are set in `.env` files in the repo.
+
 * `ELECTRON_START_URL` [string]: URL (e.g. `http://localhost:3000`) where the front end of the app is being hosted - also used in `electron.js` to indicate the app is running in dev mode
 * `EVENT_MARKER_PRODUCT_ID` [string]: The product ID of the event marker (e.g. `0487`).  If not set, it will use the `productID` set in `public/config/trigger.js`.
 * `REACT_APP_FIREBASE` [boolean]: True if Firebase is in use.
 * `REACT_APP_VOLUME` [boolean]: Whether or not to ask the participant to adjust the volume before the experiment starts.
-* `REACT_APP_HIDE_FRAME_ELECTRON` [boolean]: Whether or not to hide the buttons for closing and minifying the app window.
 * `REACT_APP_EVENT_MARKER` [boolean]: Whether or not the EEG is in use.
 * `REACT_APP_USE_PHOTODIODE` [boolean]: Whether or not the photodiode is in use.
 * Firebase environment variables: If using a custom Firebase project, make sure to set environment variables accordingly.
+
+### Runtime variables
+These are set for the specific machine the task is running on.
+
+* `REACT_APP_HIDE_FRAME_ELECTRON` [boolean]: Whether or not to hide the buttons for closing and minifying the app window.
+* `REACT_APP_STUDY_ID` [string]: The default study ID to show when logging in.
+* `REACT_APP_PARTICIPANT_ID` [string]: The default patient ID to show when logging in.
 
 ### `env/`
 

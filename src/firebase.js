@@ -16,7 +16,6 @@ firebase.initializeApp(config);
 // Get the firestore instance, and use the emulator if running locally
 let db = firebase.firestore();
 if (window.location.hostname === "localhost") {
-  console.log("Using localhost")
   db.useEmulator("localhost", 8080);
 }
 
@@ -29,13 +28,13 @@ if (window.location.hostname === "localhost") {
  * @returns An array of promises, each containing a download URL for an object.
  */
 const getObjectURLs = async (participantID, studyID, folderType) => {
-  const folderURL = `${studyID}/${participantID}/${folderType}`
+  const folderURL = `${studyID}/${participantID}/${folderType}`;
   const storage = firebase.storage();
   const ref = storage.ref(folderURL);
   const objects = await ref.listAll();
   let URLs = objects.items.map(async (item) => await item.getDownloadURL());
-  return (await Promise.all(URLs));
-}
+  return await Promise.all(URLs);
+};
 
 // Add participant data and trial data to db
 const initParticipant = (participantId, studyId, startDate) => {
@@ -61,15 +60,8 @@ const initParticipant = (participantId, studyId, startDate) => {
     });
 };
 
-// create a document in the collection with a random id
-const createFirebaseDocumentRandom = () => {
-  console.log("Creating a document with a random ID");
-  db.collection(COLLECTION_NAME).add({ dateCreated: new Date() });
-};
-
 // add individual trials to db
 const addToFirebase = (data) => {
-  console.log("Adding to Firebase", data);
   const participantID = data.participant_id;
   const studyID = data.study_id;
   const startDate = data.start_date;
@@ -80,8 +72,13 @@ const addToFirebase = (data) => {
     .collection("data")
     .doc(startDate)
     .update("results", firebase.firestore.FieldValue.arrayUnion(data))
-    .then(() => console.log("Successfully added to Firebase"))
-    .catch((error) => console.error("Error adding to Firebase:", error));
+    .then(() => {
+      return true;
+    })
+    .catch((error) => {
+      console.error("Error adding to Firebase:", error);
+      return false;
+    });
 };
 
 // Export types that exists in Firestore
@@ -94,7 +91,6 @@ export {
   COLLECTION_NAME,
   initParticipant,
   addToFirebase,
-  createFirebaseDocumentRandom,
 };
 
 export { getObjectURLs };

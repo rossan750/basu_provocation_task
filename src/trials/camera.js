@@ -1,10 +1,10 @@
-import { lang, taskName, IS_ELECTRON } from "../config/main";
+import { lang, taskName, envConfig } from "../config/main";
 import { photodiodeGhostBox } from "../lib/markup/photodiode";
 import { baseStimulus } from "../lib/markup/stimuli";
 import { jsPsych } from "jspsych-react";
 
 let ipcRenderer = false;
-if (IS_ELECTRON) {
+if (envConfig.USE_ELECTRON) {
   const electron = window.require("electron");
   ipcRenderer = electron.ipcRenderer;
 }
@@ -14,9 +14,8 @@ function saveBlob(blob, media, participantId) {
   let fileName = `pid_${participantId}_${media}_${Date.now()}.webm`;
   reader.onload = function () {
     if (reader.readyState === 2) {
-      var buffer = new Buffer(reader.result);
+      const buffer = new Buffer(reader.result);
       ipcRenderer.send("save_video", fileName, buffer);
-      console.log(`Saving ${JSON.stringify({ fileName, size: blob.size })}`);
     }
   };
   reader.readAsArrayBuffer(blob);
@@ -95,7 +94,7 @@ const camera = () => {
         });
     },
     on_finish: () => {
-      if (IS_ELECTRON) {
+      if (envConfig.USE_ELECTRON) {
         window.cameraCapture.start();
         window.screenCapture.start();
       }
