@@ -135,6 +135,8 @@ These are set in `.env` files in the repo.
 These are set for the specific machine the task is running on.
 
 * `REACT_APP_HIDE_FRAME_ELECTRON` [boolean]: Whether or not to hide the buttons for closing and minifying the app window.
+* `REACT_APP_STUDY_ID` [string]: The default study ID to show when logging in.
+* `REACT_APP_PATIENT_ID` [string]: The default patient ID to show when logging in.
 
 ### `env/`
 
