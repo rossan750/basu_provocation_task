@@ -11,7 +11,7 @@ const fs = require("fs-extra");
 const tar = require("tar");
 const log = require("electron-log");
 
-let HIDE_FRAME_ELECTRON = false;
+const HIDE_FRAME_ELECTRON = process.env.REACT_APP_HIDE_FRAME_ELECTRON === "true";
 let USE_EEG = false;
 
 // set logging levels
@@ -56,7 +56,7 @@ function createWindow() {
       protocol: "file:",
       slashes: true,
     });
-  log.info(startUrl);
+  log.info("Start URL:", startUrl);
   mainWindow.loadURL(startUrl);
 
   // Open the DevTools.
@@ -156,9 +156,8 @@ const handleEventSend = (code) => {
 
 // Update env variables with buildtime values from frontend
 ipc.on("updateEnvironmentVariables", (event, args) => {
-  log.info("Received config:", args)
+  log.info("Received config:", args);
   USE_EEG = args.USE_EEG;
-  HIDE_FRAME_ELECTRON = args.HIDE_FRAME_ELECTRON;
   if (USE_EEG) {
     setUpPort().then(() => handleEventSend(eventCodes.test_connect));
   }
@@ -257,7 +256,7 @@ ipc.on("data", (event, args) => {
 
 let fullPath = "";
 
-const getFullPath = () => {
+const getFullPath = (fileName) => {
   return path.join(
     savePath,
     fileName
@@ -266,7 +265,7 @@ const getFullPath = () => {
 
 ipc.on("save_video", (event, fileName, buffer) => {
   if (fullPath === "") {
-    fullPath = getFullPath();
+    fullPath = getFullPath(fileName);
   }
   fs.outputFile(fullPath, buffer, (err) => {
     if (err) {
@@ -343,7 +342,7 @@ app.on("activate", function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-// EXPERIMENT END  
+// EXPERIMENT END
 app.on("will-quit", () => {
   // finish writing file
   stream.write("]");
