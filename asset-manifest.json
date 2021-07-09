@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "./static/css/main.3f6fce54.chunk.css",
+    "main.js": "./static/js/main.05dc9f17.chunk.js",
+    "main.js.map": "./static/js/main.05dc9f17.chunk.js.map",
+    "runtime~main.js": "./static/js/runtime~main.d653cc00.js",
+    "runtime~main.js.map": "./static/js/runtime~main.d653cc00.js.map",
+    "static/css/2.8f52202b.chunk.css": "./static/css/2.8f52202b.chunk.css",
+    "static/js/2.db2364f8.chunk.js": "./static/js/2.db2364f8.chunk.js",
+    "static/js/2.db2364f8.chunk.js.map": "./static/js/2.db2364f8.chunk.js.map",
+    "index.html": "./index.html",
+    "precache-manifest.b8981e477602b2bae60c95a1e3f489dd.js": "./precache-manifest.b8981e477602b2bae60c95a1e3f489dd.js",
+    "service-worker.js": "./service-worker.js",
+    "static/css/2.8f52202b.chunk.css.map": "./static/css/2.8f52202b.chunk.css.map",
+    "static/css/main.3f6fce54.chunk.css.map": "./static/css/main.3f6fce54.chunk.css.map",
+    "static/media/1_happy.jpg": "./static/media/1_happy.18aba42e.jpg",
+    "static/media/2_happy.jpg": "./static/media/2_happy.9545f071.jpg",
+    "static/media/3_happy.jpg": "./static/media/3_happy.c893ae7f.jpg",
+    "static/media/4_sad.jpeg": "./static/media/4_sad.104fb27c.jpeg",
+    "static/media/5_sad.jpeg": "./static/media/5_sad.ef6dac84.jpeg",
+    "static/media/6_sad.jpeg": "./static/media/6_sad.bb879b1e.jpeg",
+    "static/media/7_unknown.jpeg": "./static/media/7_unknown.c348d28c.jpeg",
+    "static/media/breathing_exercise.m4a": "./static/media/breathing_exercise.b4b71d9b.m4a",
+    "static/media/all.css": "./static/media/fa-solid-900.c2801fb4.svg",
+    "static/media/istockphoto-888845986-612x612.jpg": "./static/media/istockphoto-888845986-612x612.23164b56.jpg"
+  }
+}
