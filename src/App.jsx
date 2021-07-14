@@ -119,7 +119,8 @@ function App() {
         setReject(true);
       }
     }
-  }, [setLoggedIn, query]);
+    // eslint-disable-next-line
+  }, []);
 
   if (reject) {
     return (
