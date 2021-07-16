@@ -14,6 +14,8 @@ function App() {
   const [loggedIn, setLogin] = useState(false);
   const [ipcRenderer, setRenderer] = useState(false);
   const [psiturk, setPsiturk] = useState(false);
+  const [participantID, setParticipantID] = useState("");
+  const [studyID, setStudyID] = useState("");
   const [envParticipantId, setEnvParticipantId] = useState("");
   const [envStudyId, setEnvStudyId] = useState("");
   const [currentMethod, setMethod] = useState("default");
@@ -67,6 +69,8 @@ function App() {
           task_version: version
         });
       }
+      setParticipantID(participantId);
+      setStudyID(studyId);
       setLogin(newLoggedIn);
     },
     [startDate]
@@ -151,6 +155,8 @@ function App() {
                 default: defaultFunction,
               }[currentMethod]
             }
+            participantID={participantID}
+            studyID={studyID}
           />
         ) : (
           <Login
