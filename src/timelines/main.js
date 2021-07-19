@@ -1,17 +1,17 @@
+import taskBlock from "./taskBlock";
 import experimentStart from "../trials/experimentStart";
 import holdUpMarker from "../trials/holdUpMarker";
-import taskBlock from "./taskBlock";
 import { instructions1, instructions2 } from "../trials/instructions";
 import adjustVolume from "../trials/adjustVolume";
 import camera from "../trials/camera";
+import buildCountdown from '../trials/countdown'
+import blockEnd from '../trials/blockEnd'
+import experimentEnd from '../trials/experimentEnd'
 import {
   envConfig,
   defaultBlockSettings,
   practiceBlockSettings, lang,
 } from '../config/main'
-import buildCountdown from '../trials/countdown'
-import blockEnd from '../trials/blockEnd'
-import experimentEnd from '../trials/experimentEnd'
 import { getImages } from '../lib/taskSetUpUtils'
 
 const taskSetUp = async (participantID, studyID, blockSettings) => {
@@ -51,9 +51,7 @@ const tl = async (participantID, studyID) => {
 
   const newBlocks = await taskSetUp(participantID, studyID, defaultBlockSettings)
 
-  for (let i = 0; i < newBlocks.length; i++) {
-    timeline.push(newBlocks[i])
-  }
+  timeline.concat(newBlocks)
 
   const primaryTimeline = timeline;
 
