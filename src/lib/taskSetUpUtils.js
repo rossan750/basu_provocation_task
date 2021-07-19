@@ -41,6 +41,20 @@ const checkNumImages = (newImages) => {
   }
 }
 
+const getLocalImages = (participantID, name) => {
+  const localImagePath = path.join(
+    app.getPath('desktop'),
+    'provocation-images',
+    `${participantID}`
+  )
+
+  const imagePath = path.join(localImagePath, name)
+  const items = fs.readdirSync(imagePath)
+  return items.map(
+    (image) => `file://` + path.join(imagePath, image)
+  )
+}
+
 const getImages = async (participantID) => {
   if (envConfig.USE_ELECTRON) {
     app = window.require('electron').remote.app
@@ -48,26 +62,9 @@ const getImages = async (participantID) => {
     const electron = window.require('electron')
     ipcRenderer = electron.ipcRenderer
     try {
-      const localImagePath = path.join(
-        app.getPath('desktop'),
-        'provocation-images',
-        `${participantID}`
-      )
-      const neutralImagePath = path.join(localImagePath, 'neutral')
-      const provokingImagePath = path.join(localImagePath, 'provoking')
-
-      let neutralItems = fs.readdirSync(neutralImagePath)
-      let provokingItems = fs.readdirSync(provokingImagePath)
-      const newImages = {
-        neutral: [],
-        provoking: [],
-      }
-      newImages.neutral = neutralItems.map(
-        (image) => `file://` + path.join(neutralImagePath, image)
-      )
-      newImages.provoking = provokingItems.map(
-        (image) => `file://` + path.join(provokingImagePath, image)
-      )
+      const newImages = {};
+      newImages.neutral = getLocalImages(participantID, 'neutral')
+      newImages.provoking = getLocalImages(participantID, 'provoking')
 
       checkNumImages(newImages)
       return newImages
