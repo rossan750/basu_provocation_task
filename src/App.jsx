@@ -60,17 +60,17 @@ function App() {
 
   // Function to add jspsych data on login
   const setLoggedIn = useCallback(
-    (newLoggedIn, studyId, participantId) => {
+    (newLoggedIn, newStudyID, newParticipantID) => {
       if (newLoggedIn) {
         jsPsych.data.addProperties({
-          participant_id: participantId,
-          study_id: studyId,
+          participant_id: newParticipantID,
+          study_id: newStudyID,
           start_date: startDate,
           task_version: version
         });
       }
-      setParticipantID(participantId);
-      setStudyID(studyId);
+      setParticipantID(newParticipantID);
+      setStudyID(newStudyID);
       setLogin(newLoggedIn);
     },
     [startDate]
