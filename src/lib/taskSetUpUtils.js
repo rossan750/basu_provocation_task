@@ -28,27 +28,28 @@ const checkNumImages = (newImages) => {
   let numNeutral = newImages.neutral.length
   let numProvoking = newImages.provoking.length
   if (numNeutral !== numRequiredImages || numProvoking !== numRequiredImages) {
+    const errorMessage = `Number of images provided does not meet requirement.  Found ${numNeutral} neutral images and ${numProvoking} provoking images, the settings for this task requires ${numRequiredImages} of each type.`
     if (envConfig.USE_ELECTRON) {
       ipcRenderer.send(
         'error',
-        `Number of images provided does not meet requirement.  Found ${numNeutral} neutral images and ${numProvoking} provoking images, the settings for this task requires ${numRequiredImages} of each type.`
+        errorMessage
       )
     } else {
       alert(
-        `Number of images provided does not meet requirement.  Found ${numNeutral} neutral images and ${numProvoking} provoking images, the settings for this task requires ${numRequiredImages} of each type. Please reload and try again.`
+        errorMessage
       )
     }
   }
 }
 
-const getLocalImages = (participantID, name) => {
+const getLocalImages = (participantID, category) => {
   const localImagePath = path.join(
     app.getPath('desktop'),
     'provocation-images',
     `${participantID}`
   )
 
-  const imagePath = path.join(localImagePath, name)
+  const imagePath = path.join(localImagePath, category)
   const items = fs.readdirSync(imagePath)
   return items.map(
     (image) => `file://` + path.join(imagePath, image)
