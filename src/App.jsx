@@ -14,6 +14,8 @@ function App() {
   const [loggedIn, setLogin] = useState(false);
   const [ipcRenderer, setRenderer] = useState(false);
   const [psiturk, setPsiturk] = useState(false);
+  const [participantID, setParticipantID] = useState("");
+  const [studyID, setStudyID] = useState("");
   const [envParticipantId, setEnvParticipantId] = useState("");
   const [envStudyId, setEnvStudyId] = useState("");
   const [currentMethod, setMethod] = useState("default");
@@ -58,15 +60,17 @@ function App() {
 
   // Function to add jspsych data on login
   const setLoggedIn = useCallback(
-    (newLoggedIn, studyId, participantId) => {
+    (newLoggedIn, newStudyID, newParticipantID) => {
       if (newLoggedIn) {
         jsPsych.data.addProperties({
-          participant_id: participantId,
-          study_id: studyId,
+          participant_id: newParticipantID,
+          study_id: newStudyID,
           start_date: startDate,
           task_version: version
         });
       }
+      setParticipantID(newParticipantID);
+      setStudyID(newStudyID);
       setLogin(newLoggedIn);
     },
     [startDate]
@@ -151,6 +155,8 @@ function App() {
                 default: defaultFunction,
               }[currentMethod]
             }
+            participantID={participantID}
+            studyID={studyID}
           />
         ) : (
           <Login
