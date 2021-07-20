@@ -28,8 +28,6 @@ const taskSetUp = async (participantID, studyID, blockSettings) => {
       blockEnd(i, blockSettings.num_repeats)
     )
   }
-  newBlocks.push(experimentEnd(5000))
-  console.log("New blocks:", newBlocks)
 
   return newBlocks
 }
@@ -52,6 +50,8 @@ const tl = async (participantID, studyID) => {
   const newBlocks = await taskSetUp(participantID, studyID, defaultBlockSettings)
 
   timeline.concat(newBlocks)
+
+  timeline.push(experimentEnd(5000))
 
   const primaryTimeline = timeline;
 
