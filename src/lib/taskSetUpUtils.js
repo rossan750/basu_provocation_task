@@ -30,14 +30,9 @@ const checkNumImages = (newImages) => {
   if (numNeutral !== numRequiredImages || numProvoking !== numRequiredImages) {
     const errorMessage = `Number of images provided does not meet requirement.  Found ${numNeutral} neutral images and ${numProvoking} provoking images, the settings for this task requires ${numRequiredImages} of each type.`
     if (envConfig.USE_ELECTRON) {
-      ipcRenderer.send(
-        'error',
-        errorMessage
-      )
+      ipcRenderer.send('error', errorMessage)
     } else {
-      alert(
-        errorMessage
-      )
+      alert(errorMessage)
     }
   }
 }
