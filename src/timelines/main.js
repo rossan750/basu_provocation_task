@@ -37,7 +37,13 @@ const taskSetUp = async (participantID, studyID, blockSettings) => {
 }
 
 const tl = async (participantID, studyID) => {
-  let timeline = [experimentStart()];
+  // preload images in trial
+  const preload = {
+    type: 'preload',
+    auto_preload: true
+  };
+
+  let timeline = [preload, experimentStart()];
 
   if (envConfig.USE_VOLUME) timeline.push(adjustVolume());
 
@@ -53,7 +59,7 @@ const tl = async (participantID, studyID) => {
 
   const newBlocks = await taskSetUp(participantID, studyID, defaultBlockSettings)
 
-  timeline = timeline.concat(newBlocks)
+  timeline.push(...newBlocks)
 
   timeline.push(experimentEnd(5000))
 
