@@ -61,6 +61,8 @@ const tl = async (participantID, studyID) => {
 
   const mturkTimeline = [];
 
+  console.log(primaryTimeline);
+
   return envConfig.USE_MTURK ? mturkTimeline : primaryTimeline
 }
 
