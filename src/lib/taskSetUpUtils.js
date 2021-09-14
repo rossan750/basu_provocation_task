@@ -51,7 +51,7 @@ const getLocalImages = (participantID, category) => {
   )
 }
 
-const getImages = async (participantID) => {
+const getImages = async (participantID, studyID) => {
   if (envConfig.USE_ELECTRON) {
     app = window.require('electron').remote.app
     fs = window.require('fs')
@@ -72,7 +72,7 @@ const getImages = async (participantID) => {
       )
     }
   } else if (envConfig.USE_FIREBASE) {
-    const newImages = await getFirebaseImages()
+    const newImages = await getFirebaseImages(participantID, studyID)
     checkNumImages(newImages)
     return newImages
   }
