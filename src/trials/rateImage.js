@@ -73,7 +73,11 @@ const rateImage = () => {
         setTimeout(canvasDraw, 10000)
 
         // request control of the cursor from the dom
-        canvas.requestPointerLock()
+        try {
+          canvas.requestPointerLock();
+        } catch {
+          console.warn("pointer lock denied");
+        }
 
         const handleMoveListener = (e) => {
           x += e.originalEvent.movementX;
