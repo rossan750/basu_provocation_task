@@ -53,7 +53,7 @@ const tl = async (participantID, studyID) => {
 
   const newBlocks = await taskSetUp(participantID, studyID, defaultBlockSettings)
 
-  timeline.concat(newBlocks)
+  timeline = timeline.concat(newBlocks)
 
   timeline.push(experimentEnd(5000))
 
