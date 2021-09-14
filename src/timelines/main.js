@@ -16,6 +16,7 @@ import { getImages } from '../lib/taskSetUpUtils'
 
 const taskSetUp = async (participantID, studyID, blockSettings) => {
   const newImages = await getImages(participantID, studyID)
+  console.log(newImages);
 
   blockSettings.images.neutral = newImages.neutral
   blockSettings.images.provoking = newImages.provoking
