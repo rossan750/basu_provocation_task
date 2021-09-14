@@ -20,8 +20,6 @@ const taskSetUp = async (participantID, studyID, blockSettings) => {
   blockSettings.images.neutral = newImages.neutral
   blockSettings.images.provoking = newImages.provoking
 
-  console.log(blockSettings);
-
   let newBlocks = []
   for (let i = 1; i < blockSettings.num_repeats; i++) {
     newBlocks.push(
@@ -30,8 +28,6 @@ const taskSetUp = async (participantID, studyID, blockSettings) => {
       blockEnd(i, blockSettings.num_repeats)
     )
   }
-
-  console.log(newBlocks);
 
   return newBlocks
 }
@@ -60,8 +56,6 @@ const tl = async (participantID, studyID) => {
   const primaryTimeline = timeline;
 
   const mturkTimeline = [];
-
-  console.log(primaryTimeline);
 
   return envConfig.USE_MTURK ? mturkTimeline : primaryTimeline
 }
