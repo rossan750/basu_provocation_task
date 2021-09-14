@@ -37,13 +37,7 @@ const taskSetUp = async (participantID, studyID, blockSettings) => {
 }
 
 const tl = async (participantID, studyID) => {
-  // preload images in trial
-  const preload = {
-    type: 'preload',
-    auto_preload: true
-  };
-
-  let timeline = [preload, experimentStart()];
+  let timeline = [experimentStart()];
 
   if (envConfig.USE_VOLUME) timeline.push(adjustVolume());
 
