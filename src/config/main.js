@@ -78,14 +78,13 @@ const audio = importAll(
   requireContext("../assets/audio", false, /\.(m4a|mp3)$/)
 );
 
-const breathingAudio = _.filter(audio, (o) => {
-  if(USE_BREATHING_AUDIO){
-    o.includes(BREATHING_AUDIO)
+let breathingAudio
+if(USE_BREATHING_AUDIO){
+    breathingAudio = _.filter(audio, (o) => o.includes(BREATHING_AUDIO))[0];
   }
   else {
-    o.includes(`breathing_exercise`)
-  }
-})[0];
+    breathingAudio = _.filter(audio, (o) => o.includes( `breathing_exercise`))[0];
+}
 
 console.log(breathingAudio);
 
@@ -136,8 +135,6 @@ const envConfig = {
   USE_PHOTODIODE,
   USE_VOLUME,
   USE_BREATHING_AUDIO,
-  BREATHING_AUDIO
-
 }
 
 export {
