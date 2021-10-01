@@ -28,6 +28,8 @@ const USE_EEG = process.env.REACT_APP_USE_EEG === "true" && USE_ELECTRON;
 // whether or not the photodiode is in use
 const USE_PHOTODIODE = process.env.REACT_APP_USE_PHOTODIODE === "true" && USE_ELECTRON;
 
+const BREATHING_AUDIO = process.env.REACT_APP_BREATHING_AUDIO || "breathing_exercise"
+
 const imageSettings = {
   width: 600,
   height: 600,
@@ -76,7 +78,7 @@ const audio = importAll(
 );
 
 const breathingAudio = _.filter(audio, (o) =>
-  o.includes(`breathing_exercise`)
+  o.includes(BREATHING_AUDIO)
 )[0];
 
 console.log(breathingAudio);
@@ -126,7 +128,7 @@ const envConfig = {
   USE_EEG,
   HIDE_FRAME_ELECTRON,
   USE_PHOTODIODE,
-  USE_VOLUME,
+  USE_VOLUME
 }
 
 export {
