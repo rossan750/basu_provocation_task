@@ -99,8 +99,10 @@ const rateImage = () => {
         document.addEventListener('mozpointerlockchange', lockChangeAlert, false);
 
         try {
+          console.log("in try")
           canvas.requestPointerLock();
         } catch {
+          console.log("in catch")
           clicked = false;
           canvas.onclick = () => canvas.requestPointerLock();
         }
