@@ -27,16 +27,12 @@ const rateImage = () => {
 
         // add stimulus to the DOM
         document.getElementById('jspsych-content').innerHTML = stimulus
-        // $('#jspsych-content').addClass('task-container')
 
         // set up canvas
         let canvas = document.querySelector('#jspsych-canvas');
         let ctx = canvas.getContext('2d');
         let animation
         let clicked = true; // require user engagement to lock
-
-        // hide the mouse
-        // $('html').css('cursor', 'none')
 
         let w = $('#jspsych-canvas').width()
         let x = w / 2
@@ -166,9 +162,6 @@ const rateImage = () => {
 
               setTimeout(
                   () => {
-                    // re-show the mouse
-                    // $('html').css('cursor', 'auto')
-
                     done({circle: circle, click: {x: x, y: y}, code: [showCode, rateCode], rt: end_rt, path: path})
                   },
                   500)
