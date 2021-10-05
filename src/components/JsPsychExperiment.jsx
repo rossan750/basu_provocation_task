@@ -22,6 +22,7 @@ function JsPsychExperiment ({ dataUpdateFunction, dataFinishFunction, participan
         <Experiment
           settings={{
             timeline: timeline,
+            use_webaudio: false,
             preload_audio: [breathingAudio],
             on_data_update: (data) => dataUpdateFunction(data),
             on_finish: (data) => dataFinishFunction(data),
