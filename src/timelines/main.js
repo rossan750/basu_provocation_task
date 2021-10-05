@@ -31,7 +31,7 @@ const taskSetUp = async (participantID, studyID, blockSettings) => {
       taskBlock(blockSettings),
       blockEnd(i, blockSettings.num_repeats)
     )
-    if (i <= blockSettings.num_repeats) {
+    if (i < blockSettings.num_repeats) {
       newBlocks.push(
         blockEnd(i, blockSettings.num_repeats)
       )
