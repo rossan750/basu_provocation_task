@@ -95,6 +95,7 @@ const rateImage = () => {
           }
         }
 
+        document.addEventListener('pointerlockerror', (e) => console.log(e), false);
         document.addEventListener('pointerlockchange', lockChangeAlert, false);
         document.addEventListener('mozpointerlockchange', lockChangeAlert, false);
 
