@@ -33,9 +33,10 @@ const rateImage = () => {
         let canvas = document.querySelector('#jspsych-canvas');
         let ctx = canvas.getContext('2d');
         let animation
+        let clicked = true; // require user engagement to lock
 
         // hide the mouse
-        $('html').css('cursor', 'none')
+        // $('html').css('cursor', 'none')
 
         let w = $('#jspsych-canvas').width()
         let x = w / 2
@@ -56,7 +57,7 @@ const rateImage = () => {
           // transparent background
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-          drawPrompt(ctx, rt(), CANVAS_SIZE)
+          drawPrompt(ctx, rt(), CANVAS_SIZE, clicked)
 
           drawNumbers(ctx, circles, CIRCLE_RADIUS, x, y, CURSOR_RADIUS)
 
@@ -73,19 +74,44 @@ const rateImage = () => {
         setTimeout(canvasDraw, 10000)
 
         // request control of the cursor from the dom
+        canvas.requestPointerLock = canvas.requestPointerLock ||
+                            canvas.mozRequestPointerLock;
+
+        document.exitPointerLock = document.exitPointerLock ||
+                           document.mozExitPointerLock;
+
+        const lockChangeAlert = () => {
+          if (document.pointerLockElement === canvas ||
+              document.mozPointerLockElement === canvas) {
+            console.log('The pointer lock status is now locked');
+            clicked = true;
+            // Bind event listener to document
+            document.addEventListener("mousemove", handleMoveListener, false)
+            document.addEventListener("click", handleClickListener, false)
+          } else {
+            console.log('The pointer lock status is now unlocked');
+            document.removeEventListener("mousemove", handleMoveListener, false)
+            document.removeEventListener("click", handleClickListener, false)
+          }
+        }
+
+        document.addEventListener('pointerlockchange', lockChangeAlert, false);
+        document.addEventListener('mozpointerlockchange', lockChangeAlert, false);
+
         try {
           canvas.requestPointerLock();
         } catch {
-          console.warn("pointer lock denied");
+          clicked = false;
+          canvas.onclick = () => canvas.requestPointerLock();
         }
 
         const handleMoveListener = (e) => {
-          x += e.originalEvent.movementX;
-          y += e.originalEvent.movementY;
+          x += e.movementX;
+          y += e.movementY;
 
           // if direction changes, add to path
-          let newdx = Math.sign(e.originalEvent.movementX)
-          let newdy = Math.sign(e.originalEvent.movementY)
+          let newdx = Math.sign(e.movementX)
+          let newdy = Math.sign(e.movementY)
 
           let updated = false
           if ( newdx !== dx && newdx !== 0 ) {
@@ -133,24 +159,18 @@ const rateImage = () => {
               // add final click spot to path
               addToPath()
 
-              // free event listeners
-              $(document).unbind('mousemove', handleMoveListener)
-              $(document).unbind('click', handleClickListener)
+              document.exitPointerLock()
 
               setTimeout(
                   () => {
                     // re-show the mouse
-                    $('html').css('cursor', 'auto')
+                    // $('html').css('cursor', 'auto')
 
                     done({circle: circle, click: {x: x, y: y}, code: [showCode, rateCode], rt: end_rt, path: path})
                   },
                   500)
             }
         }
-
-        // Bind event listener to document
-        $(document).bind('mousemove', handleMoveListener)
-        $(document).bind('click', handleClickListener)
       }
     }
 }

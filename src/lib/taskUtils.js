@@ -89,9 +89,9 @@ const drawNumbers = (ctx, circles, radius, x, y, cursor_radius) => {
   });
 };
 
-const drawPrompt = (ctx, rt, size) => {
+const drawPrompt = (ctx, rt, size, clicked) => {
   // only draw if it's been 10 seconds
-  if (rt < 10000) return;
+  if (rt < 10000 && clicked) return;
 
   ctx.font = 20 + "px arial";
   ctx.textBaseline = "middle";
@@ -99,7 +99,11 @@ const drawPrompt = (ctx, rt, size) => {
 
   // draw text
   ctx.fillStyle = "#ffffff"; // white
-  ctx.fillText("Please select a rating", size / 2, size * 0.25);
+  if (!clicked) {
+    ctx.fillText("Click the dot", size / 2, size * 0.25);
+  } else {
+    ctx.fillText("Please select a rating", size / 2, size * 0.25);
+  }
 };
 
 const drawFixation = (ctx, size) => {
