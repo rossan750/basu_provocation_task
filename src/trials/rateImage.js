@@ -33,7 +33,7 @@ const rateImage = () => {
         let canvas = document.querySelector('#jspsych-canvas');
         let ctx = canvas.getContext('2d');
         let animation
-        let clicked = true; // require user engagement to lock
+        let clicked = false; // require user engagement to lock
 
         // hide the mouse
         // $('html').css('cursor', 'none')
@@ -99,14 +99,8 @@ const rateImage = () => {
         document.addEventListener('pointerlockchange', lockChangeAlert, false);
         document.addEventListener('mozpointerlockchange', lockChangeAlert, false);
 
-        try {
-          console.log("in try")
-          canvas.requestPointerLock();
-        } catch {
-          console.log("in catch")
-          clicked = false;
-          canvas.onclick = () => canvas.requestPointerLock();
-        }
+        canvas.requestPointerLock();
+        canvas.onclick = () => canvas.requestPointerLock();
 
         const handleMoveListener = (e) => {
           x += e.movementX;
