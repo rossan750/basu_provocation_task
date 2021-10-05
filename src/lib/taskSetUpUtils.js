@@ -76,7 +76,7 @@ const getImages = async (participantID, studyID) => {
     checkNumImages(newImages)
     return newImages
   } else {
-    return { neutral : [], provoking: []}
+    return false
   }
 }
 

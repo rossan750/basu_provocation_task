@@ -32,7 +32,7 @@ const rateImage = () => {
         let canvas = document.querySelector('#jspsych-canvas');
         let ctx = canvas.getContext('2d');
         let animation
-        let clicked = true; // require user engagement to lock
+        let clicked = false; // require user engagement to lock
 
         let w = $('#jspsych-canvas').width()
         let x = w / 2
@@ -62,12 +62,6 @@ const rateImage = () => {
           // draw the cursor
           drawCursor(ctx, x, y, CURSOR_RADIUS)
         }
-        // show ratings
-        canvasDraw();
-        pdSpotEncode(showCode)
-
-        // make sure canvas re-draws at 10 seconds to get prompt
-        setTimeout(canvasDraw, 10000)
 
         // request control of the cursor from the dom
         canvas.requestPointerLock = canvas.requestPointerLock ||
@@ -76,37 +70,61 @@ const rateImage = () => {
         document.exitPointerLock = document.exitPointerLock ||
                            document.mozExitPointerLock;
 
-        const lockChangeAlert = () => {
+        const lockChangeAlert = (e) => {
+          console.log(e)
+          console.log(document.pointerLockElement)
           if (document.pointerLockElement === canvas ||
               document.mozPointerLockElement === canvas) {
-            console.log('The pointer lock status is now locked');
             clicked = true;
-            canvasDraw();
+            if (!animation) {
+              animation = requestAnimationFrame(() => {
+                animation = null;
+                canvasDraw();
+              });
+            }
             // Bind event listener to document
-            document.addEventListener("mousemove", handleMoveListener, false)
-            document.addEventListener("click", handleClickListener, false)
+            canvas.addEventListener("mousemove", handleMoveListener, false)
+            canvas.addEventListener("click", handleClickListener, false)
           } else {
-            console.log('The pointer lock status is now unlocked');
-            document.removeEventListener("mousemove", handleMoveListener, false)
-            document.removeEventListener("click", handleClickListener, false)
+            canvas.removeEventListener("mousemove", handleMoveListener, false)
+            canvas.removeEventListener("click", handleClickListener, false)
           }
         }
 
         document.addEventListener('pointerlockerror', (e) => {
-          console.log(e);
           clicked = false;
-          canvasDraw();
+          if (!animation) {
+            animation = requestAnimationFrame(() => {
+              animation = null;
+              canvasDraw();
+            });
+          }
         }
           , false);
         document.addEventListener('pointerlockchange', lockChangeAlert, false);
         document.addEventListener('mozpointerlockchange', lockChangeAlert, false);
 
-        canvas.requestPointerLock();
         canvas.onclick = () => canvas.requestPointerLock();
 
+        // show ratings
+        canvasDraw();
+        pdSpotEncode(showCode)
+
+        // make sure canvas re-draws at 10 seconds to get prompt
+        setTimeout(canvasDraw, 10000)
+        let firstcall = true;
         const handleMoveListener = (e) => {
+          if (firstcall) {
+            console.log(e)
+            console.log(x, y, dx, dy)
+            firstcall = false
+          }
           x += e.movementX;
           y += e.movementY;
+
+          if (e.movementX > 10 || e.movementY > 10) {
+            console.log(e)
+          }
 
           // if direction changes, add to path
           let newdx = Math.sign(e.movementX)
@@ -140,7 +158,7 @@ const rateImage = () => {
 
           // re-draw with updates
           if (!animation) {
-            animation = requestAnimationFrame( () => {
+            animation = requestAnimationFrame(() => {
               animation = null;
               canvasDraw();
             });
@@ -158,10 +176,13 @@ const rateImage = () => {
               // add final click spot to path
               addToPath()
 
+              console.log("requesting pointer lock exit")
               document.exitPointerLock()
 
               setTimeout(
                   () => {
+                    document.removeEventListener('pointerlockchange', lockChangeAlert, false);
+                    document.removeEventListener('mozpointerlockchange', lockChangeAlert, false);
                     done({circle: circle, click: {x: x, y: y}, code: [showCode, rateCode], rt: end_rt, path: path})
                   },
                   500)

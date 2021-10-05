@@ -17,16 +17,25 @@ import { getImages } from '../lib/taskSetUpUtils'
 const taskSetUp = async (participantID, studyID, blockSettings) => {
   const newImages = await getImages(participantID, studyID)
 
-  blockSettings.images.neutral = newImages.neutral
-  blockSettings.images.provoking = newImages.provoking
+  if (newImages) {
+    blockSettings.images.neutral = newImages.neutral
+    blockSettings.images.provoking = newImages.provoking
+  } else {
+    blockSettings.images = defaultBlockSettings.images
+  }
 
   let newBlocks = []
-  for (let i = 1; i < blockSettings.num_repeats; i++) {
+  for (let i = 1; i <= blockSettings.num_repeats; i++) {
     newBlocks.push(
       buildCountdown(lang.countdown.message, 3),
       taskBlock(blockSettings),
       blockEnd(i, blockSettings.num_repeats)
     )
+    if (i <= blockSettings.num_repeats) {
+      newBlocks.push(
+        blockEnd(i, blockSettings.num_repeats)
+      )
+    }
   }
 
   return newBlocks
