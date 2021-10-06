@@ -8,7 +8,7 @@ const releaseLock = () => {
 
         document.exitPointerLock();
 
-        done()
+        done({lock_release: true})
       }
     }
 }

@@ -21,7 +21,7 @@ const requestLock = () => {
           el.innerHTML = ''
           setTimeout(
             () => {
-              done()
+              done({lock_request: true})
             },
             500)
         };
