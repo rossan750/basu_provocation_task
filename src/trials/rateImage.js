@@ -26,13 +26,15 @@ const rateImage = () => {
         const start = Date.now()
 
         // add stimulus to the DOM
-        document.getElementById('jspsych-content').innerHTML = stimulus
+        const container = document.querySelector('#jspsych-content')
+        container.innerHTML = stimulus
 
         // set up canvas
         let canvas = document.querySelector('#jspsych-canvas');
         let ctx = canvas.getContext('2d');
         let animation
-        let clicked = false; // require user engagement to lock
+        let clicked = document.pointerLockElement === container ||
+            document.mozPointerLockElement === container; // require user engagement to lock
 
         let w = $('#jspsych-canvas').width()
         let x = w / 2
@@ -64,17 +66,13 @@ const rateImage = () => {
         }
 
         // request control of the cursor from the dom
-        canvas.requestPointerLock = canvas.requestPointerLock ||
-                            canvas.mozRequestPointerLock;
+        container.requestPointerLock = container.requestPointerLock ||
+                            container.mozRequestPointerLock;
 
-        document.exitPointerLock = document.exitPointerLock ||
-                           document.mozExitPointerLock;
 
         const lockChangeAlert = (e) => {
-          console.log(e)
-          console.log(document.pointerLockElement)
-          if (document.pointerLockElement === canvas ||
-              document.mozPointerLockElement === canvas) {
+          if (document.pointerLockElement === container ||
+              document.mozPointerLockElement === container) {
             clicked = true;
             if (!animation) {
               animation = requestAnimationFrame(() => {
@@ -82,16 +80,10 @@ const rateImage = () => {
                 canvasDraw();
               });
             }
-            // Bind event listener to document
-            canvas.addEventListener("mousemove", handleMoveListener, false)
-            canvas.addEventListener("click", handleClickListener, false)
-          } else {
-            canvas.removeEventListener("mousemove", handleMoveListener, false)
-            canvas.removeEventListener("click", handleClickListener, false)
           }
         }
 
-        document.addEventListener('pointerlockerror', (e) => {
+        const lockError = (e) => {
           clicked = false;
           if (!animation) {
             animation = requestAnimationFrame(() => {
@@ -100,31 +92,16 @@ const rateImage = () => {
             });
           }
         }
-          , false);
+
+        document.addEventListener('pointerlockerror', lockError, false);
         document.addEventListener('pointerlockchange', lockChangeAlert, false);
         document.addEventListener('mozpointerlockchange', lockChangeAlert, false);
 
-        canvas.onclick = () => canvas.requestPointerLock();
+        canvas.onclick = () => !clicked && container.requestPointerLock();
 
-        // show ratings
-        canvasDraw();
-        pdSpotEncode(showCode)
-
-        // make sure canvas re-draws at 10 seconds to get prompt
-        setTimeout(canvasDraw, 10000)
-        let firstcall = true;
         const handleMoveListener = (e) => {
-          if (firstcall) {
-            console.log(e)
-            console.log(x, y, dx, dy)
-            firstcall = false
-          }
           x += e.movementX;
           y += e.movementY;
-
-          if (e.movementX > 10 || e.movementY > 10) {
-            console.log(e)
-          }
 
           // if direction changes, add to path
           let newdx = Math.sign(e.movementX)
@@ -166,28 +143,40 @@ const rateImage = () => {
         }
 
         const handleClickListener = () => {
-            // find circle that was clicked (or null if none)
-            let circle = getCircle(x, y, CURSOR_RADIUS, circles, CIRCLE_RADIUS)
+          // find circle that was clicked (or null if none)
+          let circle = getCircle(x, y, CURSOR_RADIUS, circles, CIRCLE_RADIUS)
 
-            if (circle) { // rating complete
-              const end_rt = rt()
-              pdSpotEncode(rateCode)
+          if (circle) { // rating complete
+            const end_rt = rt()
+            pdSpotEncode(rateCode)
 
-              // add final click spot to path
-              addToPath()
+            // add final click spot to path
+            addToPath()
 
-              console.log("requesting pointer lock exit")
-              document.exitPointerLock()
+            container.removeEventListener("mousemove", handleMoveListener, false)
+            container.removeEventListener("click", handleClickListener, false)
 
-              setTimeout(
-                  () => {
-                    document.removeEventListener('pointerlockchange', lockChangeAlert, false);
-                    document.removeEventListener('mozpointerlockchange', lockChangeAlert, false);
-                    done({circle: circle, click: {x: x, y: y}, code: [showCode, rateCode], rt: end_rt, path: path})
-                  },
-                  500)
-            }
+            setTimeout(
+              () => {
+                document.removeEventListener('pointerlockerror', lockError, false);
+                document.removeEventListener('pointerlockchange', lockChangeAlert, false);
+                document.removeEventListener('mozpointerlockchange', lockChangeAlert, false);
+                done({circle: circle, click: {x: x, y: y}, code: [showCode, rateCode], rt: end_rt, path: path})
+              },
+              500)
+          }
         }
+
+        // Bind event listener to document
+        container.addEventListener("mousemove", handleMoveListener, false)
+        container.addEventListener("click", handleClickListener, false)
+
+        // show ratings
+        canvasDraw();
+        pdSpotEncode(showCode)
+
+        // make sure canvas re-draws at 10 seconds to get prompt
+        setTimeout(canvasDraw, 10000)
       }
     }
 }

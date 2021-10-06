@@ -7,6 +7,8 @@ import camera from "../trials/camera";
 import buildCountdown from '../trials/countdown'
 import blockEnd from '../trials/blockEnd'
 import experimentEnd from '../trials/experimentEnd'
+import requestLock from '../trials/requestLock'
+import releaseLock from '../trials/releaseLock'
 import {
   envConfig,
   defaultBlockSettings,
@@ -28,8 +30,7 @@ const taskSetUp = async (participantID, studyID, blockSettings) => {
   for (let i = 1; i <= blockSettings.num_repeats; i++) {
     newBlocks.push(
       buildCountdown(lang.countdown.message, 3),
-      taskBlock(blockSettings),
-      blockEnd(i, blockSettings.num_repeats)
+      taskBlock(blockSettings)
     )
     if (i < blockSettings.num_repeats) {
       newBlocks.push(
@@ -52,13 +53,17 @@ const tl = async (participantID, studyID) => {
 
   timeline.push(
     instructions1,
+    requestLock(),
     taskBlock(practiceBlockSettings),
+    releaseLock(),
     instructions2
   );
 
   const newBlocks = await taskSetUp(participantID, studyID, defaultBlockSettings)
 
+  timeline.push(requestLock())
   timeline.push(...newBlocks)
+  timeline.push(releaseLock())
 
   timeline.push(experimentEnd(5000))
 
