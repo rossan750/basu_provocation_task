@@ -26,16 +26,15 @@ const rateImage = () => {
         const start = Date.now()
 
         // add stimulus to the DOM
-        document.getElementById('jspsych-content').innerHTML = stimulus
-        // $('#jspsych-content').addClass('task-container')
+        const container = document.querySelector('#jspsych-content')
+        container.innerHTML = stimulus
 
         // set up canvas
         let canvas = document.querySelector('#jspsych-canvas');
         let ctx = canvas.getContext('2d');
         let animation
-
-        // hide the mouse
-        $('html').css('cursor', 'none')
+        let clicked = document.pointerLockElement === container ||
+            document.mozPointerLockElement === container; // require user engagement to lock
 
         let w = $('#jspsych-canvas').width()
         let x = w / 2
@@ -56,7 +55,7 @@ const rateImage = () => {
           // transparent background
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-          drawPrompt(ctx, rt(), CANVAS_SIZE)
+          drawPrompt(ctx, rt(), CANVAS_SIZE, clicked)
 
           drawNumbers(ctx, circles, CIRCLE_RADIUS, x, y, CURSOR_RADIUS)
 
@@ -65,27 +64,48 @@ const rateImage = () => {
           // draw the cursor
           drawCursor(ctx, x, y, CURSOR_RADIUS)
         }
-        // show ratings
-        canvasDraw();
-        pdSpotEncode(showCode)
-
-        // make sure canvas re-draws at 10 seconds to get prompt
-        setTimeout(canvasDraw, 10000)
 
         // request control of the cursor from the dom
-        try {
-          canvas.requestPointerLock();
-        } catch {
-          console.warn("pointer lock denied");
+        container.requestPointerLock = container.requestPointerLock ||
+                            container.mozRequestPointerLock;
+
+
+        const lockChangeAlert = (e) => {
+          if (document.pointerLockElement === container ||
+              document.mozPointerLockElement === container) {
+            clicked = true;
+            if (!animation) {
+              animation = requestAnimationFrame(() => {
+                animation = null;
+                canvasDraw();
+              });
+            }
+          }
         }
 
+        const lockError = (e) => {
+          clicked = false;
+          if (!animation) {
+            animation = requestAnimationFrame(() => {
+              animation = null;
+              canvasDraw();
+            });
+          }
+        }
+
+        document.addEventListener('pointerlockerror', lockError, false);
+        document.addEventListener('pointerlockchange', lockChangeAlert, false);
+        document.addEventListener('mozpointerlockchange', lockChangeAlert, false);
+
+        canvas.onclick = () => !clicked && container.requestPointerLock();
+
         const handleMoveListener = (e) => {
-          x += e.originalEvent.movementX;
-          y += e.originalEvent.movementY;
+          x += e.movementX;
+          y += e.movementY;
 
           // if direction changes, add to path
-          let newdx = Math.sign(e.originalEvent.movementX)
-          let newdy = Math.sign(e.originalEvent.movementY)
+          let newdx = Math.sign(e.movementX)
+          let newdy = Math.sign(e.movementY)
 
           let updated = false
           if ( newdx !== dx && newdx !== 0 ) {
@@ -115,7 +135,7 @@ const rateImage = () => {
 
           // re-draw with updates
           if (!animation) {
-            animation = requestAnimationFrame( () => {
+            animation = requestAnimationFrame(() => {
               animation = null;
               canvasDraw();
             });
@@ -123,34 +143,40 @@ const rateImage = () => {
         }
 
         const handleClickListener = () => {
-            // find circle that was clicked (or null if none)
-            let circle = getCircle(x, y, CURSOR_RADIUS, circles, CIRCLE_RADIUS)
+          // find circle that was clicked (or null if none)
+          let circle = getCircle(x, y, CURSOR_RADIUS, circles, CIRCLE_RADIUS)
 
-            if (circle) { // rating complete
-              const end_rt = rt()
-              pdSpotEncode(rateCode)
+          if (circle) { // rating complete
+            const end_rt = rt()
+            pdSpotEncode(rateCode)
 
-              // add final click spot to path
-              addToPath()
+            // add final click spot to path
+            addToPath()
 
-              // free event listeners
-              $(document).unbind('mousemove', handleMoveListener)
-              $(document).unbind('click', handleClickListener)
+            container.removeEventListener("mousemove", handleMoveListener, false)
+            container.removeEventListener("click", handleClickListener, false)
 
-              setTimeout(
-                  () => {
-                    // re-show the mouse
-                    $('html').css('cursor', 'auto')
-
-                    done({circle: circle, click: {x: x, y: y}, code: [showCode, rateCode], rt: end_rt, path: path})
-                  },
-                  500)
-            }
+            setTimeout(
+              () => {
+                document.removeEventListener('pointerlockerror', lockError, false);
+                document.removeEventListener('pointerlockchange', lockChangeAlert, false);
+                document.removeEventListener('mozpointerlockchange', lockChangeAlert, false);
+                done({circle: circle, click: {x: x, y: y}, code: [showCode, rateCode], rt: end_rt, path: path})
+              },
+              500)
+          }
         }
 
         // Bind event listener to document
-        $(document).bind('mousemove', handleMoveListener)
-        $(document).bind('click', handleClickListener)
+        container.addEventListener("mousemove", handleMoveListener, false)
+        container.addEventListener("click", handleClickListener, false)
+
+        // show ratings
+        canvasDraw();
+        pdSpotEncode(showCode)
+
+        // make sure canvas re-draws at 10 seconds to get prompt
+        setTimeout(canvasDraw, 10000)
       }
     }
 }

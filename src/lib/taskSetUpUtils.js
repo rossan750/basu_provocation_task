@@ -75,6 +75,8 @@ const getImages = async (participantID, studyID) => {
     const newImages = await getFirebaseImages(participantID, studyID)
     checkNumImages(newImages)
     return newImages
+  } else {
+    return false
   }
 }
 

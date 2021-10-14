@@ -19,7 +19,6 @@ function App() {
   const [envParticipantId, setEnvParticipantId] = useState("");
   const [envStudyId, setEnvStudyId] = useState("");
   const [currentMethod, setMethod] = useState("default");
-  const [reject, setReject] = useState(false);
 
   const startDate = new Date().toISOString();
 
@@ -57,6 +56,9 @@ function App() {
     };
     completePsiturk();
   };
+  const defaultFinishFunction = () => {
+    jsPsych.data.get().localSave('csv', 'neuro-task.csv')
+  }
 
   // Function to add jspsych data on login
   const setLoggedIn = useCallback(
@@ -119,62 +121,50 @@ function App() {
         if (studyId) {
           setEnvStudyId(studyId)
         }
-      } else {
-        setReject(true);
       }
     }
     // eslint-disable-next-line
   }, []);
 
-  if (reject) {
-    return (
-      <div className="centered-h-v">
-        <div className="width-50 alert alert-danger">
-          Please tell your task provider to enable Firebase.
-        </div>
-      </div>
-    );
-  } else {
-    return (
-      <>
-        {loggedIn ? (
-          <JsPsychExperiment
-            dataUpdateFunction={
-              {
-                desktop: desktopUpdateFunction,
-                firebase: firebaseUpdateFunction,
-                mturk: psiturkUpdateFunction,
-                default: defaultFunction,
-              }[currentMethod]
-            }
-            dataFinishFunction={
-              {
-                desktop: desktopFinishFunction,
-                mturk: psiturkFinishFunction,
-                firebase: defaultFunction,
-                default: defaultFunction,
-              }[currentMethod]
-            }
-            participantID={participantID}
-            studyID={studyID}
-          />
-        ) : (
-          <Login
-            validationFunction={
-              {
-                desktop: defaultValidation,
-                default: defaultValidation,
-                firebase: firebaseValidation,
-              }[currentMethod]
-            }
-            envParticipantId={envParticipantId}
-            envStudyId={envStudyId}
-            onLogin={setLoggedIn}
-          />
-        )}
-      </>
-    );
-  }
+  return (
+    <>
+      {loggedIn ? (
+        <JsPsychExperiment
+          dataUpdateFunction={
+            {
+              desktop: desktopUpdateFunction,
+              firebase: firebaseUpdateFunction,
+              mturk: psiturkUpdateFunction,
+              default: defaultFunction,
+            }[currentMethod]
+          }
+          dataFinishFunction={
+            {
+              desktop: desktopFinishFunction,
+              mturk: psiturkFinishFunction,
+              firebase: defaultFunction,
+              default: defaultFinishFunction,
+            }[currentMethod]
+          }
+          participantID={participantID}
+          studyID={studyID}
+        />
+      ) : (
+        <Login
+          validationFunction={
+            {
+              desktop: defaultValidation,
+              default: defaultValidation,
+              firebase: firebaseValidation,
+            }[currentMethod]
+          }
+          envParticipantId={envParticipantId}
+          envStudyId={envStudyId}
+          onLogin={setLoggedIn}
+        />
+      )}
+    </>
+  );
 }
 
 export default App;
