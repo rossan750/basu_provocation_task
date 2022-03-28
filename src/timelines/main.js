@@ -9,6 +9,7 @@ import blockEnd from '../trials/blockEnd'
 import experimentEnd from '../trials/experimentEnd'
 import requestLock from '../trials/requestLock'
 import releaseLock from '../trials/releaseLock'
+import startCode from '../trials/startCode'
 import {
   envConfig,
   defaultBlockSettings,
