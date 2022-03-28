@@ -9,6 +9,7 @@ import blockEnd from '../trials/blockEnd'
 import experimentEnd from '../trials/experimentEnd'
 import requestLock from '../trials/requestLock'
 import releaseLock from '../trials/releaseLock'
+import startCode from '../trials/startCode'
 import {
   envConfig,
   defaultBlockSettings,
@@ -44,6 +45,8 @@ const taskSetUp = async (participantID, studyID, blockSettings) => {
 
 const tl = async (participantID, studyID) => {
   let timeline = [experimentStart()];
+  
+  if (envConfig.USE_EEG) timeline.push(startCode());
 
   if (envConfig.USE_VOLUME) timeline.push(adjustVolume());
 
