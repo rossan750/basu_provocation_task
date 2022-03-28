@@ -9,6 +9,7 @@ import blockEnd from '../trials/blockEnd'
 import experimentEnd from '../trials/experimentEnd'
 import requestLock from '../trials/requestLock'
 import releaseLock from '../trials/releaseLock'
+import startCode from '../trials/startCode'
 import {
   envConfig,
   defaultBlockSettings,
@@ -49,7 +50,10 @@ const tl = async (participantID, studyID) => {
 
   if (envConfig.USE_VIDEO) timeline.push(camera());
 
-  if (envConfig.USE_EEG) timeline.push(holdUpMarker());
+  if (envConfig.USE_EEG) {
+    timeline.push(holdUpMarker());
+    timeline.push(startCode());
+  }
 
   timeline.push(
     instructions1,
