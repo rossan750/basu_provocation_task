@@ -68,6 +68,7 @@ function App() {
           participant_id: newParticipantID,
           study_id: newStudyID,
           start_date: startDate,
+          timestamp: Date.now(),
           task_version: version
         });
       }
