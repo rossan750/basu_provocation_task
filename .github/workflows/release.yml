@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        setting: ['home', 'clinic', 'clinic-butler' ]
+        setting: ['home', 'clinic', 'clinic-butler', 'clinictest']
         os: [ubuntu-latest, macOS-latest, windows-2019]
 
 
