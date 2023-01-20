@@ -53,7 +53,8 @@
     "build:firebase": "dotenv -e env/.env.firebase-build npm run build",
     "build:home": "dotenv -e env/.env.home npm run build",
     "build:video": "dotenv -e env/.env.video npm run build",
-    "build:clinic": "dotenv -e env/.env.clinic npm run build"
+    "build:clinic": "dotenv -e env/.env.clinic npm run build",
+    "build:clinictest": "dotenv -e env/.env.clinictest npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
