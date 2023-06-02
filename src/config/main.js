@@ -84,8 +84,8 @@ const breathingAudio = _.filter(audio, (o) =>
 console.log(breathingAudio);
 
 const ratingSettings = {
-  min: 0,
-  max: 8,
+  min: -3,
+  max: 3,
   canvasSize: 640, // canvas is a square
   circleRadius: 28,
   cursorRadius: 7.5,
