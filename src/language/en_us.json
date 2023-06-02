@@ -19,7 +19,7 @@
   "instructions": {
     "welcome": "Welcome, new user!",
     "p1": "During the task, you will see a series of neutral images and anxiety-provoking images.",
-    "p2": "You will be asked to rate your level of distress from 0-10 in response to each image, where 0 is no distress and 10 is the highest level of distress.",
+    "p2": "You will be asked to rate your level of distress from 0-8 in response to each image, where 0 is no distress and 8 is the highest level of distress.",
     "fixation": "Throughout the experiment, you'll see this fixation point at the center of the screen. <br> Try to keep your eyes focused on the fixation point during the task.",
     "rate": "Next, you will do one practice trial. You will see the fixation point, followed by an image. Then, you will be asked to submit your rating when you’re ready.",
     "rate_practice": "Try submitting a rating of “5” by dragging the cursor to “5” and clicking to submit.",
