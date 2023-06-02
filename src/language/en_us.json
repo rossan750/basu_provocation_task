@@ -17,7 +17,7 @@
     "not_found": "Note: no USB event marker found."
   },
   "instructions": {
-    "welcome": "Welcome!",
+    "welcome": "Welcome, new user!",
     "p1": "During the task, you will see a series of neutral images and anxiety-provoking images.",
     "p2": "You will be asked to rate your level of distress from 0-10 in response to each image, where 0 is no distress and 10 is the highest level of distress.",
     "fixation": "Throughout the experiment, you'll see this fixation point at the center of the screen. <br> Try to keep your eyes focused on the fixation point during the task.",
