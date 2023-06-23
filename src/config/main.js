@@ -50,6 +50,23 @@ const audioCodes = {
 };
 
 // UPDATE THIS PATH TO CHANGE IMAGE FOLDER
+
+const newImages = importAll(
+requireContext(
+    "../assets/images",
+    false,
+    /\.(png|jpe?g|svg)$/
+  )
+);
+
+const practiceImages = importAll(
+requireContext(
+    "../assets/images/Practice Images",
+    false,
+    /\.(png|jpe?g|svg)$/
+  )
+);
+
 const neutralImages = importAll(
   requireContext(
     "../assets/images/provocation-images/neutral",
@@ -65,13 +82,13 @@ const provokingImages = importAll(
   )
 );
 
-const practiceImages = importAll(
-  requireContext(
-    "../assets/images/practice-images/neutral",
-    false,
-    /\.(png|jpe?g|svg)$/
-  )
-);
+// const practiceImages = importAll(
+//   requireContext(
+//     "../assets/images/practice-images/neutral",
+//     false,
+//     /\.(png|jpe?g|svg)$/
+//   )
+// );
 
 const audio = importAll(
   requireContext("../assets/audio", false, /\.(m4a|mp3)$/)
